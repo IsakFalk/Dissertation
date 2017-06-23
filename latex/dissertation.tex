@@ -8,37 +8,68 @@
 % spacing
 \doublespacing
 
+% path to figures
 \graphicspath{{./figures}}
 
 \begin{document}
 
 \frontmatter
 
-\maketitle
-
+% Title page
+\begin{title} 
+  \input{./sections/title}
+\end{title}
 \newpage
 
+% Dedication page
+\begin{dedication} 
+  \input{./sections/dedication}
+\end{dedication}
+\newpage
+
+% Abstract page
 \begin{abstract}
-\input{./sections/abstract}
+  \input{./sections/abstract}
 \end{abstract}
-
 \newpage
 
+% Acknowledgements
+\begin{acknowledgements}
+  \input{./sections/acknowledgements}
+\end{acknowledgements}
+\newpage
+
+% Table of contents and other lists
 \tableofcontents
 \listoffigures
 \listoftables
 
 \newpage
+% Table of symbols and notation
+
+\newpage
+% Preface
+
+\newpage
 
 \mainmatter
 
+% Inner chapters
+% \chapter{Chapter 1}
+% \chapter{Chapter 2}
+% \chapter{Chapter 3}
+
+% Appendicies
 \appendix
 
 \backmatter
 
+% Bibliography
 \bibliography{dissertation}
-
 \bibliographystyle{abbrv}
 
+% List of acronymns
+
+% Index
 
 \end{document}

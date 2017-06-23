@@ -1,12 +1,14 @@
 This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: dissertation.aux
+A level-1 auxiliary file: ./sections/dedication.aux
+A level-1 auxiliary file: ./sections/abstract.aux
 The style file: abbrv.bst
 I found no \citation commands---while reading file dissertation.aux
 Database file #1: dissertation.bib
 You've used 0 entries,
             2118 wiz_defined-function locations,
-            496 strings with 3713 characters,
+            498 strings with 3761 characters,
 and the built_in function-call counts, 18 in all, are:
 = -- 0
 > -- 0
