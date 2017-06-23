@@ -1,20 +1,25 @@
 \documentclass[11pt,letterpaper,oneside]{book}
 \usepackage{dissertation}
 
+% only include these parts of the thesis. Speeds up compilation
+% if we only want to look at parts of it and not the whole thesis
+\includeonly{chapter1}
+
 % spacing
 \doublespacing
 
 \graphicspath{{./figures}}
 
 \begin{document}
+
 \frontmatter
 
-% \maketitle
+\maketitle
 
 \newpage
 
 \begin{abstract}
-  This is a document about NLP. DUmdumumum.
+\input{./sections/abstract}
 \end{abstract}
 
 \newpage
@@ -30,5 +35,10 @@
 \appendix
 
 \backmatter
+
+\bibliography{dissertation}
+
+\bibliographystyle{abbrv}
+
 
 \end{document}
