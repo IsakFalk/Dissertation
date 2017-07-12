@@ -33,6 +33,8 @@
 \usepackage{bm}
 \usepackage{amssymb}
 \usepackage{titling}
+\usepackage{nomencl}
+\usepackage{makeidx}
 
 % typesetting
 \usepackage[english]{babel}
@@ -120,9 +122,16 @@
 
 % Dedication
 \newenvironment{dedication}
-{\null\vspace{10em}
-  \begin{flushright}}
-  {\end{flushright}}
+{\clearpage           % we want a new page          %% I commented this
+  \thispagestyle{empty}% no header and footer
+  \vspace*{\stretch{1}}% some space at the top
+  \itshape             % the text is in italics
+  \raggedleft          % flush to the right margin
+}
+{\par % end the paragraph
+  \vspace{\stretch{3}} % space at bottom is three times that at the top
+  \clearpage           % finish off the page
+}
 
 % Abstract
 \newcommand\abstractname{Abstract}
@@ -136,10 +145,9 @@
 {\vfill \null}
 
 % Acknowledgements
-\newenvironment{acknowledgements}{
-  {\begin{flushright}}
+\newenvironment{acknowledgements}
+{\begin{flushright}}
   {\end{flushright}}
-}
 
 % Preface
 

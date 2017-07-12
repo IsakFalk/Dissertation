@@ -1,4 +1,21 @@
-In this thesis we will explore the role of latent variable models in NMT (neural
-machine translation). We will consider newly published models such as AUTR which
-writes to a canvas, essentially using an external memory in extension to a
-recurrent neural network.
+Neural Machine translation is a direction in automated translation which learns
+the mapping from the source to the target language directly in an end-to-end
+fashion using the framework of neural networks. As NMT hinges on advances in
+neural network methods and architectures, it is able to directly use
+improvements there in its own domain.
+
+We use recent improvements in latent variables models in order to train a
+completely probabilistic generative model with a latent variable representing a
+language-agnostic representation of a sentence mapping through deep neural
+networks to two different output languages. Following recent advances in
+training deep generative latent variable models we approximate the posterior of
+the latents given output with a recognition model, mimicking a VAE. Following
+the SGVB method to find a stochastic lower bound to the true log-likelihood of
+the observed data, we train the parameters of the generative model and the
+variational recognition model jointly to optimise this bound.
+
+Since the recognition model acts as a pseudo-posterior (it approximates it given
+constraints on the distributional form of the recognition model) we can use this
+to translate from one language to another by finding the posterior
+q-distribution over z and then from sampled z find the most likely output of the
+languages.

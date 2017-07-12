@@ -1,0 +1,27 @@
+We will evaluate our models on a variety of scores:
+
+\begin{description}
+\item[ELBO] ELBO is the lower bound of the actual log-likelihood of the observed
+  data
+  \begin{equation*}
+    \sum_{i=1}^{N} \log p_{\theta}(\bm{x}_i)
+  \end{equation*}
+\item[Qualitative] Since natural language is not a formal in the sense that it
+  is ambiguous, inconsistent and with exceptions to rules; any of these scores
+  will be imperfect insofar as taking into account the feel of the generated
+  sentences. Due to this we will inspect the sentences manually.
+\item[BLEU] BLEU compares the generated sentences with sentences translated by
+  professional translators, yielding a score telling us how well the generated
+  translation does in relation to the translated benchmarks for each sentence.
+\item[KL] Part of our investigation is about building models that take into
+  account the latent space, enforcing the model to encode the information in the
+  latent variable z instead of the encoder/decoder part. Luckily, we have a
+  quantitative measure of this, the KL divergence between the prior and the
+  posterior q-distribution over $\bm{z}$,
+  \begin{equation*}
+    KL[q_{\phi}(\bm{z} | \bm{x}) || p_{\theta}(\bm{z})]
+  \end{equation*}
+  , where the KL is a measure of how much information is put into the
+  q-distribution compared to just using the prior isotropic gaussian over
+  $\bm{z}$, $p_{\theta}(\bm{z})$.
+\end{description}

@@ -1,0 +1,3 @@
+[submodule "latex/test/tikz-bayesnet"]
+	path = latex/test/tikz-bayesnet
+	url = https://github.com/jluttine/tikz-bayesnet/
