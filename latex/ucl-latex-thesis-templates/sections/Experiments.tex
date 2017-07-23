@@ -1,0 +1,177 @@
+\chapter{Experiments}
+\label{ExperimentsCh}
+
+\section{Data}
+
+\subsection{Dataset}
+
+The dataset we have chosen to evaluate the model on is the Europarl dataset
+between languages English and French. Europarl is a dataset of the proceedings
+of the European Parliament, comprising in total of the 11 official languages of
+the European Union.
+
+The dataset was chosen as the number of sentences for English and French is
+enough to be able to generalise (the uncompressed size of the full dataset is
+619MB, 288MB for English, 311MB for French) to new sentences, and furthermore has
+established baseline for NMT in the form of BLEU scores for all the different
+language pairs in the full dataset, English-French in
+particular.\cite{koehn2005epc}
+
+\begin{table}[t]
+  \begin{center}
+    \begin{tabular}{ |p{0.8\textwidth}| } 
+      \hline
+      \textbf{English}: I declare resumed the session of the European Parliament adjourned on Friday 17 December 1999, and I would like once again to wish you a happy new year in the hope that you enjoyed a pleasant festive period.\\
+      \textbf{French}: Je déclare reprise la session du Parlement européen qui avait été interrompue le vendredi 17 décembre dernier et je vous renouvelle tous mes vux en espérant que vous avez passé de bonnes vacances.\\
+      \hline
+    \end{tabular}
+    \caption{A randomly sampled sentence from the Europarl corpus}
+  \end{center}
+\end{table}
+
+\subsection{Preprocessing}
+
+The raw data is unfit for use directly with the model. For one thing the raw
+data is in the form of strings and in order to leverage the mathematics easily
+we need to translate the raw form into a form which take place in a
+high-dimensional space instead, here $\mathbb{R}^N$. Equally we remove aspects
+of the data that will make it harder for the model to learn due to sparsity and
+other statistical peculiarities of the data and NLP in general.
+
+Preprocessing the data we make the following simplifications
+
+\subsubsection{Character Level}
+
+% \item Only lowercase characters and common punctuation marks are considered to
+%   be part of our alphabet.
+
+%   \textbf{English Alpabet}: \texttt{abcdefghijklmnopqrstuvwxyz,.`'?!}\\
+%   \textbf{French Alphabet}: \texttt{abcdefghijklmnopqrstuvwxyz,.`'?!âêîôûàèùéëïüç}\\
+
+\subsubsection{Word Level}
+
+The problem with words is that there exist an immense quantity of them, if even
+just due to grammatical constructs (example: run, running, ran etc.). Similarly,
+for any given point in time, words go in and out of use and this necessitates
+choosing which words to include in the dictionary. The dictionary consists of
+all of the words that we consider part of the language, everything not in the
+dictionary are either too rare or for some other reason excluded from use.
+
+\begin{itemize}
+\item We only include sentences of length between 2 and 30. This makes sure that
+  the model have long enough sentences such that it may learn from the
+  dependencies between words, but short enough so that the parameters are able
+  to capture the long-term dependencies of sentences.
+\item We calculate the word frequencies in order to sort all of the words in the
+  dataset in terms of how often it appear in absolute terms. This is then used
+  to only retain the 80000 most common words. Words which are not part of this
+  list gets replaced by an \texttt{<UNK>} token, specifying that it's an unknown
+  word outside of the dictionary. This makes sure that only words which are
+  prevalent enough such that the model can derive its relation to other words
+  are part of the dictionary.
+\item Newline characters were removed and replaced by \texttt{<EOS>},
+  end-of-sentence tokens, signifying the end of a sentence.
+\item In parts where we have a dataset of 2 or more language sentences in
+  parallel, we make sure that both of the the languages both satisfy the above criteria.
+\end{itemize}
+
+It is important to note that due to how languages differ, even though the
+dataset might consist of sentence pairs this will still not mean that in general
+both of the languages will have the same dictionary of words. Partially this is
+due to the different ways that languages are built up when expressing meaning,
+but on a more basic level, there are no bijection between languages as words
+have slightly different meaning and contexts, with some words only existing in
+one language but not the other.
+
+\section{Scores}
+
+We will evaluate our models on a variety of scores:
+
+\begin{description}
+\item[ELBO] ELBO is the lower bound of the actual log-likelihood of the observed
+  data
+  \begin{equation*}
+    \sum_{i=1}^{N} \log p_{\theta}(\bm{x}_i)
+  \end{equation*}
+\item[Qualitative] Since natural language is not a formal in the sense that it
+  is ambiguous, inconsistent and with exceptions to rules; any of these scores
+  will be imperfect insofar as taking into account the feel of the generated
+  sentences. Due to this we will inspect the sentences manually.
+\item[BLEU] BLEU compares the generated sentences with sentences translated by
+  professional translators, yielding a score telling us how well the generated
+  translation does in relation to the translated benchmarks for each sentence.
+\item[KL] Part of our investigation is about building models that take into
+  account the latent space, enforcing the model to encode the information in the
+  latent variable z instead of the encoder/decoder part. Luckily, we have a
+  quantitative measure of this, the KL divergence between the prior and the
+  posterior q-distribution over $\bm{z}$,
+  \begin{equation*}
+    KL[q_{\phi}(\bm{z} | \bm{x}) || p_{\theta}(\bm{z})]
+  \end{equation*}
+  , where the KL is a measure of how much information is put into the
+  q-distribution compared to just using the prior isotropic gaussian over
+  $\bm{z}$, $p_{\theta}(\bm{z})$.
+\end{description}
+
+\section{layout}
+
+We will perform the following experiments, building up the order of doing them
+from least complex to more complex.
+
+We first have different models, depending on how we choose
+
+\begin{description}
+\item[Recognition model]
+  \begin{itemize}
+  \item WaveNet
+  \item RNN
+  \item MLP
+  \end{itemize}
+\item[Factorisation of Rec model]
+  \begin{itemize}
+  \item Independence of $\bm{x}, \bm{y}$
+  \item diagonal sigma
+  \item opposite of these
+  \end{itemize}
+\item[Generative model]
+  \begin{itemize}
+  \item AUTR
+  \item WaveNet
+  \item RNN
+  \end{itemize}
+\end{description}.
+
+We then use these models on different types of language modelling:
+
+\begin{description}
+\item[Reconstruction]
+  \begin{figure}[h]
+    \center
+    \begin{tikzpicture}
+
+      % Define nodes
+      \node[latent] (z) {$z$} ;
+      
+      \node[obs, below=of z] (x) {$x$} ;
+      
+      \edge {z} {x} ;
+    \end{tikzpicture}
+  \end{figure}
+\item[Translation]
+  \begin{figure}[h]
+    \center
+    \begin{tikzpicture}
+
+      % Define nodes
+      \node[latent] (z) {$z$} ;
+      
+      \node[obs, below=of z, xshift=-1cm] (x) {$x$} ;
+      \node[obs, below=of z, xshift=1cm] (y) {$y$} ;
+      
+      \edge {z} {x, y} ;
+    \end{tikzpicture}
+  \end{figure}
+\end{description}
+While using the recognition model to do translation (We let $\bm{x}$ encode all
+information about $\bm{z}$, and then see what the generated $\bm{x}, \bm{y}$
+correspond to).

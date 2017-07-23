@@ -1,3 +1,9 @@
 [submodule "latex/test/tikz-bayesnet"]
 	path = latex/test/tikz-bayesnet
 	url = https://github.com/jluttine/tikz-bayesnet/
+[submodule "tikz-bayesnet"]
+	path = latex/ucl-latex-thesis-templates/tikz-bayesnet
+	url = https://github.com/jluttine/tikz-bayesnet/
+[submodule "tikz_bayesnet_top"]
+	path = latex/tikz-bayesnet
+	url = https://github.com/jluttine/tikz-bayesnet/

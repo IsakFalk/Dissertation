@@ -2,7 +2,7 @@
  "Main"
  (lambda ()
    (TeX-add-to-alist 'LaTeX-provided-class-options
-                     '(("ucl_thesis" "12pt" "phd" "draft" "a4paper" "oneside")))
+                     '(("ucl_thesis" "12pt" "mphil" "draft" "a4paper" "oneside")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("nag" "l2tabu" "orthodox")))
    (TeX-run-style-hooks
@@ -11,16 +11,18 @@
     "LinksAndMetadata"
     "FloatSettings"
     "BibSettings"
-    "Preamble"
-    "Introduction"
-    "Chapter2"
-    "Chapter3"
-    "Conclusions"
-    "Appendices"
+    "./sections/Preamble"
+    "./sections/Introduction"
+    "./sections/Background"
+    "./sections/Methods"
+    "./sections/Experiments"
+    "./sections/Conclusions"
+    "./sections/Appendices"
     "nag"
     "ucl_thesis"
-    "ucl_thesis12")
+    "ucl_thesis12"
+    "Dissertation")
    (LaTeX-add-bibliographies
-    "example"))
+    "Dissertation"))
  :latex)
 

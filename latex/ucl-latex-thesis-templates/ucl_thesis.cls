@@ -122,7 +122,7 @@
 %  in the submission statement.  Make PhD the default.
 %    \begin{macrocode}
 \newcommand \@doctor{Doctor of Philosophy}
-\newcommand \@master{Master of Philosophy}
+\newcommand \@master{Master of Science}
 \newcommand \@mres{Master of Research}
 \newcommand \@degree@string{\@doctor}
 %    \end{macrocode}

@@ -1,3 +1,19 @@
+% I may change the way this is done in a future version, 
+%  but given that some people needed it, if you need a different degree title 
+%  (e.g. Master of Science, Master in Science, Master of Arts, etc)
+%  uncomment the following 3 lines and set as appropriate (this *has* to be before \maketitle)
+\makeatletter
+\renewcommand {\@degree@string} {Master of Science}
+\makeatother
+
+\title{Latent Variable Models in Neural Machine Translation}
+\author{John Isak Texas Falk}
+\department{The Centre for Computational Statistics and Machine Learning}
+
+\maketitle
+\makedeclaration
+
+\begin{abstract} % 300 word limit
 Neural Machine translation is a direction in automated translation which learns
 the mapping from the source to the target language directly in an end-to-end
 fashion using the framework of neural networks. As NMT hinges on advances in
@@ -19,3 +35,17 @@ constraints on the distributional form of the recognition model) we can use this
 to translate from one language to another by finding the posterior
 q-distribution over z and then from sampled z find the most likely output of the
 languages.
+\end{abstract}
+
+\begin{acknowledgements}
+I would like to thank the help from my supervisor Harshil Shah for helping me
+make this thesis possible, and my parents, for always being there for me.
+\end{acknowledgements}
+
+\setcounter{tocdepth}{2} 
+% Setting this higher means you get contents entries for
+%  more minor section headers.
+
+\tableofcontents
+\listoffigures
+\listoftables
