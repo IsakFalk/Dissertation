@@ -29,7 +29,7 @@
 \usepackage{amsthm}
 \usepackage{amsfonts}
 % \usepackage[plain]{algorithm}
-% \usepackage{enumitem}
+\usepackage{enumitem}
 % \usepackage{tabu}
 \usepackage{bm}
 \usepackage{amssymb}
@@ -54,3 +54,12 @@
 
 % Commands. This makes it easier to change styles for the whole thesis at once.
 \newcommand{\lang}[1]{\mathcal{#1}}
+
+% Probability commands
+\newcommand{\expectation}[2]{\mathbb{E}_{#2}[#1]}
+\newcommand{\cov}[2]{\mathtit{Cov}(#1, #2)}
+\newcommand{\var}[1]{\mathit{Var}(#1)}
+
+% Mathematics commands
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}

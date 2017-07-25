@@ -11,9 +11,15 @@
     "amsmath"
     "amsthm"
     "amsfonts"
+    "enumitem"
     "bm"
     "amssymb")
    (TeX-add-symbols
-    '("lang" 1)))
+    '("var" 1)
+    '("cov" 2)
+    '("expectation" 2)
+    '("lang" 1)
+    "argmin"
+    "argmax"))
  :latex)
 

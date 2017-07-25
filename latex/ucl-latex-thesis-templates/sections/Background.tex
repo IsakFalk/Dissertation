@@ -4,25 +4,137 @@
 From here on I will assume familiarity with some concepts which will be
 important for the experiments that we will conduct and analyse.
 
-\section{Bayesian Machine Learning}
-Bayesian machine learning stems from the tradition of Bayesian statistics where
-we assume that the parameters of the model that we are using are random
-variables and thus distributed in accordance to some probability distribution.
-Letting $\theta$ be the model parameter, this means that before we start doing
-anything, we codify our beliefs about $\theta$ in terms of a distribution
-$p(\theta)$. Given the model, we then have a way of parametrising the
-probability of the data given the model. Assuming that we are doing supervised
-learning as in NMT, given a dataset $ \mathcal{D} = \{(x_i, y_i)_i^n\}$ we have a way of
-parametrising the functional relationship between $\lang{X}$ and $\lang{Y}$ by
-the distribution induced by the model, $p_{\theta}(y_i | x_i)$ representing our
-belief about the sentence $y_i$ being the translation given the source
-translation $x_i$. Using this we may then find a distribution over the actual
-sentences and also do translation by finding the sentences with the highest
-probability.
+\section{Probability Theory and Statistics}
 
-In practice it's not always feasible to put priors on the actual model
-parameters $\theta$, instead we see $\theta$ as a parameter that parametrise the
-distribution $p_{\theta}(y | x)$.
+\subsection{Probability Theory as a Reasoning System}
+Although often seen as a self-contained mathematical theory of stochastic
+systems and reasoning about the random, probability theory has a prominent role
+within machine learning since it gives us a principled way of reasoning about
+the world. As proved by Cox, if we are to accept that any theory of reasoning is
+to satisfy the Cox desiderata,
+\begin{enumerate}
+\item Degrees of plausibility are represented by real numbers.
+\item Qualitative correspondence with common sense
+\item If a conclusion can be reasoned out in more than one way, then
+  every possible way must lead to the same result.
+\end{enumerate},
+then we must accept that this theory is isomorphic to probability theory and
+effectively the same.
+
+This is a formal way of stating that probability theory is the best way to
+organize our reasoning if we want to make sure that we are consistent in the way
+we reason.\cite[p.~3-23]{jaynes2003probability}
+
+\subsection{Rules and Theorems}
+Rules of probability that will be useful to us are the following axioms
+\begin{description}
+\item[Unit volume]
+  \begin{equation}
+    \label{eq:unit_vol_prob_axiom}
+    \int_{\mathcal{X}}p(X) = 1
+  \end{equation}
+\item[Non-negativity]
+  \begin{equation}
+    \label{eq:non_neg_of_prob}
+    p(X) \geq 0
+  \end{equation}
+\end{description}
+where $\mathcal{X}$ is the domain of $X$ and the generalized integral is interpreted as
+the Lebesgue integral if $X$ is continuous and as a sum over the possible values
+of $X$ if it is discrete.
+
+I will assume the notion of a random variable $X$ in an intuitive sense.
+However, this $X$ might be represented in many forms and in our case there is
+not reason to not be able to put probabilities over sentences, words and/or
+characters and conditioning thereof. Similarly I will assume familiarity with
+the different notions of continuous, discrete and categorical random variables.
+Finally 
+
+Most manipulation of statements about random variables can be stated as a consequence
+of the two following fundamental rules
+\begin{description}
+\item[Sum rule]
+  \begin{equation}
+    \label{eq:sum_rule}
+    p(X) = \int_{\mathcal{Y}}p(X, Y)
+  \end{equation}
+\item[Product rule]
+  \begin{equation}
+    \label{eq:product_rule}
+    p(X, Y) = p(Y | X)p(X)
+  \end{equation}
+\end{description}
+such that $X, Y$ are two random variables defined on the domains $\mathcal{X},
+\mathcal{Y}$. The integral $\int_{\mathcal{Y}}$ is to be understood in the
+general sense, if $Y$ is continuous it is the ordinary Lebesgue integral as
+commonly used throughout mathematics and calculus, while if $Y$ is discrete then
+it is the sum over the possible values of $Y$. $p(X, Y)$ is the joint
+distribution of $X$ and $Y$, $p(Y | X)$ is the probability of $Y$ conditioned on
+$X$ and $p(X)$ is the marginal distribution of $X$. Using these rules it is easy
+to Bayes theorem, one of the most integral (and simple) theorem of probability
+theory
+
+\fbox{
+  \begin{minipage}{0.8\textwidth}
+    Bayes Theorem
+
+    \begin{equation}
+      \label{eq:Bayes_thm}
+      p(Y | X) = \frac{p(X | Y)p(Y)}{p(X)}
+    \end{equation}
+  \end{minipage}
+  \hfill
+}
+
+Two very important operations involving probabilities of random variables are
+those of \textit{Expectation} and \textit{Covariance}. These take as input a
+function $f$ and maps to the real number line $\mathbb{R}$, and are defined
+implicitly with regards to some random variable $X$ and its 
+probability distribution $p(X)$.
+\begin{description}
+\item[Expectation]
+  \begin{equation}
+    \label{eq:expectation}
+    \expectation{f, X} = \int p(x)f(x)
+  \end{equation}
+\item[Covariance]
+  \begin{equation}
+    \label{eq:covariance}
+    \cov{X, Y} = \expectation{(X - \expectation{X, X})(Y - \expectation{Y, Y}), XY}
+  \end{equation}
+\end{description}
+We then define the variance operator as
+\begin{equation}
+  \var{X} = \cov{X, X}
+\end{equation}
+
+\subsection{The Gaussian Distribution}
+
+
+\subsection{Maximum Likelihood Estimation}
+The methods that we will use in our experiments stem from the tradition of
+\textit{Bayesian Statistics}. In short, in Bayesian statistics we assume that
+the parameters we are trying to find are not fixed as is common to assume when
+thinking of probability statements as long-term frequencies of events. Instead
+we assume that probabilities are statements about our \textit{beliefs} of the
+parameter or random variable we are interested in.
+
+In our case, we won't use the full Bayesian machinery, we will instead be
+interested in doing \textit{Maximum Likelihood} optimization which means that if
+we let $\mathcal{D} = \{(x_i, y_i)_i^n\}$ be our dataset and $\theta$ be all the
+parameters of our model of the distribution of the data and $\Theta$ be the
+domain of the model parameters, then maximum likelihood estimation in the case
+of supervised learning is formulated as the following problem of finding the
+model parameters
+\begin{equation}
+  \label{eq:ML_estimate}
+  \theta_{ML} = \argmax_{\theta \in \Theta}p(y_1, \dots, y_n | x_1, \dots, x_n)
+\end{equation}
+
+In some way this is the optimal setting of $\theta$ without prior knowledge of
+how they are distributed. It takes all the data available into account and
+reduces to finding the $\theta$ that maximizes the \textit{likelihood}, that is
+the statement $p_{\theta}(X)$ seen as a function in $\theta$.
 
 \section{Deep Learning}
 A ubiquitous classifier within statistics is logistic regression. Logistic
@@ -91,7 +203,7 @@ since the likelihood often deals with products due to the iid assumption of the
 data, in practice it is much more common to use the \textit{log-likelihood}
 \begin{equation}
   \label{eq:log_likelihood}
-  \ell(\theta; \matcal{X]}) = \log \mathcal{L}(\theta; \mathcal{X})
+  \ell(\theta; \mathcal{X]}) = \log \mathcal{L}(\theta; \mathcal{X})
 \end{equation},
 since this turns the products when assuming iid data into sums
 \begin{equation*}
