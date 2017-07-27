@@ -1,25 +1,31 @@
 (TeX-add-style-hook
  "Dissertation"
  (lambda ()
-   (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("inputenc" "utf8")))
-   (TeX-run-style-hooks
-    "graphicx"
-    "tikz"
-    "inputenc"
-    "subfig"
-    "amsmath"
-    "amsthm"
-    "amsfonts"
-    "enumitem"
-    "bm"
-    "amssymb")
-   (TeX-add-symbols
-    '("var" 1)
-    '("cov" 2)
-    '("expectation" 2)
-    '("lang" 1)
-    "argmin"
-    "argmax"))
- :latex)
+   (LaTeX-add-bibitems
+    "bahdanau_neural_2014"
+    "neubig_neural_2017"
+    "cheng_long_2016"
+    "cho_learning_2014"
+    "yang_improved_2017"
+    "johnson_googles_2016"
+    "mikolov_distributed_2013"
+    "zhou_deep_2016"
+    "hu_controllable_2017"
+    "kingma_auto-encoding_2013"
+    "wu_adversarial_2017"
+    "gehring_convolutional_2016"
+    "goodfellow_maxout_2013"
+    "wu_googles_2016"
+    "graves_generating_2013"
+    "bowman_generating_2015"
+    "mikolov_efficient_2013"
+    "semeniuta_hybrid_2017"
+    "mescheder_adversarial_2017"
+    "luong_achieving_2016"
+    "Rumelhart:1995:BBT:201784.201785"
+    "Bishop:2006"
+    "koehn2005epc"
+    "jaynes2003probability"
+    "Press:2007:NRE:1403886"))
+ :bibtex)
 

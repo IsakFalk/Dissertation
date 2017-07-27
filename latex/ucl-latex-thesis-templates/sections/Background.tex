@@ -70,7 +70,7 @@ general sense, if $Y$ is continuous it is the ordinary Lebesgue integral as
 commonly used throughout mathematics and calculus, while if $Y$ is discrete then
 it is the sum over the possible values of $Y$. $p(X, Y)$ is the joint
 distribution of $X$ and $Y$, $p(Y | X)$ is the probability of $Y$ conditioned on
-$X$ and $p(X)$ is the marginal distribution of $X$. Using these rules it is easy
+n$X$ and $p(X)$ is the marginal distribution of $X$. Using these rules it is easy
 to Bayes theorem, one of the most integral (and simple) theorem of probability
 theory
 
@@ -95,21 +95,116 @@ probability distribution $p(X)$.
 \item[Expectation]
   \begin{equation}
     \label{eq:expectation}
-    \expectation{f, X} = \int p(x)f(x)
+    \E_X[f] = \int_{\mathcal{X}} p(x)f(x)
   \end{equation}
 \item[Covariance]
   \begin{equation}
     \label{eq:covariance}
-    \cov{X, Y} = \expectation{(X - \expectation{X, X})(Y - \expectation{Y, Y}), XY}
+    \Cov(X, Y) = \E_{XY}[(X - \E_X[X])(Y - \E_Y[Y])]
   \end{equation}
 \end{description}
 We then define the variance operator as
 \begin{equation}
-  \var{X} = \cov{X, X}
+  \Var(X) = \Cov(X, X)
 \end{equation}
 
-\subsection{The Gaussian Distribution}
+The generalisation from $f: \mathcal{X} \to \mathbb{R}$ to $f: \mathcal{X} \to
+\mathbb{R}^n$ is defined in the straightforward manner such that if $\bm{f} =
+f(X)$ then
+\begin{equation*}
+  \E_X
+  \begin{bmatrix}
+    \bm{f}_1 \\
+    \vdots \\
+    \bm{f}_n \\
+  \end{bmatrix} =
+  \begin{bmatrix}
+    \E_X \bm{f}_1 \\
+    \vdots \\
+    \E_X \bm{f}_n \\
+  \end{bmatrix}
+\end{equation*}
+similarly $\Cov(\bm{f})$ is a $D \times D$-dimensional matrix where
+$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i, \bm{f}_j)$.
 
+\subsection{The Gaussian Distribution}
+A very common distribution in machine learning and statistics in general is the
+Gaussian distribution, also called the Normal distribution. The Gaussian
+distribution satisfies some properties that makes it an ideal candidate from a
+modeling perspective including the Central Limit Theorem which says that sums of
+independent random variables of finite mean and variance will tend to a normal
+distribution, and the fact that the joint distribution of many random variables
+that are Gaussianly distributed is itself Gaussian which means that
+conditionals, posteriors and other distributions are themselves Gaussian when we
+deal with Gaussian random variables.
+
+For a $D$-dimensional vector $\bm{X}$, the multivariate Gaussian distribution
+takes the form
+\begin{equation}
+  \label{eq:Gaussian_dist}
+  \mathcal{N}(\bm{x} | \bm{\mu}, \bm{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\bm{\Sigma}|^{1/2}}\exp\left( -\frac{1}{2}(\bm{x} - \bm{\mu})^T\bm{\Sigma}^{-1}(\bm{x} - \bm{\mu})\right)
+\end{equation}
+where $\bm{\mu}$ is a $D$-dimensional mean vector, $\bm{\Sigma}$ is a $D \times
+D$ dimensional covariance matrix, and $|\bm{\Sigma}|$ denotes the determinant of
+$\bm{\Sigma}$. The meaning of these parameters can be shown to correspond to the
+operations of the expected value and covariance of $\bm{x}$,
+$\E_{\bm{x}}[\bm{x}] = \bm{\mu}$ and $\Cov(\bm{x}) = \bm{\Sigma}$.
+
+The Gaussian distribution can be seen as a unit $D$-dimensional cube which is
+translated, sheared and rotated, giving rise to the fact that we can write any
+Gaussianly distributed random variable $\bm{x} \sim \mathcal{N}(\bm{x} |
+\bm{\mu}, \bm{\Sigma})$ as a linear combination of a unit Gaussian random
+variable $\bm{z} \sim \mathcal{N}(\bm{x} | \bm{0}_D, \bm{I}_{D \times D})$. If
+we let $\bm{\Lambda} \bm{\Lambda} = \bm{\Sigma}$ be the Cholesky
+decomposition\cite[p.~100-102]{Press:2007:NRE:1403886} of $\bm{\Sigma}$, then we
+also have that
+\begin{equation*}
+  p(\bm{x}) = p(\bm{\mu} + \bm{\Lambda}\bm{z})
+\end{equation*}
+. If we further assume that $\bm{x}$ is parametrised by $\bm{\mu}$ and
+$\bm{\Sigma}$ such that $\bm{\Sigma}$ is diagonal positive definite with
+diagonal $\bm{\sigma}$, then $\bm{\Sigma} = \bm{\sigma} \odot \bm{I}_{D \times
+  D}$. Finally this means that if we want to sample a random variable $\bm{x}$
+with diagonal covariance structure, then we can do this by sampling a unit
+normal $\bm{z}$ which we then transform, which we can express as
+\begin{equation}
+  \label{eq:sample_x}
+  \bm{x} = \bm{\mu} + \bm{\sigma} \odot \bm{z} \sim \mathcal{N}(\bm{\mu}, \bm{\sigma} \odot \bm{I}_{D \times D})
+\end{equation}\cite[p.~78-84]{Bishop:2006}
+
+As the Gaussian distribution is part of the exponential family, the density of
+joint distribution of iid Gaussian variables are themselves Gaussian distributed
+where the natural parameters of this joint distribution is the sum of the
+natural parameters of each random variable in the joint. In particular for the
+Gaussian distribution, this means that if we have a collection of iid gaussian
+random variables $\{\bm{x}_i)\}_i^n$, such that $\bm{x}_i \sim
+\mathcal{N}(\bm{x}_i | \bm{\mu}_i, \bm{\Sigma}_{i})$, then the joint
+can be found to be Gaussian distributed as
+\begin{equation}
+  \label{eq:join_dist_Gaussian}
+  \mathcal{N}(\bm{\mu}, \bm{\Sigma})
+\end{equation},
+where
+\begin{align*}
+  \bm{\Sigma} & = \left( \sum_i^n \bm{\Sigma}_i^{-1} \right)^{-1}\\ 
+  \bm{\mu} & = \bm{\Sigma}\left( \sum_i^n \bm{\Sigma}^{-1} bm{\mu}_i \right)
+\end{align*}.
+
+In the case of two random variables distributed according to the form as laid
+out in \ref{eq:sample_x}, $\bm{x} \sim
+\mathcal{N}(\mathcal{N}(\bm{\mu}_{\bm{x}}, \bm{\sigma}_{\bm{x}} \odot \bm{I}))$
+and $\bm{y} \sim
+\mathcal{N}(\mathcal{N}(\bm{\mu}_{\bm{y}}, \bm{\sigma}_{\bm{y}} \odot \bm{I}))$
+we have that the resulting distribution $p(\bm{x}, \bm{y}) = p(\bm{x})p(\bm{y})$ is distributed such that
+\begin{equation}
+  \label{eq:twin_joint_diag_cov}
+  p(\bm{x}, \bm{y}) = \mathcal{N}(\bm{\mu}_{\bm{x}, \bm{y}}, \bm{\sigma}_{\bm{x}, \bm{y}})
+\end{equation}
+where
+\begin{align*}
+  \bm{\sigma}_{\bm{x}, \bm{y}} & = \frac{1}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \\
+  \bm{\mu}_{\bm{x}, \bm{y}} & = \frac{\bm{\sigma}_{\bm{x}}^{-1}\bm{\mu}_{\bm{x}} + \bm{\sigma}_{\bm{y}}^{-1}\bm{\mu}}_{\bm{y}}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}}
+\end{align*}.
 
 \subsection{Maximum Likelihood Estimation}
 The methods that we will use in our experiments stem from the tradition of
@@ -221,7 +316,6 @@ the resulting number might be smaller than $\epsilon_{machine}$ which will then
 be rounded down to $0.0$.
 
 For Maximum Likelihood learning which is the way that we ideally want to train
-models in the 
-
+models in the
 
 \section{Natural Language Processing}
