@@ -170,7 +170,7 @@ normal $\bm{z}$ which we then transform, which we can express as
 \begin{equation}
   \label{eq:sample_x}
   \bm{x} = \bm{\mu} + \bm{\sigma} \odot \bm{z} \sim \mathcal{N}(\bm{\mu}, \bm{\sigma} \odot \bm{I}_{D \times D})
-\end{equation}\cite[p.~78-84]{Bishop:2006}
+\end{equation}
 
 As the Gaussian distribution is part of the exponential family, the density of
 joint distribution of iid Gaussian variables are themselves Gaussian distributed
@@ -187,8 +187,8 @@ can be found to be Gaussian distributed as
 where
 \begin{align*}
   \bm{\Sigma} & = \left( \sum_i^n \bm{\Sigma}_i^{-1} \right)^{-1}\\ 
-  \bm{\mu} & = \bm{\Sigma}\left( \sum_i^n \bm{\Sigma}^{-1} bm{\mu}_i \right)
-\end{align*}.
+  \bm{\mu} & = \bm{\Sigma}\left( \sum_i^n \bm{\Sigma}^{-1} \bm{\mu}_i \right)
+\end{align*}.\cite[p.~78-84]{Bishop:2006}
 
 In the case of two random variables distributed according to the form as laid
 out in \ref{eq:sample_x}, $\bm{x} \sim
@@ -203,33 +203,172 @@ we have that the resulting distribution $p(\bm{x}, \bm{y}) = p(\bm{x})p(\bm{y})$
 where
 \begin{align*}
   \bm{\sigma}_{\bm{x}, \bm{y}} & = \frac{1}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \\
-  \bm{\mu}_{\bm{x}, \bm{y}} & = \frac{\bm{\sigma}_{\bm{x}}^{-1}\bm{\mu}_{\bm{x}} + \bm{\sigma}_{\bm{y}}^{-1}\bm{\mu}}_{\bm{y}}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}}
-\end{align*}.
+  \bm{\mu}_{\bm{x}, \bm{y}} & = \frac{\bm{\sigma}_{\bm{x}}^{-1}\bm{\mu}_{\bm{x}} + \bm{\sigma}_{\bm{y}}^{-1}\bm{\mu}_{\bm{y}}}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \\
+\end{align*}.\ref{appendixproofs}
 
 \subsection{Maximum Likelihood Estimation}
-The methods that we will use in our experiments stem from the tradition of
-\textit{Bayesian Statistics}. In short, in Bayesian statistics we assume that
-the parameters we are trying to find are not fixed as is common to assume when
-thinking of probability statements as long-term frequencies of events. Instead
-we assume that probabilities are statements about our \textit{beliefs} of the
-parameter or random variable we are interested in.
+An often used estimator for parameters is the \textit{Maximum Likelihood
+  Estimator}, hereafter called the MLE.
 
-In our case, we won't use the full Bayesian machinery, we will instead be
-interested in doing \textit{Maximum Likelihood} optimization which means that if
-we let $\mathcal{D} = \{(x_i, y_i)_i^n\}$ be our dataset and $\theta$ be all the
-parameters of our model of the distribution of the data and $\Theta$ be the
-domain of the model parameters, then maximum likelihood estimation in the case
-of supervised learning is formulated as the following problem of finding the
-model parameters
+Assume we have a model $\mathcal{M}$ parametrised by $\bm{\theta}$ constrained
+to live in the parameter space $\bm{\Theta}$. Given data $\mathcal{D}$ we want
+to be able to fit the parameters $\bm{\theta}$ such that these somehow explains
+the data, and thus should be able to work on new data in a manner that
+generalises well. The MLE of of the parameters of the model is defined to be
+\begin{equation*}
+  \hat{\bm{\theta}}_{ML} = \argmax_{\bm{\theta} \in \bm{\Theta}}\mathcal{L}(\bm{\theta}; \mathcal{D})
+\end{equation*}
+.
+
+While the original MLE is defined in terms of the likelihood function
+$\mathcal{L}(\bm{\theta}; \mathcal{D})$, it's often more practical to work with
+the logarithm of this function, the log-likelihood function $\ell(\bm{\theta} ;
+\mathcal{D})$. Using the common assumption of i.i.d datapoints, the joint
+distribution becomes a product of individual probabilities for each datapoint,
 \begin{equation}
-  \label{eq:ML_estimate}
-  \theta_{ML} = \argmax_{\theta \in \Theta}p(y_1, \dots, y_n | x_1, \dots, x_n)
-\end{equation}
+  \label{eq:likelihood}
+  \mathcal{L}(\bm{\theta} | \mathcal{D}) = p(\bm{x}_1, \dots, \bm{x}_n | \bm{\theta}) = \prod_i^n p(\bm{x}_i | \bm{\theta})
+\end{equation}.
+Using the log-likelihood we transform this product into a form involving sums
+\begin{equation}
+  \label{eq:log-likelihood}
+  \ell(\bm{\theta} | \mathcal{D}) = \log \mathcal{L}(\bm{\theta} | \mathcal{D}) = \sum_i^n \log p(\bm{x}_i)
+\end{equation}.
+Besides from simplifying notation and calculation, it has the added benefit of
+reducing the risk of arithmetic underflow due to the small magnitude of
+individual probabilities\footnote{Also, with the use of the log-sum-exp-trick,
+  \begin{equation*}
+    \log \sum_{i=1}^n \exp(x_n) = \max_i x_i + \log \sum_{i=1}^n \exp(x_n - \max_i x_i)
+  \end{equation*}
+  this problem can be reduced even further}
 
-In some way this is the optimal setting of $\theta$ without prior knowledge of
-how they are distributed. It takes all the data available into account and
-reduces to finding the $\theta$ that maximizes the \textit{likelihood}, that is
-the statement $p_{\theta}(X)$ seen as a function in $\theta$.
+In a sense, the MLE is the best fit to the data given that we put a flat prior
+over the parameters $\bm{\theta}$, that is we let the data speak for itself. The
+MLE only takes into account the information given by the available data
+$\mathcal{D}$ and thus makes a choice of $\bm{\theta}$ based upon the
+information in the data set and nothing else. Besides this intuitive
+justification of the estimator, from a frequentist perspective it comes with a
+number of advantageous properties that we like an estimator to have, making it a
+natural candidate for training models.
+
+The main problem with MLE's are that they are defined implicitly in terms of the
+likelihood function of the data. In that sense every setting is different as
+there is no straightforward way to solve for the MLE as we in most cases have to
+resort to numerical solutions to try to find the global maximum of
+$\mathcal{L}(\bm{\theta}; \mathcal{D})$, a function which is often non-linear,
+multimodal and with a complex surface, leading to local maximums being found
+instead of the global maximum in many cases.\cite{CaseBerg:01}
+
+\subsection{Graphical models}
+A very convenient tool for probabilistic modelling is the notion of using
+diagrams to specify the conditional relationships between random variables. A
+graphical model is a diagrammatic way of specifying this relationship by
+creating a Directed Acyclic Graph, a directed graph without any cycles. This
+representation is called a \textit{Graphical Model} and provide a powerful way
+to visualize the structure of the probabilistic model and also how to use and
+abuse the structure of the model in order to infer variables in a
+computationally efficient way.
+
+A graph in this setting consists of a set of \textit{vertices} connected by
+\textit{edges}, following the notation and nomenclature of graph theory as used
+in mathematics. While there are many different kinds of graphical models
+depending on the type of graph structure used (directed graphical models,
+undirected graphical models, factor graphs, etc.), we will only focus on the
+subset of graphical models called directed graphical models.
+
+Directed graphical models specify how the joint distribution of a set of random
+variables $\mathcal{X}$ factors in a conditional manner. In general, the
+relationship between a given directed graph and the corresponding distribution
+over the variables in $\mathcal{X}$ is such that the join distribution defined
+by the graph is given by the product, over all vertices of the graph, of a
+conditional distribution for each vertex conditioned on the variables
+corresponding to the parents of that vertex in the graph. So for a graph with
+$K$ vertices, the joint distribution is give by
+\begin{equation}
+  \label{eq:dir_graph_model_dist}
+  p(\mathcal{X}) = \prod_{k=1}^K p(x_k | \text{pa}(x_k))
+\end{equation}
+where $\text{pa}(x_k)$ is defined as the set of random variables corresponding
+to the parent vertices of the random variable $x_k$.
+
+Although a graphical model is completely defined in terms of it's vertex and
+edge set, it is really the most powerful when visualized as a diagram. As an
+example I will repeat the above formulation in the context of the directed
+graphical model
+\begin{figure}[H]
+  \center
+  \begin{tikzpicture}
+    % Define nodes
+    \node[latent] (a) {$a$} ;
+    \node[latent, right=of a] (b) {$b$} ;
+    \node[latent, below=of a, xshift=0.95cm] (c) {$c$} ;
+    \node[obs, below=of c] (d) {$d$} ;
+
+    % Connect the nodes
+    \edge {a} {b, c} ;
+    \edge {b} {c} ;
+    \edge {c} {d} ;
+  \end{tikzpicture}
+\end{figure}
+There are two different vertices in this graphical model, the greyed out vertex
+indicates that the random variable is \textit{observed} such that it's value is
+fixed and known. The white vertices indicates latent random variables which we
+don't observe.
+
+For this example we have the following factorisation of the joint distribution,
+following the rules laid out in equation~\ref{eq:dir_graph_model_dist},
+\begin{equation*}
+  p(a, b, c, d) = p(d | c)p(c | a, b)p(b | a)p(a)
+\end{equation*}.
+
+\section{Approximate Inference}
+
+While MLE is in many ways the optimal way that we can fit the model, it's only
+analytically and/or computationally feasible for very simple models which relies
+simple transformations and tractable distributional relationships. In cases
+where more powerful models are used it is very hard to find the MLE or even
+local maximum to the likelihood $\mathcal{L}$, or equivalently the log-likelihood
+$\ell$.
+
+While in theory most of these problems can be resolved by MCMC
+sampling, which also practically have been implemented in the way of
+probabilistic programming with some
+success\cite[Ch.~1]{brooks2011handbook}\cite{Carpenter_stan:a, }
+
+% In a bayesian setting we parametrise a model $\mathcal{M}$ by the parameters
+% $\theta_{\mathcal{M}}$ which we will call $\theta$ since our model is fixed. The
+% goal is to find the parameters that maximise the likelihood,
+% \begin{equation}
+%   \label{eq:likelihood}
+%   \mathcal{L}(\theta; \mathcal{X}) = p_{\theta}(\mathcal{X})
+% \end{equation}.
+
+% Contrary to a normal probability which is a function of the random variable
+% $\mathcal{X}$, the likelihood instead acts as a function of $\theta$, hence why
+% it's often written in the form $\mathcal{L}(\theta; \mathcal{X})$. However,
+% since the likelihood often deals with products due to the iid assumption of the
+% data, in practice it is much more common to use the \textit{log-likelihood}
+% \begin{equation}
+%   \label{eq:log_likelihood}
+%   \ell(\theta; \mathcal{X]}) = \log \mathcal{L}(\theta; \mathcal{X})
+% \end{equation},
+% since this turns the products when assuming iid data into sums
+% \begin{equation*}
+%   \log p_{\theta}(X_1, \dots, X_n) = \log \prod_{i = 1}^n p_{\theta}(X_i) = \sum_{i = 1}^n \log p_{\theta}(X_i)
+% \end{equation*}.
+
+% Beside for ease of notation, this also have the following advantage that when
+% dealing with floating point arithmetic, using log-likelihoods we have a much
+% smaller chance of over/underflowing. Arithmetic underflow and overflow stems
+% from the fact that the computer only deals with floating point numbers, which
+% has a smallest number that it can represent, called machine epsilon
+% ($\epsilon_{machine}$), and a biggest number that it can represent. When
+% multiplying a lot of small numbers together as is common in probability theory,
+% the resulting number might be smaller than $\epsilon_{machine}$ which will then
+% be rounded down to $0.0$.
+
+% For Maximum Likelihood learning which is the way that we ideally want to train
+% models in the
 
 \section{Deep Learning}
 A ubiquitous classifier within statistics is logistic regression. Logistic
@@ -281,41 +420,7 @@ to each other in terms of independency. This is specified by the Directed
 Acyclic Graph where each arrow signifies a conditional relationship between
 $\bm{x}$ and $\bm{y}$. A full description of how graphical models ,
 
-\section{Approximate Inference}
-
-In a bayesian setting we parametrise a model $\mathcal{M}$ by the parameters
-$\theta_{\mathcal{M}}$ which we will call $\theta$ since our model is fixed. The
-goal is to find the parameters that maximise the likelihood,
-\begin{equation}
-  \label{eq:likelihood}
-  \mathcal{L}(\theta; \mathcal{X}) = p_{\theta}(\mathcal{X})
-\end{equation}.
-
-Contrary to a normal probability which is a function of the random variable
-$\mathcal{X}$, the likelihood instead acts as a function of $\theta$, hence why
-it's often written in the form $\mathcal{L}(\theta; \mathcal{X})$. However,
-since the likelihood often deals with products due to the iid assumption of the
-data, in practice it is much more common to use the \textit{log-likelihood}
-\begin{equation}
-  \label{eq:log_likelihood}
-  \ell(\theta; \mathcal{X]}) = \log \mathcal{L}(\theta; \mathcal{X})
-\end{equation},
-since this turns the products when assuming iid data into sums
-\begin{equation*}
-  \log p_{\theta}(X_1, \dots, X_n) = \log \prod_{i = 1}^n p_{\theta}(X_i) = \sum_{i = 1}^n \log p_{\theta}(X_i)
-\end{equation*}.
-
-Beside for ease of notation, this also have the following advantage that when
-dealing with floating point arithmetic, using log-likelihoods we have a much
-smaller chance of over/underflowing. Arithmetic underflow and overflow stems
-from the fact that the computer only deals with floating point numbers, which
-has a smallest number that it can represent, called machine epsilon
-($\epsilon_{machine}$), and a biggest number that it can represent. When
-multiplying a lot of small numbers together as is common in probability theory,
-the resulting number might be smaller than $\epsilon_{machine}$ which will then
-be rounded down to $0.0$.
-
-For Maximum Likelihood learning which is the way that we ideally want to train
-models in the
-
 \section{Natural Language Processing}
+
+
+

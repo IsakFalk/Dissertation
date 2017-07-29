@@ -26,6 +26,9 @@
     "Bishop:2006"
     "koehn2005epc"
     "jaynes2003probability"
-    "Press:2007:NRE:1403886"))
+    "Press:2007:NRE:1403886"
+    "CaseBerg:01"
+    "brooks2011handbook"
+    "Carpenter_stan:a"))
  :bibtex)
 

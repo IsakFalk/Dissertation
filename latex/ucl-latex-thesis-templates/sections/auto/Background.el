@@ -14,9 +14,9 @@
     "eq:sample_x"
     "eq:join_dist_Gaussian"
     "eq:twin_joint_diag_cov"
-    "eq:ML_estimate"
-    "eq:logistic_function"
     "eq:likelihood"
-    "eq:log_likelihood"))
+    "eq:log-likelihood"
+    "eq:dir_graph_model_dist"
+    "eq:logistic_function"))
  :latex)
 
