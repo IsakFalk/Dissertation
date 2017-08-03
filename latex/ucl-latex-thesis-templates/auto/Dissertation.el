@@ -29,6 +29,12 @@
     "Press:2007:NRE:1403886"
     "CaseBerg:01"
     "brooks2011handbook"
-    "Carpenter_stan:a"))
+    "Carpenter_stan:a"
+    "journals/peerj-cs/SalvatierWF16"
+    "Dempster77maximumlikelihood"
+    "Neal98aview"
+    "bengio_practical_2012"
+    "Larochelle:2009:EST:1577069.1577070"
+    "beal2003"))
  :bibtex)
 

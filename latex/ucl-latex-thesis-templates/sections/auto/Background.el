@@ -17,6 +17,10 @@
     "eq:likelihood"
     "eq:log-likelihood"
     "eq:dir_graph_model_dist"
-    "eq:logistic_function"))
+    "eq:latent_var_model"
+    "eq:AI_optimal_element"
+    "eq:logistic_function"
+    "eq:GD_update"
+    "eq:SGD_update"))
  :latex)
 
