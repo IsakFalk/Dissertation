@@ -35,6 +35,21 @@
     "Neal98aview"
     "bengio_practical_2012"
     "Larochelle:2009:EST:1577069.1577070"
-    "beal2003"))
+    "beal2003"
+    "kingma_adam:_2014"
+    "mandt_stochastic_2017"
+    "bottou_optimization_2016"
+    "choromanska_loss_2014"
+    "blei_variational_2017"
+    "roeder_sticking_2017"
+    "Duchi:EECS-2010-24"
+    "Tieleman2012"
+    "Ruder17"
+    "series/lncs/Bottou12"
+    "mandt_variational_2016"
+    "Rosenfeld00twodecades"
+    "sep-computational-linguistics"
+    "Hinton:1986:DR:104279.104287"
+    "Bengio:2003:NPL:944919.944966"))
  :bibtex)
 

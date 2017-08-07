@@ -20,7 +20,11 @@
     "eq:latent_var_model"
     "eq:AI_optimal_element"
     "eq:logistic_function"
+    "eq:conditional_language_probability"
+    "eq:one_hot_encoding"
+    "eq:cosine_similarity"
     "eq:GD_update"
-    "eq:SGD_update"))
+    "eq:SGD_update"
+    "ADAM"))
  :latex)
 

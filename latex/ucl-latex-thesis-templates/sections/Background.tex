@@ -452,9 +452,76 @@ $\bm{x}$ and $\bm{y}$. A full description of how graphical models ,
 
 \section{Natural Language Processing}
 
-\subsection{Language statistics}
+Humans use natural language everyday to convey concepts and abstractions to each
+other in an efficient manner. However, compared to formal languages found in
+mathematics and programming languages, the natural languages we use are often
+ambiguous systems filled with rules and exceptions\cite{Rosenfeld00twodecades, sep-computational-linguistics}.
+
+Natural Language Processing (Hereafter NLP) is and old field that for a long
+time developed in parallel with the field of machine learning and
+computational statistics which deals with how to process information coming from
+human languages and is split up into several subfields such as Machine
+Translation, statistical parsing and sentiment analysis\cite{sep-computational-linguistics}.
+
+\subsection{Language model}
+If we define a sentence to be a tuple of words $\bm{w} = (w_1, \dots,
+w_l)$ such that each word is an atomic element $w_i \in \mathbf{D}$, where $\mathbf{D}$ is the
+dictionary of words in our language, then the joint distribution of a word with
+respect to the underlying probability measure can be rolled out using the
+probabilistic chain rule which is just repeated application of the original
+product rule\ref{eq:product_rule}
+\begin{equation}
+  \label{eq:conditional_language_probability}
+  P(\bm{w}) = \prod_{t = 1}^TP(w_t | w_1, \dots, w_{t-1})
+\end{equation}
+where $w_t$ is the $t$'th word.\cite{Bengio:2003:NPL:944919.944966}
+
+From this starting point analysis and generation of other language models can start.
 
 \subsection{Word embeddings}
+A straightforward way to represent the various words of the dictionary is as
+one-hot-encoded vectors such that a word $w \in \mathbf{D}$, such that size of
+$\mathbf{D}$ is $D$ with an index $i$
+given by its place in the dictionary sorted alphabetically in descending order
+will have the vector representation
+\begin{equation}
+  \label{eq:one_hot_encoding}
+  \text{one-hot}(w) =
+  \begin{bmatrix}
+    0 \\
+    \vdots \\
+    0 \\
+    1 \\
+    0 \\
+    \vdots \\
+    0
+  \end{bmatrix}
+\end{equation}
+such that $\text{one-hot}(w)_{j} = \delta_{ij}$.
+
+While this is a conceptually easy to understand, it fails to account for the
+curse of dimensionality as the size of the vocabulary might grow to millions of
+entries and the fact that the cosine similarity of two words $v_1, v_2 \in
+\mathbf{D}$ is zero unless they are the same word
+\begin{equation}
+  \label{eq:cosine_similarity}
+  \cos_{similarity}(\text{one-hot}(v_1), \text{one-hot}(v_2)) = \delta_{v_1 v_2}
+\end{equation}. This means that no meaning is embedded in the vector space
+except for the location in the sorted dictionary. Instead we would like to
+associate each word in the vocabulary with a distributed \textit{word feature
+  vector}, a real-valued vector in $\mathbf{R}^m$, express the joint probability
+function \ref{eq:conditional_language_probability} of word sequences in terms of
+the feature vectors of these words in the sequence and simultaneously learn the
+word feature vectors and the parameters of the model which dictates the form of
+the probability function; $\bm{\theta}$.
+
+We may represent this in a mathematical form by trying to find a mapping $C$
+from any element $w \in \mathbf{D}$ such that $C(w) \in \mathf{R}^m$, in our
+case $C$ is a linear mapping, using the one-hot encoded form of $\bm{w} =
+\text{one-hot}(w)$ as the
+initial representation of the words. This also means that we may represent $C$
+as a matrix, $\bm{C} \in \mathbf{R}^{m \times D}$, thus the word feature vector of
+the learned embedding can be represented by the matrix multiplication $Cw$.
 
 \subsection{Neural machine translation}
 
@@ -474,11 +541,13 @@ the function we are trying to optimize is particularly well-behaved, leading to
 theoretical guarantees on the solution converged to. The surface of the function
 we are trying to optimize in machine learning in general and deep learning in
 particular is not well-behaved, being highly non-linear and non-convex, meaning
-most theoretical results that exist do not apply to this domain.
+most theoretical results that exist do not apply to this domain\cite{choromanska_loss_2014}.
 
 Nevertheless, while theoretical results are lacking, there has been substantial
 advances in various optimisation techniques fit to attack the highly non-linear,
-non-convex and high-dimensional optimization problems of learning in deep models.
+non-convex and high-dimensional optimization problems of learning in deep
+models, particularly from the Stochastic Gradient Descent. This has led to
+numerous gradient descent-like algorithms used machine learning\cite{Ruder17}.
 
 \subsection{Stochastic Gradient Descent}
 
@@ -499,7 +568,7 @@ objective function that we try to maximize, such that $Q : \Theta \times
 \begin{equation}
   \label{eq:GD_update}
   \bm{\theta}_{t + 1} = \bm{\theta}_t - \gamma_t \frac{1}{n} \sum_{i = 1}^n \nabla_{\bm{\theta}} Q(z_i, \bm{\theta}_t)
-\end{equation}.\cite{}
+\end{equation}.
 While $\gamma_t$ may vary with $t$, it is often fixed for practical reasons. As
 we can see GD takes into account all of the datapoints in the set, in some sense
 updating the parameters with respect to the true linear approximation of the gradient.
@@ -517,7 +586,12 @@ following update
 \begin{equation}
   \label{eq:SGD_update}
   \bm{\theta}_{t + 1} = \bm{\theta}_t - \gamma_t \frac{1}{m} \sum_{i \in I_t} \nabla_{\bm{\theta}} Q(z_i, \bm{\theta}_t)
-\end{equation}.
+\end{equation}\cite{series/lncs/Bottou12}\cite[p.~240]{Bishop:2006}.
+
+The stochasticity has been shown to act as a regularizer and several analyses of
+this in terms of a Bayesian framework has been done, explaining the stationary
+behaviour of SGD with constant learning rate after
+convergence\cite{mandt_stochastic_2017, mandt_variational_2016}
 
 This solves the problem of memory and time, but also improves on GD in terms of
 acting as a sort of regulariser for the model if $\gamma_t$ is kept fixed.
@@ -527,4 +601,48 @@ learning problems before other algorithms improved on the issue of picking a
 good learning rate.
 
 \subsection{ADAM}
+SGD has found widespread use within the machine learning community due to strong
+experimental results and ease of use, especially in deep learning. Lately
+though, a number of alternatives have sprung up that aims to improve the vanilla
+SGD, such as RMSProp\cite{Tieleman2012} and AdaGrad\cite{Duchi:EECS-2010-24}.
 
+Adam takes inspiration from RMSProp and AdaGrad. Technically, Adam keeps an
+exponential running average of the first and second order statistics of the
+gradient, using these to calculate an adaptive learning rate.
+
+As laid out in the original paper, ADAM operates on a stochastic objective
+function $f(\bm{\theta})$, which in our case would be the probability averaged
+over our input batch. $f_t(\bm{\theta})$ denotes this function over different
+timesteps, equally $g_t = \nabla_{\bm{\theta}} f_t(\bm{\theta})$. $m_t$ and
+$v_t$ denotes the first and second order moments of the gradients, however,
+these are biased and are corrected in the algorithm.
+
+The whole algorithm is as follows.
+
+\begin{algorithm}
+  \caption{ADAM}\label{ADAM}
+  \begin{algorithmic}[1]
+    \Require $\alpha$: Stepsize
+    \Require $\beta_1, \beta_2 \in [0, 1)$: Exponential decay rates of the moment estimates
+    \Require $f(\bm{\theta})$: Stochastic objective function with parameters
+    $\bm{\theta}$
+    \Require $\bm{\theta}_0$: Initial parameter vector
+    \State $m_0 \gets 0$ (Initialize $1^{\text{st}}$ moment vector)
+    \State $v_0 \gets 0$ (Initialize $2^{\text{nd}}$ moment vector)
+    \State $t \gets 0$ (Initialize timestep)
+    \While{$\bm{\theta}_t$ not converged}
+    \State $t \gets t + 1$
+    \State $g_t \gets \nabla_{\bm{\theta}}f_t(\bm{\theta}_{t-1})$ (get gradients w.r.t stochastic objective at timestep $t$)
+    \State $m_t \gets \beta_1 \cdot m_{t-1} + (1 - \beta_1) \cdot g_t$ (Update biased first moment estimate)
+    \State $v_t \gets \beta_2 \cdot v_{t-1} + (1 - \beta_2) \cdot g^2_t$ (Update biased second raw moment estimate)
+    \State $\hat{m}_1 \gets m_t / (1 - \beta^t_1)$ (Compute bias-corrected first moment estimate)
+    \State $\hat{v}_1 \gets v_t / (1 - \beta^t_2)$ (Compute bias-corrected second raw moment estimate)
+    \State $\bm{\theta}_t \gets \bm{\theta}_{t-1} - \alpha \cdot \hat{m}_i/(\sqrt{\hat{v}_t} + \epsilon)$ (Update parameters)
+    \EndWhile
+    \Return $\bm{\theta}_t$ (Resulting parameters)
+  \end{algorithmic}
+\end{algorithm}
+
+Experimentally Adam has shown very good results on training various deep
+learning models such as MLP's, CNN's and RNN's so we will use it to train our
+models throughout this dissertation\cite{kingma_adam:_2014}.
