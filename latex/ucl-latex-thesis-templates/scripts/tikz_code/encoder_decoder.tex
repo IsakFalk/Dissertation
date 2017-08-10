@@ -1,0 +1,55 @@
+\documentclass[12pt,tikz,border=2pt]{standalone}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\begin{document}
+\tikzset
+{
+  myTrapezium/.pic =
+  {
+    \draw [fill=magenta!50] (0,0) -- (0,\b) -- (\a,\c) -- (\a,-\c) -- (0,-\b) -- cycle ;
+    \coordinate (-center) at (\a/2,0);
+    \coordinate (-out) at (\a,0);
+  },
+  myArrows/.style=
+  {
+    line width=2mm, 
+    black,
+    -{Triangle[length=1.5mm,width=5mm]},
+    shorten >=2pt, 
+    shorten <=2pt, 
+  }
+}
+    \def\a{3}  % width of trapezium
+    \def\b{.9} % small height of trapezium
+    \def\c{2}  % tall height of trapezium
+
+\begin{tikzpicture}
+[
+  node distance=1mm, % space between drawn parts
+  every node/.style={align=center},
+]
+
+
+  \node (middleThing) 
+  [
+    draw,
+    fill=purple!80!blue!70,
+    %minimum width=1cm,
+    minimum height=2*\b cm,
+    font=\tiny,
+  ]
+  {\begin{tabular}{r}-0.2 \\ -0.1 \\ 0.1 \\ 0.4 \\ -0.3 \\ 1.1\end{tabular}};
+  \pic (right)[right=of middleThing.east] {myTrapezium} ;
+  \pic (left)[left=of middleThing.west, rotate=180] {myTrapezium} ;
+  \node at (right-center) {Decoder} ;
+  \node at (left-center) {Encoder};
+  \node at (right-center) {Decoder} ;
+
+  \def\d{.9}
+  \coordinate (u) at (\d,0);
+  \draw [myArrows] (right-out) -- ++(u) node [anchor=west] {$\bm{y}$};
+  \draw [myArrows] ($(left-out)-(u)$) node [anchor=east] {$\bm{x}$} -- ++(u) ;
+
+\end{tikzpicture}
+\end{document}
+
+
