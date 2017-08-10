@@ -23,6 +23,7 @@
     "eq:conditional_language_probability"
     "eq:one_hot_encoding"
     "eq:cosine_similarity"
+    "fig:encoder_decoder"
     "eq:GD_update"
     "eq:SGD_update"
     "ADAM"))

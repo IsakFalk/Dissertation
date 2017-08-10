@@ -151,8 +151,11 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 \ProcessOptions
 \LoadClass{book}
-\RequirePackage{times}
-\RequirePackage{mathptmx}
+\RequirePackage{libertine}
+\RequirePackage[scaled=0.95]{inconsolata}
+\RequirePackage[libertine,cmintegrals,cmbraces,vvarbb]{newtxmath}
+%\RequirePackage{times}
+%\RequirePackage{mathptmx}
 %    \end{macrocode}
 %
 %  \subsection{Page Layout}

@@ -3,6 +3,7 @@
 
 \usepackage{graphicx}
 % % --- all packages
+\usepackage[mode=buildnew]{standalone}
 \usepackage{tikz}
 \usetikzlibrary{bayesnet}
 \usepackage[utf8]{inputenc}
@@ -26,11 +27,35 @@
 % % }
 % \usepackage{extramarks}
 \usepackage{amsmath}
-\usepackage{amsthm}
+%\usepackage{amsthm}
 \usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{enumitem}
+
+\usepackage{color} % Colour
+\usepackage{bm} % allows bold maths symbols
+
+% Nomenclature packages
+\usepackage[intoc]{nomencl}
+\usepackage{ifthen}
+\renewcommand\nomgroup[1]{%
+  \ifthenelse{\equal{#1}{A}}{%
+    \item[\textbf{Acronyms}]}{%                       A - Acronyms
+  \ifthenelse{\equal{#1}{M}}{%
+    \item[\textbf{Matrix notation}]}{%                M - Matrix
+  \ifthenelse{\equal{#1}{P}}{%
+    \item[\textbf{Probability}]}{%                    P - Probability
+  \ifthenelse{\equal{#1}{L}}{%
+    \item[\textbf{Natural Language Processing}]}{%    L - Language
+  {}}}}}}
+\renewcommand*{\nompreamble}{\markboth{\nomname}{\nomname}}
+
+\newcommand{\nomunit}[1]{%
+  \renewcommand{\nomentryend}{\hspace*{\fill}\makebox[1cm][l]{#1}}%
+  }
+
 % \usepackage{tabu}
 \usepackage{bm}
 \usepackage{amssymb}
@@ -53,6 +78,15 @@
 % \usepackage{physics}
 % \usepackage{verbatim}
 
+% Nomenclature groupings definitions
+\usepackage{etoolbox}
+\renewcommand\nomgroup[1]{%
+  \item[\bfseries
+  \ifstrequal{#1}{NLP}{Natural Language Processing}{%
+  \ifstrequal{#1}{MAT}{Mathematics}{%
+  \ifstrequal{#1}{O}{Other Symbols}{}}}%
+]}
+
 % Commands. This makes it easier to change styles for the whole thesis at once.
 \newcommand{\lang}[1]{\mathcal{#1}}
 
@@ -60,7 +94,7 @@
 \DeclareMathOperator{\E}{\mathbb{E}}
 \DeclareMathOperator{\Cov}{\text{Cov}}
 \DeclareMathOperator{\Var}{\text{Var}}
+\newcommand\KL[2]{D_{KL}(#1 || #2)}
 \DeclareMathOperator*{\argmin}{\arg\!\min}
 \DeclareMathOperator*{\argmax}{\arg\!\max}
-
 

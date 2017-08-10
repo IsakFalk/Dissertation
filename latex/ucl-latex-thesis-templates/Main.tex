@@ -52,12 +52,13 @@
 %  phd
 %  mres
 %  mphil 
-%\documentclass[12pt,phd,draft,a4paper,oneside]{ucl_thesis}
-\documentclass[12pt,mphil,draft,a4paper,oneside]{ucl_thesis}
+%  \documentclass[12pt,phd,draft,a4paper,oneside]{ucl_thesis}
+\documentclass[12pt,mphil,a4paper,oneside]{ucl_thesis}
 
 % Include the .sty file. Check so that it doesn't fuck up
 % the whole document. Might want to rewrite it.
 \usepackage{Dissertation}
+\makenomenclature
 
 % Path to the graphics (figures, plots etc)
 \graphicspath{{./figures}}
@@ -93,19 +94,17 @@
 
 % At last, content! Remember filenames are case-sensitive and 
 %  *must not* include spaces.
-\include{./sections/Preamble} 
+\include{./sections/Preamble}
+\include{./sections/Nomenclature}
 \include{./sections/Introduction}
 \include{./sections/Background}
 \include{./sections/Methods}
 \include{./sections/Experiments}
 \include{./sections/Conclusions}
-\include{./sections/Appendices}
+\include{./sections/Appendices} 
  
 % You could separate these out into different files if you have
 % particularly large appendices.
-
-% Example citation.
-\cite{bahdanau_neural_2014}
 
 % This line manually adds the Bibliography to the table of contents.
 % The fact that \include is the last thing before this ensures that it

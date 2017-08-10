@@ -1,55 +1,28 @@
 (TeX-add-style-hook
  "Dissertation"
  (lambda ()
-   (LaTeX-add-bibitems
-    "bahdanau_neural_2014"
-    "neubig_neural_2017"
-    "cheng_long_2016"
-    "cho_learning_2014"
-    "yang_improved_2017"
-    "johnson_googles_2016"
-    "mikolov_distributed_2013"
-    "zhou_deep_2016"
-    "hu_controllable_2017"
-    "kingma_auto-encoding_2013"
-    "wu_adversarial_2017"
-    "gehring_convolutional_2016"
-    "goodfellow_maxout_2013"
-    "wu_googles_2016"
-    "graves_generating_2013"
-    "bowman_generating_2015"
-    "mikolov_efficient_2013"
-    "semeniuta_hybrid_2017"
-    "mescheder_adversarial_2017"
-    "luong_achieving_2016"
-    "Rumelhart:1995:BBT:201784.201785"
-    "Bishop:2006"
-    "koehn2005epc"
-    "jaynes2003probability"
-    "Press:2007:NRE:1403886"
-    "CaseBerg:01"
-    "brooks2011handbook"
-    "Carpenter_stan:a"
-    "journals/peerj-cs/SalvatierWF16"
-    "Dempster77maximumlikelihood"
-    "Neal98aview"
-    "bengio_practical_2012"
-    "Larochelle:2009:EST:1577069.1577070"
-    "beal2003"
-    "kingma_adam:_2014"
-    "mandt_stochastic_2017"
-    "bottou_optimization_2016"
-    "choromanska_loss_2014"
-    "blei_variational_2017"
-    "roeder_sticking_2017"
-    "Duchi:EECS-2010-24"
-    "Tieleman2012"
-    "Ruder17"
-    "series/lncs/Bottou12"
-    "mandt_variational_2016"
-    "Rosenfeld00twodecades"
-    "sep-computational-linguistics"
-    "Hinton:1986:DR:104279.104287"
-    "Bengio:2003:NPL:944919.944966"))
- :bibtex)
+   (TeX-add-to-alist 'LaTeX-provided-package-options
+                     '(("standalone" "mode=buildnew") ("inputenc" "utf8") ("algpseudocode" "noend") ("nomencl" "intoc")))
+   (TeX-run-style-hooks
+    "graphicx"
+    "standalone"
+    "tikz"
+    "inputenc"
+    "subfig"
+    "amsmath"
+    "amsfonts"
+    "amssymb"
+    "algorithm"
+    "algpseudocode"
+    "enumitem"
+    "color"
+    "bm"
+    "nomencl"
+    "ifthen"
+    "etoolbox")
+   (TeX-add-symbols
+    '("KL" 2)
+    '("lang" 1)
+    '("nomunit" 1)))
+ :latex)
 

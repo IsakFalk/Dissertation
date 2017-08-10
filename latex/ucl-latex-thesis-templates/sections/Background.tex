@@ -479,6 +479,14 @@ where $w_t$ is the $t$'th word.\cite{Bengio:2003:NPL:944919.944966}
 From this starting point analysis and generation of other language models can start.
 
 \subsection{Word embeddings}
+Breaking down sentences at a word level and processing them into a form that
+encodes information efficiently is a problem which has gained notorious
+recognition, leading to algorithms such as word2vec and
+Glove\cite{DBLP:journals/corr/abs-1301-3781, Pennington14glove:global,
+  Mikolov:2013:DRW:2999792.2999959}. However, these techniques work less well in
+a neural network setting where instead finding the best embedding jointly while
+optimizing the model is preferred\cite[p.~5-7]{goldberg2015primer}.
+
 A straightforward way to represent the various words of the dictionary is as
 one-hot-encoded vectors such that a word $w \in \mathbf{D}$, such that size of
 $\mathbf{D}$ is $D$ with an index $i$
@@ -496,7 +504,7 @@ will have the vector representation
     \vdots \\
     0
   \end{bmatrix}
-\end{equation}
+\end{equation}\cite[p.~6]{goldberg2015primer}
 such that $\text{one-hot}(w)_{j} = \delta_{ij}$.
 
 While this is a conceptually easy to understand, it fails to account for the
@@ -509,21 +517,42 @@ entries and the fact that the cosine similarity of two words $v_1, v_2 \in
 \end{equation}. This means that no meaning is embedded in the vector space
 except for the location in the sorted dictionary. Instead we would like to
 associate each word in the vocabulary with a distributed \textit{word feature
-  vector}, a real-valued vector in $\mathbf{R}^m$, express the joint probability
+  vector}, a dense, real-valued vector in $\mathbb{R}^m$; express the joint probability
 function \ref{eq:conditional_language_probability} of word sequences in terms of
 the feature vectors of these words in the sequence and simultaneously learn the
 word feature vectors and the parameters of the model which dictates the form of
-the probability function; $\bm{\theta}$.
+the probability function; $\bm{\theta}$. After this is done words which share
+similarities in some sense such as \texttt{Dog, Puppy} would have a higher
+similarity score than unrelated concepts such as \texttt{Dog, Bulwark}\cite{Bengio:2003:NPL:944919.944966}.
 
 We may represent this in a mathematical form by trying to find a mapping $C$
-from any element $w \in \mathbf{D}$ such that $C(w) \in \mathf{R}^m$, in our
+from any element $w \in \mathbf{D}$ such that $C(w) \in \mathbb{R}^m$, in our
 case $C$ is a linear mapping, using the one-hot encoded form of $\bm{w} =
 \text{one-hot}(w)$ as the
 initial representation of the words. This also means that we may represent $C$
 as a matrix, $\bm{C} \in \mathbf{R}^{m \times D}$, thus the word feature vector of
-the learned embedding can be represented by the matrix multiplication $Cw$.
+the learned embedding can be represented by the matrix multiplication
+$\bm{C}\bm{w}$.
 
 \subsection{Neural machine translation}
+For a long time the dominant paradigm within machine translation was to use
+phrase based machine translation systems\cite{Koehn:2003:SPT:1073445.1073462, Koehn:2007:MOS:1557769.1557821},
+however since a couple of year back, modelling the word or character level
+directly with neural networks, so called NMT has become the best performing
+method\cite{wolk_neural-based_2015, wu_googles_2016}.
+
+Most NMT models work in terms of an encoder-decoder architecture where the
+encoder extracts a fixed length representation $\bm{c}$, often called a context
+vector, from a variable length input sentence $\bm{x} \in \lang{X}$, and the
+decoder uses this representation to generate a correct translation $\bm{y} \in
+\lang{Y}$ from this representation\cite{cho_properties_2014}.
+
+\begin{figure}[H]
+  \includestandalone[width=\textwidth]{./scripts/tikz_code/encoder_decoder}% 
+%  \includegraphics[width=\textwidth]{encoderdecoder.pdf}
+    \caption{Encoder decoder schematic}
+  \label{fig:encoder_decoder}
+\end{figure}
 
 \section{Optimization}
 
