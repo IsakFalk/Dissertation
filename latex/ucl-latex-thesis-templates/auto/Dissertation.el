@@ -61,6 +61,7 @@
     "cho_properties_2014"
     "Goodfellow-et-al-2016"
     "Rumelhart:1986:LIR:104279.104293"
-    "LeCun:1989:BAH:1351079.1351090"))
+    "LeCun:1989:BAH:1351079.1351090"
+    "Hornik:1989:MFN:70405.70408"))
  :bibtex)
 

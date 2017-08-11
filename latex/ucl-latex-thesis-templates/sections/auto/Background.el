@@ -19,6 +19,8 @@
     "eq:dir_graph_model_dist"
     "eq:latent_var_model"
     "eq:AI_optimal_element"
+    "eq:MLP_output"
+    "eq:MLP_base_case"
     "eq:logistic_function"
     "eq:conditional_language_probability"
     "eq:one_hot_encoding"

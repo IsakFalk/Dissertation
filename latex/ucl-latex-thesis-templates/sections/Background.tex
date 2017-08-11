@@ -401,10 +401,51 @@ log-likelihood
 \end{equation*}. For many models this is not possible to evaluate. 
 
 \section{Deep Learning}
+Until recently the field of NLP were dominated by older machine learning
+techniques utilising linear models trained over very high-dimensional and sparse
+feature vectors. Recently the field has switched over to neural networks over
+dense inputs instead\cite[p.~1 - 2]{goldberg2015primer}.
+
+What all neural networks have in common is that they are trying to find a
+functional relationship for the data, with the specific form of the function
+depending on the task. For NMT this reduces to finding the function $f : \bm{x}
+\in \lang{X} \to \bm{y} \in \lang{Y}$ such that this $f$ maximizes the
+likelihood $P(\bm{x} | \bm{y})$. Indeed many of the neural networks in existence
+has been shown to be universal approximators, theoretically being able to
+simulate a big set of nice functions\cite{Hornik:1989:MFN:70405.70408}.
+
+We will go through the three most common architectures that are used in this thesis.
 
 \subsection{Multilayer Perceptron}
+Feedforward Neural Networks as MLP's are also called in the literature are
+functions formed by composition by layers. The original MLP can be defined in
+terms of a recurrence relation such that if we have input vectors of the form $\bm{x} \in
+\mathbb{R}^{d_{in}}$ and output vectors of the form $\bm{y} \in
+\mathbb{R}^{d_{out}}$, then an MLP with $L$ layers have the functional form of
+\begin{equation}
+  \label{eq:MLP_output}
+  f(\bm{x} | \bm{\theta}) = \sigma_L(\bm{W}_L \bm{z}_{L-1} + \bm{b}_{L})
+\end{equation}
+where for any $l \in \{2, \dots, L-1\}$
+\begin{equation}
+    \bm{z}_l = \sigma_l(\bm{W}_l \bm{z}_{l-1} + \bm{b}_l)
+\end{equation}
+and with the base case
+\begin{equation}
+  \label{eq:MLP_base_case}
+  \bm{z}_1 = \sigma_1(\bm{W}_1 \bm{x} + \bm{b}_1)
+\end{equation}.
+
+$\bm{W}_l$ and $\bm{b}_l$ may be of any dimension as long as it is dimensionally consistent
+with the input and output of the layer and conform to the original input and output
+dimensions. In this case we have that the parameters of the network are all of
+the biases and weights for the layers, $\bm{\theta} = \{(\bm{W}_l, \bm{b}_l)_{l
+  = 1}^L\}$.
 
 \subsection{Recurrent Neural Networks}
+A recurrent neural network acts upon sequences to produce an output. It is a
+special kind of technique called parameter tying where parameters are shared
+over many time-steps.
 
 \subsection{Convolutional Neural Networks}
 
