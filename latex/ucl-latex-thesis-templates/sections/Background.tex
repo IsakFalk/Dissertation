@@ -6,32 +6,21 @@ important for the experiments that we will conduct and analyse.
 
 \section{Probability Theory and Statistics}
 
-\subsection{Probability Theory as a Reasoning System}
-Although often seen as a self-contained mathematical theory of stochastic
-systems and reasoning about the random, probability theory has a prominent role
-within machine learning since it gives us a principled way of reasoning about
-the world. As proved by Cox, if we are to accept that any theory of reasoning is
-to satisfy the Cox desiderata,
-\begin{enumerate}
-\item Degrees of plausibility are represented by real numbers.
-\item Qualitative correspondence with common sense
-\item If a conclusion can be reasoned out in more than one way, then
-  every possible way must lead to the same result.
-\end{enumerate},
-then we must accept that this theory is isomorphic to probability theory and
-effectively the same.
-
-This is a formal way of stating that probability theory is the best way to
-organize our reasoning if we want to make sure that we are consistent in the way
-we reason.\cite[p.~3-23]{jaynes2003probability}
+Probability theory is a natural candidate for doing principled reasoning about
+uncertainty, in that is isomorphic to believes which follow Cox desiderata. This
+is one of the reasons it has gained such widespread use in machine learning\cite[p.~3-23]{jaynes2003probability}.
 
 \subsection{Rules and Theorems}
-Rules of probability that will be useful to us are the following axioms
+(might just want to dump Maneesh's stuff on probability basics, page 2)
+
+Rules of probability that will be useful to us are the following, if we let $X
+\in \mathcal{X}$ be a random variable and $p(X)$ the measure with respect to
+this variable, then
 \begin{description}
 \item[Unit volume]
   \begin{equation}
     \label{eq:unit_vol_prob_axiom}
-    \int_{\mathcal{X}}p(X) = 1
+    \int_{\mathcal{X}}p(X) \dif X = 1
   \end{equation}
 \item[Non-negativity]
   \begin{equation}
@@ -39,24 +28,20 @@ Rules of probability that will be useful to us are the following axioms
     p(X) \geq 0
   \end{equation}
 \end{description}
-where $\mathcal{X}$ is the domain of $X$ and the generalized integral is interpreted as
-the Lebesgue integral if $X$ is continuous and as a sum over the possible values
-of $X$ if it is discrete.
+the integral is interpreted as the Lebesgue integral if $X$ is continuous and as
+a sum over the possible values of $X$ if it is discrete.
 
-I will assume the notion of a random variable $X$ in an intuitive sense.
-However, this $X$ might be represented in many forms and in our case there is
-not reason to not be able to put probabilities over sentences, words and/or
-characters and conditioning thereof. Similarly I will assume familiarity with
-the different notions of continuous, discrete and categorical random variables.
-Finally 
+I will assume familiarity with random variables and random vectors, difference
+between continuous and discrete variables.
 
 Most manipulation of statements about random variables can be stated as a consequence
-of the two following fundamental rules
+of the two following fundamental rules, given two random variables $X, Y$
+defined on the support $\mathcal{X}, \mathcal{Y}$ respectively, then
 \begin{description}
 \item[Sum rule]
   \begin{equation}
     \label{eq:sum_rule}
-    p(X) = \int_{\mathcal{Y}}p(X, Y)
+    p(X) = \int_{\mathcal{Y}}p(X, Y) \dif Y
   \end{equation}
 \item[Product rule]
   \begin{equation}
@@ -64,27 +49,6 @@ of the two following fundamental rules
     p(X, Y) = p(Y | X)p(X)
   \end{equation}
 \end{description}
-such that $X, Y$ are two random variables defined on the domains $\mathcal{X},
-\mathcal{Y}$. The integral $\int_{\mathcal{Y}}$ is to be understood in the
-general sense, if $Y$ is continuous it is the ordinary Lebesgue integral as
-commonly used throughout mathematics and calculus, while if $Y$ is discrete then
-it is the sum over the possible values of $Y$. $p(X, Y)$ is the joint
-distribution of $X$ and $Y$, $p(Y | X)$ is the probability of $Y$ conditioned on
-n$X$ and $p(X)$ is the marginal distribution of $X$. Using these rules it is easy
-to Bayes theorem, one of the most integral (and simple) theorem of probability
-theory
-
-\fbox{
-  \begin{minipage}{0.8\textwidth}
-    Bayes Theorem
-
-    \begin{equation}
-      \label{eq:Bayes_thm}
-      p(Y | X) = \frac{p(X | Y)p(Y)}{p(X)}
-    \end{equation}
-  \end{minipage}
-  \hfill
-}
 
 Two very important operations involving probabilities of random variables are
 those of \textit{Expectation} and \textit{Covariance}. These take as input a
@@ -95,7 +59,7 @@ probability distribution $p(X)$.
 \item[Expectation]
   \begin{equation}
     \label{eq:expectation}
-    \E_X[f] = \int_{\mathcal{X}} p(x)f(x)
+    \E_X[f] = \int_{\mathcal{X}} f(X) p(X) \dif X
   \end{equation}
 \item[Covariance]
   \begin{equation}
@@ -105,6 +69,7 @@ probability distribution $p(X)$.
 \end{description}
 We then define the variance operator as
 \begin{equation}
+  \label{eq:variance}
   \Var(X) = \Cov(X, X)
 \end{equation}
 
@@ -125,50 +90,42 @@ f(X)$ then
   \end{bmatrix}
 \end{equation*}
 similarly $\Cov(\bm{f})$ is a $D \times D$-dimensional matrix where
-$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i, \bm{f}_j)$.
+$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i, \bm{f}_j)$.\cite{Bishop:2006}
 
 \subsection{The Gaussian Distribution}
-A very common distribution in machine learning and statistics in general is the
-Gaussian distribution, also called the Normal distribution. The Gaussian
-distribution satisfies some properties that makes it an ideal candidate from a
-modeling perspective including the Central Limit Theorem which says that sums of
-independent random variables of finite mean and variance will tend to a normal
-distribution, and the fact that the joint distribution of many random variables
-that are Gaussianly distributed is itself Gaussian which means that
-conditionals, posteriors and other distributions are themselves Gaussian when we
-deal with Gaussian random variables.
 
-For a $D$-dimensional vector $\bm{X}$, the multivariate Gaussian distribution
-takes the form
+For a $D$-dimensional random vector $\bm{X}$, the multivariate Gaussian
+distribution takes the form
 \begin{equation}
   \label{eq:Gaussian_dist}
-  \mathcal{N}(\bm{x} | \bm{\mu}, \bm{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\bm{\Sigma}|^{1/2}}\exp\left( -\frac{1}{2}(\bm{x} - \bm{\mu})^T\bm{\Sigma}^{-1}(\bm{x} - \bm{\mu})\right)
+  \mathcal{N}(\bm{X} | \bm{\mu}, \bm{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\bm{\Sigma}|^{1/2}}\exp\left( -\frac{1}{2}(\bm{X} - \bm{\mu})^T\bm{\Sigma}^{-1}(\bm{X} - \bm{\mu})\right)
 \end{equation}
 where $\bm{\mu}$ is a $D$-dimensional mean vector, $\bm{\Sigma}$ is a $D \times
-D$ dimensional covariance matrix, and $|\bm{\Sigma}|$ denotes the determinant of
-$\bm{\Sigma}$. The meaning of these parameters can be shown to correspond to the
-operations of the expected value and covariance of $\bm{x}$,
-$\E_{\bm{x}}[\bm{x}] = \bm{\mu}$ and $\Cov(\bm{x}) = \bm{\Sigma}$.
+D$ dimensional positive definite covariance matrix, and $|\bm{\Sigma}|$ denotes
+the determinant of $\bm{\Sigma}$. It is straightforward to show that these
+parameters correspond to the mean and covariance as defined in equations
+\eqref{eq:expectation} and \eqref{eq:covariance}\cite{}.
 
 The Gaussian distribution can be seen as a unit $D$-dimensional cube which is
 translated, sheared and rotated, giving rise to the fact that we can write any
 Gaussianly distributed random variable $\bm{x} \sim \mathcal{N}(\bm{x} |
 \bm{\mu}, \bm{\Sigma})$ as a linear combination of a unit Gaussian random
 variable $\bm{z} \sim \mathcal{N}(\bm{x} | \bm{0}_D, \bm{I}_{D \times D})$. If
-we let $\bm{\Lambda} \bm{\Lambda} = \bm{\Sigma}$ be the Cholesky
+we let $\bm{\Lambda} \bm{\Lambda}^{\top} = \bm{\Sigma}$ be the Cholesky
 decomposition\cite[p.~100-102]{Press:2007:NRE:1403886} of $\bm{\Sigma}$, then we
 also have that
-\begin{equation*}
-  p(\bm{x}) = p(\bm{\mu} + \bm{\Lambda}\bm{z})
-\end{equation*}
-. If we further assume that $\bm{x}$ is parametrised by $\bm{\mu}$ and
-$\bm{\Sigma}$ such that $\bm{\Sigma}$ is diagonal positive definite with
-diagonal $\bm{\sigma}$, then $\bm{\Sigma} = \bm{\sigma} \odot \bm{I}_{D \times
-  D}$. Finally this means that if we want to sample a random variable $\bm{x}$
-with diagonal covariance structure, then we can do this by sampling a unit
-normal $\bm{z}$ which we then transform, which we can express as
 \begin{equation}
   \label{eq:sample_x}
+  \bm{x} = \bm{\mu} + \bm{\Lambda}\bm{z}
+\end{equation},
+where the equality is in terms of distribution. If we further assume that
+$\bm{x}$ is parametrised by $\bm{\mu}$ and $\bm{\Sigma}$ such that $\bm{\Sigma}$
+is diagonal positive definite with diagonal $\bm{\sigma}$, then $\bm{\Sigma} =
+\bm{\sigma} \odot \bm{I}_{D \times D}$. Finally this means that if we want to
+sample a random variable $\bm{x}$ with diagonal covariance structure, then we
+can do this by sampling a unit normal $\bm{z}$ which we then transform, which we can express as
+\begin{equation}
+  \label{eq:sample_x_diag_covariance}
   \bm{x} = \bm{\mu} + \bm{\sigma} \odot \bm{z} \sim \mathcal{N}(\bm{\mu}, \bm{\sigma} \odot \bm{I}_{D \times D})
 \end{equation}
 
@@ -180,44 +137,40 @@ Gaussian distribution, this means that if we have a collection of iid gaussian
 random variables $\{\bm{x}_i)\}_i^n$, such that $\bm{x}_i \sim
 \mathcal{N}(\bm{x}_i | \bm{\mu}_i, \bm{\Sigma}_{i})$, then the joint
 can be found to be Gaussian distributed as
-\begin{equation}
-  \label{eq:join_dist_Gaussian}
+\begin{equation*}
   \mathcal{N}(\bm{\mu}, \bm{\Sigma})
-\end{equation},
+\end{equation*},
 where
-\begin{align*}
-  \bm{\Sigma} & = \left( \sum_i^n \bm{\Sigma}_i^{-1} \right)^{-1}\\ 
-  \bm{\mu} & = \bm{\Sigma}\left( \sum_i^n \bm{\Sigma}^{-1} \bm{\mu}_i \right)
-\end{align*}.\cite[p.~78-84]{Bishop:2006}
+\begin{align}
+  \bm{\Sigma} & = \left( \sum_i^n \bm{\Sigma}_i^{-1} \right)^{-1} \label{eq:joint_indep_normal_covariance}\\ 
+  \bm{\mu} & = \bm{\Sigma}\left( \sum_i^n \bm{\Sigma}^{-1} \bm{\mu}_i \right) \label{eq:joint_indep_normal_mean}
+\end{align}\cite[p.~78-84]{Bishop:2006}.
 
 In the case of two random variables distributed according to the form as laid
-out in \ref{eq:sample_x}, $\bm{x} \sim
+out in \eqref{eq:sample_x}, $\bm{x} \sim
 \mathcal{N}(\mathcal{N}(\bm{\mu}_{\bm{x}}, \bm{\sigma}_{\bm{x}} \odot \bm{I}))$
-and $\bm{y} \sim
-\mathcal{N}(\mathcal{N}(\bm{\mu}_{\bm{y}}, \bm{\sigma}_{\bm{y}} \odot \bm{I}))$
-we have that the resulting distribution $p(\bm{x}, \bm{y}) = p(\bm{x})p(\bm{y})$ is distributed such that
-\begin{equation}
-  \label{eq:twin_joint_diag_cov}
+and $\bm{y} \sim \mathcal{N}(\mathcal{N}(\bm{\mu}_{\bm{y}}, \bm{\sigma}_{\bm{y}}
+\odot \bm{I}))$ we have that the resulting distribution $p(\bm{x}, \bm{y}) =
+p(\bm{x})p(\bm{y})$ is distributed such that
+\begin{equation*}
   p(\bm{x}, \bm{y}) = \mathcal{N}(\bm{\mu}_{\bm{x}, \bm{y}}, \bm{\sigma}_{\bm{x}, \bm{y}})
-\end{equation}
+\end{equation*}
 where
-\begin{align*}
-  \bm{\sigma}_{\bm{x}, \bm{y}} & = \frac{1}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \\
-  \bm{\mu}_{\bm{x}, \bm{y}} & = \frac{\bm{\sigma}_{\bm{x}}^{-1}\bm{\mu}_{\bm{x}} + \bm{\sigma}_{\bm{y}}^{-1}\bm{\mu}_{\bm{y}}}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \\
-\end{align*}.\ref{appendixproofs}
+\begin{align}
+  \bm{\sigma}_{\bm{x}, \bm{y}} & = \frac{1}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \label{eq:joint_indep_normal_covariance_diag}\\
+  \bm{\mu}_{\bm{x}, \bm{y}} & = \frac{\bm{\sigma}_{\bm{x}}^{-1}\bm{\mu}_{\bm{x}} + \bm{\sigma}_{\bm{y}}^{-1}\bm{\mu}_{\bm{y}}}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \label{eq:joint_indep_normal_mean_diag}
+\end{align}.
 
 \subsection{Maximum Likelihood Estimation}
-An often used estimator for parameters is the \textit{Maximum Likelihood
-  Estimator}, hereafter called the MLE.
 
 Assume we have a model $\mathcal{M}$ parametrised by $\bm{\theta}$ constrained
 to live in the parameter space $\bm{\Theta}$. Given data $\mathcal{D}$ we want
-to be able to fit the parameters $\bm{\theta}$ such that these somehow explains
-the data, and thus should be able to work on new data in a manner that
-generalises well. The MLE of of the parameters of the model is defined to be
-\begin{equation*}
+to be able to fit the parameters $\bm{\theta}$ such that these generalise to
+unseen data. The MLE of of the parameters of the model is defined to be
+\begin{equation}
+  \label{eq:MLE}
   \hat{\bm{\theta}}_{ML} = \argmax_{\bm{\theta} \in \bm{\Theta}}\mathcal{L}(\bm{\theta}; \mathcal{D})
-\end{equation*}
+\end{equation}
 .
 
 While the original MLE is defined in terms of the likelihood function
@@ -240,34 +193,20 @@ individual probabilities\footnote{Also, with the use of the log-sum-exp-trick,
   \begin{equation*}
     \log \sum_{i=1}^n \exp(x_n) = \max_i x_i + \log \sum_{i=1}^n \exp(x_n - \max_i x_i)
   \end{equation*}
-  this problem can be reduced even further}
+  this problem can be reduced even further}.
 
-In a sense, the MLE is the best fit to the data given that we put a flat prior
-over the parameters $\bm{\theta}$, that is we let the data speak for itself. The
-MLE only takes into account the information given by the available data
-$\mathcal{D}$ and thus makes a choice of $\bm{\theta}$ based upon the
-information in the data set and nothing else. Besides this intuitive
-justification of the estimator, from a frequentist perspective it comes with a
-number of advantageous properties that we like an estimator to have, making it a
-natural candidate for training models.
-
-The main problem with MLE's are that they are defined implicitly in terms of the
-likelihood function of the data. In that sense every setting is different as
-there is no straightforward way to solve for the MLE as we in most cases have to
-resort to numerical solutions to try to find the global maximum of
-$\mathcal{L}(\bm{\theta}; \mathcal{D})$, a function which is often non-linear,
-multimodal and with a complex surface, leading to local maximums being found
-instead of the global maximum in many cases.\cite{CaseBerg:01}
+MLE estimators have a number of nice properties such as consistency and
+asymptotic normality, however, the optimization problem itself is often
+non-convex, making it hard to find the actual estimator\cite{CaseBerg:01}.
 
 \subsection{Graphical models}
-A very convenient tool for probabilistic modelling is the notion of using
+tool for probabilistic modelling is the notion of using
 diagrams to specify the conditional relationships between random variables. A
 graphical model is a diagrammatic way of specifying this relationship by
 creating a Directed Acyclic Graph, a directed graph without any cycles. This
 representation is called a \textit{Graphical Model} and provide a powerful way
 to visualize the structure of the probabilistic model and also how to use and
-abuse the structure of the model in order to infer variables in a
-computationally efficient way.
+abuse the structure of the model in order to infer variables in a computationally efficient way.
 
 A graph in this setting consists of a set of \textit{vertices} connected by
 \textit{edges}, following the notation and nomenclature of graph theory as used
@@ -316,7 +255,7 @@ fixed and known. The white vertices indicates latent random variables which we
 don't observe.
 
 For this example we have the following factorisation of the joint distribution,
-following the rules laid out in equation~\ref{eq:dir_graph_model_dist},
+following the rules laid out in equation~\eqref{eq:dir_graph_model_dist},
 \begin{equation*}
   p(a, b, c, d) = p(d | c)p(c | a, b)p(b | a)p(a)
 \end{equation*}.
@@ -339,31 +278,22 @@ intensive and has a large cost in terms of time. Approximate inference forms an
 alternative to MCMC for solving intractable densities by recasting this problem
 into an optimization problem instead of a sampling one as in MCMC.
 
-Approximate inference form a group of methods for approximating probability
-densities and is widely used to approximate posterior densities for Bayesian
-models. Compared to MCMC it tends to be faster and easier to scale to larger
-datasets, but lacks in generality as every new problem has to be solved again
-within the approximate inference framework.
-
 The most common setting is in latent variable models, where a latent
 variable, often denoted by $\bm{z}$ is introduced to explain underlying causes
 to the observed variables, such as different clusters for Mixture of
-Gaussians or a lower-dimensional manifold in
-terms of the Factor Analysis model\cite[page.~430-439, 583-586]{Bishop:2006}.
-Latent variable models which rely on Gaussian distributions and linear
-relationships may be learned in an exact manner in the context of the EM
-algorithm or its many variations which guarantees parameters $\hat{\bm{\theta}}$
-such that this point in the parameter space will yield a local maximum of the
-likelihood function\cite{Dempster77maximumlikelihood, Neal98aview}.
+Gaussians or a lower-dimensional manifold in terms of the Factor Analysis
+model\cite[page.~430-439, 583-586]{Bishop:2006}. Latent variable models which
+rely on Gaussian distributions and linear relationships may be learned in an
+exact manner in the context of the EM algorithm or its many variations which
+guarantees parameters $\hat{\bm{\theta}}$ such that this point in the parameter
+space will yield a local maximum of the likelihood function\cite{Dempster77maximumlikelihood, Neal98aview}.
 
 As theory and computing power has progressed, so has the advances in more
 powerful models. Compared to older models for which solutions often could be
 found analytically, these models were too non-linear, non-gaussian and complex
 to train in a straightforward manner, which can bee seen directly from the
 numerous heuristics that exist with regards how to train deep neural
-networks\cite{bengio_practical_2012, Larochelle:2009:EST:1577069.1577070}. As
-neural network architectures are becoming commonplace in bayesian modelling,
-techniques to train these models has also become more prevalent.
+networks\cite{bengio_practical_2012, Larochelle:2009:EST:1577069.1577070}.
 
 The problem setting of variational inference is a latent variable model such
 that it can be split up into the observed variables $\bm{x}$ and latent
@@ -371,18 +301,14 @@ variables $\bm{z}$ such that
 \begin{equation}
   \label{eq:latent_var_model}
   p(\bm{z}, \bm{x}) = p(\bm{z})p(\bm{x} | \bm{z})
-\end{equation}.
-Indeed this describes a plethora of different models showing how broadly the
-variational framework can be applied. Variational inference has enjoyed much
-success in the past over other domains as well\cite{beal2003}, but we will focus
-on this special case.
+\end{equation}. This also happens to cover the case of our generative model.
 
 Technically, Approximate inference is a way of approximating
 a complicated distribution $p(\bm{z} | \bm{x})$ by a distribution $q(\bm{z})$ belonging
 to some constrained family of distributions $\mathcal{Q}$, for continuous
 distributions often such that $\mathcal{Q} = \{\mathcal{N}(\bm{\mu},
 \bm{\Sigma}) | \bm{mu} \in \mathbb{R}^d, \text{p.d \:} \bm{\Sigma} \in
-\mathbb{R}^{d \times d}\}$. The goal is then to find the elementfof $\mathcal{Q}$
+\mathbb{R}^{d \times d}\}$. The goal is then to find the elementof $\mathcal{Q}$
 that minimizes some distance from $p$ to $q$, most often the Kullback-Leibler
 divergence,
 \begin{equation}
@@ -392,19 +318,11 @@ divergence,
 This optimal $q^*$ may then be used as a pseudo-correct
 distribution in order to calculate other statistics and quantities.
 
-This also means that we have recast the original MLE into a simpler optimisation
-problem involving terms which lends itself to analytical solutions and
-computational tractability. For MLE we are interested in optimizing the
-log-likelihood
-\begin{equation*}
-  p(\bm{x} | \bm{\theta}) = \int_{\mathcal{Z}}p(\bm{x} | \bm{z})p(\bm{z})
-\end{equation*}. For many models this is not possible to evaluate. 
-
 \section{Deep Learning}
 Until recently the field of NLP were dominated by older machine learning
 techniques utilising linear models trained over very high-dimensional and sparse
 feature vectors. Recently the field has switched over to neural networks over
-dense inputs instead\cite[p.~1 - 2]{goldberg2015primer}.
+dense inputs instead using embeddings\cite[p.~1 - 2]{goldberg2015primer}.
 
 What all neural networks have in common is that they are trying to find a
 functional relationship for the data, with the specific form of the function
@@ -414,16 +332,13 @@ likelihood $P(\bm{x} | \bm{y})$. Indeed many of the neural networks in existence
 has been shown to be universal approximators, theoretically being able to
 simulate a big set of nice functions\cite{Hornik:1989:MFN:70405.70408}.
 
-We will go through the three most common architectures that are used in this thesis.
-
 \subsection{Multilayer Perceptron}
-Feedforward Neural Networks as MLP's are also called in the literature are
-functions formed by composition by layers. The original MLP can be defined in
+MLP's are neural networks represented by functional composition, where each
+function is interpreted as a layer of the network. The original MLP can be defined in
 terms of a recurrence relation such that if we have input vectors of the form $\bm{x} \in
 \mathbb{R}^{d_{in}}$ and output vectors of the form $\bm{y} \in
 \mathbb{R}^{d_{out}}$, then an MLP with $L$ layers have the functional form of
 \begin{equation}
-  \label{eq:MLP_output}
   f(\bm{x} | \bm{\theta}) = \sigma_L(\bm{W}_L \bm{z}_{L-1} + \bm{b}_{L})
 \end{equation}
 where for any $l \in \{2, \dots, L-1\}$
@@ -432,7 +347,6 @@ where for any $l \in \{2, \dots, L-1\}$
 \end{equation}
 and with the base case
 \begin{equation}
-  \label{eq:MLP_base_case}
   \bm{z}_1 = \sigma_1(\bm{W}_1 \bm{x} + \bm{b}_1)
 \end{equation}.
 
@@ -449,85 +363,31 @@ over many time-steps.
 
 \subsection{Convolutional Neural Networks}
 
-
-
-\subsection{old stuff}
-A ubiquitous classifier within statistics is logistic regression. Logistic
-regression uses an input vector $\bm{x}$ in order to give importance scores in
-form of probabilities to different classes $y \in \{c_1, \dots, c_k\}$. It gets
-its name from the logistic function
-\begin{equation}
-  \label{eq:logistic_function}
-  \sigma(a) = \frac{1}{1 + e^{a}}
-\end{equation}
-which together with an affine transformation $\bm{W} \bm{x}$ yields the layer
-\begin{equation*}
-  \sigma(\bm{W} \bm{x})
-\end{equation*}
-which transforms values from a feature space $\bm{X} \subset \mathbb{R}^m$ into
-probabilities\cite{Bishop:2006}.
-
-Deep learning builds upon this intuition by recursively applying transformations
-and activation functions, functions which in some sense maps input on to
-\textit{ON/OFF} states. These functions take their functionality from an
-abstraction from how neurons function when firing with regards to input,
-mirroring how artificial neural networks have taken inspiration from how the
-brain operates in the past. On a very basic level, neural networks are
-characterised by stacked layers of affine transformations followed by activation
-functions, where the output of one layer serves as the input to the next layer.
-The final layer outputs $\hat{y}$ where the form of $\hat{y}$ depends on the application.
-The hope is that after training the model using
-backpropagation\cite{Rumelhart:1995:BBT:201784.201785} that the model is able to
-predict satisfactory and drive down the specified loss.
-
-Deep models are very powerful in that they are able to model complex functional
-relationships. In our case we are looking at Supervised and Semi-supervised
-learning, trying to find the relationship between $\bm{x} \in bm{X}$ and $\bm{y}
-\in \bm{Y}$ of some kind of functional form $f(\bm{x}) \approx \bm{y}$.
-
-Besides from the straightforward models where we stack logistic regressors
-serially, neural networks have extended well beyond this into an extremely
-diverse set of models that can capture different aspects of data such as long
-term-dependencies through the architecture of Recurrent Neural Networks and
-invariances by using convolutions. Many of these models have also found use in
-NLP, especially in the form of RNN's which are well-suited for handling
-language due to how it enables information to flow through
-time\cite{graves_generating_2013}\cite{cho_learning_2014} and more recently
-CNN's for finding representation over many different
-scales\cite{semeniuta_hybrid_2017}\cite{yang_improved_2017}\cite{gehring_convolutional_2016}.
-
-In a Bayesian setting each graphical model codifies how different random variables relate
-to each other in terms of independency. This is specified by the Directed
-Acyclic Graph where each arrow signifies a conditional relationship between
-$\bm{x}$ and $\bm{y}$. A full description of how graphical models ,
-
 \section{Natural Language Processing}
 
-Humans use natural language everyday to convey concepts and abstractions to each
-other in an efficient manner. However, compared to formal languages found in
-mathematics and programming languages, the natural languages we use are often
+Humans use natural language every day to convey concepts and abstractions to each
+other in an efficient manner. Compared to formal languages found in
+mathematics and programming, the natural languages we use are often
 ambiguous systems filled with rules and exceptions\cite{Rosenfeld00twodecades, sep-computational-linguistics}.
 
-Natural Language Processing (Hereafter NLP) is and old field that for a long
+Natural Language Processing is an old field that for a long
 time developed in parallel with the field of machine learning and
 computational statistics which deals with how to process information coming from
 human languages and is split up into several subfields such as Machine
 Translation, statistical parsing and sentiment analysis\cite{sep-computational-linguistics}.
 
 \subsection{Language model}
-If we define a sentence to be a tuple of words $\bm{w} = (w_1, \dots,
-w_l)$ such that each word is an atomic element $w_i \in \mathbf{D}$, where $\mathbf{D}$ is the
-dictionary of words in our language, then the joint distribution of a word with
-respect to the underlying probability measure can be rolled out using the
-probabilistic chain rule which is just repeated application of the original
-product rule\ref{eq:product_rule}
+We define a sentence to be a vector of words $\bm{w}_{1:L} = (\mathsf{w}_1, \dots,
+\mathsf{w}_l)^{\top}$ such that each word is an atomic element $\mathsf{w}_i \in
+V$, where $V$ is the dictionary of words in our language. Then the joint
+distribution of a word with respect to the underlying probability measure can be
+rolled out using the probabilistic chain rule which is just repeated application
+of the original product rule in equation \eqref{eq:product_rule}
 \begin{equation}
   \label{eq:conditional_language_probability}
-  P(\bm{w}) = \prod_{t = 1}^TP(w_t | w_1, \dots, w_{t-1})
+  P(\bm{w}_{1:L}) = \prod_{l = 1}^LP(\mathsf{w}_l | \mathsf{w}_1, \dots, \mathsf{w}_{l-1})
 \end{equation}
-where $w_t$ is the $t$'th word.\cite{Bengio:2003:NPL:944919.944966}
-
-From this starting point analysis and generation of other language models can start.
+where $\mathsf{w}_l$ is the $l$'th word of the sentence $\bm{w}_{1:L}$\cite{Bengio:2003:NPL:944919.944966}.
 
 \subsection{Word embeddings}
 Breaking down sentences at a word level and processing them into a form that
@@ -535,17 +395,16 @@ encodes information efficiently is a problem which has gained notorious
 recognition, leading to algorithms such as word2vec and
 Glove\cite{DBLP:journals/corr/abs-1301-3781, Pennington14glove:global,
   Mikolov:2013:DRW:2999792.2999959}. However, these techniques work less well in
-a neural network setting where instead finding the best embedding jointly while
-optimizing the model is preferred\cite[p.~5-7]{goldberg2015primer}.
+a neural network setting where instead finding the best embedding jointly with
+the parameters of the model is peqreferred \cite[p.~5-7]{goldberg2015primer}.
 
 A straightforward way to represent the various words of the dictionary is as
-one-hot-encoded vectors such that a word $w \in \mathbf{D}$, such that size of
-$\mathbf{D}$ is $D$ with an index $i$
-given by its place in the dictionary sorted alphabetically in descending order
-will have the vector representation
+one-hot-encoded vectors such that a word $\mathsf{w} \in V$, such that size of
+$V$ is $|V|$, with an index $i$ given by its place in the dictionary sorted
+alphabetically in descending order will have the vector representation
 \begin{equation}
   \label{eq:one_hot_encoding}
-  \text{one-hot}(w) =
+  \bm{w} =
   \begin{bmatrix}
     0 \\
     \vdots \\
@@ -556,41 +415,39 @@ will have the vector representation
     0
   \end{bmatrix}
 \end{equation}\cite[p.~6]{goldberg2015primer}
-such that $\text{one-hot}(w)_{j} = \delta_{ij}$.
+such that $\bm{w}_{j} = \delta_{ij}$.
 
-While this is a conceptually easy to understand, it fails to account for the
+While this is a form conceptually easy to understand, it fails to account for the
 curse of dimensionality as the size of the vocabulary might grow to millions of
-entries and the fact that the cosine similarity of two words $v_1, v_2 \in
-\mathbf{D}$ is zero unless they are the same word
+entries and the fact that the cosine similarity of two words $\mathsf{v}_1,
+\mathsf{v}_2 \in V$ is zero unless they are the same word
 \begin{equation}
   \label{eq:cosine_similarity}
-  \cos_{similarity}(\text{one-hot}(v_1), \text{one-hot}(v_2)) = \delta_{v_1 v_2}
+  \cos_{similarity}(\bm{v}_1, \bm{v}_2) = \delta_{\mathsf{v}_1 \mathsf{v}_2}
 \end{equation}. This means that no meaning is embedded in the vector space
 except for the location in the sorted dictionary. Instead we would like to
 associate each word in the vocabulary with a distributed \textit{word feature
-  vector}, a dense, real-valued vector in $\mathbb{R}^m$; express the joint probability
-function \ref{eq:conditional_language_probability} of word sequences in terms of
-the feature vectors of these words in the sequence and simultaneously learn the
-word feature vectors and the parameters of the model which dictates the form of
-the probability function; $\bm{\theta}$. After this is done words which share
-similarities in some sense such as \texttt{Dog, Puppy} would have a higher
-similarity score than unrelated concepts such as \texttt{Dog, Bulwark}\cite{Bengio:2003:NPL:944919.944966}.
+  vector}, a dense, real-valued vector in $\mathbb{R}^m$. Express the joint probability
+function \eqref{eq:conditional_language_probability} of word sequences of a
+sentence in terms of the feature vectors of these words in the sequence and
+simultaneously learn the word feature vectors and the parameters of the model
+which dictates the form of the probability function, $\bm{\theta}$. After this
+is done words which share similarities in some sense such as \texttt{Dog, Puppy}
+would have a higher similarity score than unrelated concepts such as \texttt{Dog, Bulwark}\cite{Bengio:2003:NPL:944919.944966}.
 
-We may represent this in a mathematical form by trying to find a mapping $C$
-from any element $w \in \mathbf{D}$ such that $C(w) \in \mathbb{R}^m$, in our
-case $C$ is a linear mapping, using the one-hot encoded form of $\bm{w} =
-\text{one-hot}(w)$ as the
-initial representation of the words. This also means that we may represent $C$
-as a matrix, $\bm{C} \in \mathbf{R}^{m \times D}$, thus the word feature vector of
-the learned embedding can be represented by the matrix multiplication
-$\bm{C}\bm{w}$.
+We may represent this in a mathematical form by trying to find a linear map $C$
+from any element $\mathsf{w} \in V$ such that $C(\mathbf{w}) \in \mathbb{R}^m$.
+Using the usual canonical basis of an Euclidean space, we can express this
+linear map in terms of a matrix $\bm{C} \in \mathbb{R}^{m \times |V|}$, thus the
+word feature vector of the learned embedding can be represented by the matrix
+multiplication $\bm{C}\bm{w}$.
 
 \subsection{Neural machine translation}
 For a long time the dominant paradigm within machine translation was to use
-phrase based machine translation systems\cite{Koehn:2003:SPT:1073445.1073462, Koehn:2007:MOS:1557769.1557821},
-however since a couple of year back, modelling the word or character level
-directly with neural networks, so called NMT has become the best performing
-method\cite{wolk_neural-based_2015, wu_googles_2016}.
+phrase based machine translation systems\cite{Koehn:2003:SPT:1073445.1073462,
+  Koehn:2007:MOS:1557769.1557821}, however since a couple of year back,
+modelling the word or character level directly with neural networks, so called
+NMT has become the best performing method\cite{wolk_neural-based_2015, wu_googles_2016}.
 
 Most NMT models work in terms of an encoder-decoder architecture where the
 encoder extracts a fixed length representation $\bm{c}$, often called a context
@@ -608,11 +465,6 @@ decoder uses this representation to generate a correct translation $\bm{y} \in
 \section{Optimization}
 
 \subsection{Problem formulation}
-
-Most of machine learning may be recasted as an optimization problem. In a fully
-probabilistic setting, the function to optimise is simply the joint probability
-of the data, parametrised by the model. In a likelihood setting this reduces to
-finding the maximizer of equations of the form \ref{eq:log-likelihood}.
 
 Numerical optimization has been applied to many parts of science and thus many
 different algorithms have been developed to tackle different problems. However,
@@ -635,7 +487,7 @@ For a normal probabilistic machine learning problem, we have data $\mathcal{D}$
 that we try to model with a model $\mathcal{M}$ parametrised by parameters
 $\bm{\theta} \in \Theta$. The optimization problem can in the most general case be recast
 as an effort to find the parameters $\bm{\theta}_{ML}$ that maximizes the
-log-likelihood function \ref{eq:log-likelihood}.
+log-likelihood function \eqref{eq:log-likelihood}.
 
 As this can't be found analytically we have to resort to numerical schemes to
 find good candidates which hopefully will be close to the true solution
@@ -661,7 +513,7 @@ Stochastic Gradient Descent is a similar algorithm to GD that instead of
 calculating the gradient with respect to the whole dataset calculates an
 approximate gradient, hence the word \textit{stochastic}, as it picks a random
 subset of the dataset to update $\bm{\theta}$ with regards to. If we let $I_t$
-be a random subset of the indices of $\mathcal{D}$ of size $m$ then SGD does the
+be a random subset of the indices of $V$ of size $m$ then SGD does the
 following update
 \begin{equation}
   \label{eq:SGD_update}
@@ -670,15 +522,8 @@ following update
 
 The stochasticity has been shown to act as a regularizer and several analyses of
 this in terms of a Bayesian framework has been done, explaining the stationary
-behaviour of SGD with constant learning rate after
-convergence\cite{mandt_stochastic_2017, mandt_variational_2016}
-
-This solves the problem of memory and time, but also improves on GD in terms of
-acting as a sort of regulariser for the model if $\gamma_t$ is kept fixed.
-Experimental results also show that SGD yields extremely good practical
-convergence on many tasks, and was often the first algorithm to be tried on deep
-learning problems before other algorithms improved on the issue of picking a
-good learning rate.
+behaviour of SGD with constant learning rate after convergence
+\cite{mandt_stochastic_2017, mandt_variational_2016}.
 
 \subsection{ADAM}
 SGD has found widespread use within the machine learning community due to strong
