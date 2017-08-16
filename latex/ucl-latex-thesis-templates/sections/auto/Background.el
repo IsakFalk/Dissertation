@@ -23,6 +23,7 @@
     "eq:dir_graph_model_dist"
     "eq:latent_var_model"
     "eq:AI_optimal_element"
+    "fig:rolled_rnn"
     "eq:conditional_language_probability"
     "eq:one_hot_encoding"
     "eq:cosine_similarity"

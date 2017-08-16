@@ -134,7 +134,7 @@ joint distribution of iid Gaussian variables are themselves Gaussian distributed
 where the natural parameters of this joint distribution is the sum of the
 natural parameters of each random variable in the joint. In particular for the
 Gaussian distribution, this means that if we have a collection of iid gaussian
-random variables $\{\bm{x}_i)\}_i^n$, such that $\bm{x}_i \sim
+random variables $\{\bm{x}_i\}_i^n$, such that $\bm{x}_i \sim
 \mathcal{N}(\bm{x}_i | \bm{\mu}_i, \bm{\Sigma}_{i})$, then the joint
 can be found to be Gaussian distributed as
 \begin{equation*}
@@ -337,7 +337,7 @@ MLP's are neural networks represented by functional composition, where each
 function is interpreted as a layer of the network. The original MLP can be defined in
 terms of a recurrence relation such that if we have input vectors of the form $\bm{x} \in
 \mathbb{R}^{d_{in}}$ and output vectors of the form $\bm{y} \in
-\mathbb{R}^{d_{out}}$, then an MLP with $L$ layers have the functional form of
+\mathbb{R}^{d_{out}}$, then an MLP with $L$ layers have the functional form
 \begin{equation}
   f(\bm{x} | \bm{\theta}) = \sigma_L(\bm{W}_L \bm{z}_{L-1} + \bm{b}_{L})
 \end{equation}
@@ -354,14 +354,63 @@ $\bm{W}_l$ and $\bm{b}_l$ may be of any dimension as long as it is dimensionally
 with the input and output of the layer and conform to the original input and output
 dimensions. In this case we have that the parameters of the network are all of
 the biases and weights for the layers, $\bm{\theta} = \{(\bm{W}_l, \bm{b}_l)_{l
-  = 1}^L\}$.
+  = 1}^L\}$(CITE PAPER ON MLP).
 
 \subsection{Recurrent Neural Networks}
-A recurrent neural network acts upon sequences to produce an output. It is a
-special kind of technique called parameter tying where parameters are shared
-over many time-steps.
+RNN's keeps information over long time-spans. It uses gates in order to let
+information flow forward in time. A recurrent neural network has the following
+functional form, given an input vector $\bm{x}$ of length $L$:
+
+\begin{align}
+  \bm{s}_0 & = \bm{0} \\
+  \bm{s}_t & = f(\bm{U} \bm{x}_t + \bm{V} \bm{s}_{t-1}) \\
+  \bm{o}_t & = \text{softmax}(\bm{V} \bm{s}_t)
+\end{align}
+for $t \in \{0, \dots, L\}$(CITE RNN PAPER).
+
+In order to avoid vanishing or exploding gradients which means information does
+not propagate properly(CITE VANISHING GRADIENTS PROBLEM), we use the LSTM unit as the the function $f$ which is
+defined implicitly as:
+
+\begin{align}
+  \bm{f}_t & = \sigma_g(\bm{U}_{\bm{f}} \bm{x}_t + \bm{V}_{\bm{f}} \bm{s}_{t-1}) \\
+  \bm{i}_t & = \sigma_g(\bm{U}_{\bm{i}} \bm{x}_t + \bm{V}_{\bm{i}} \bm{s}_{t-1}) \\
+  \bm{o}_t & = \sigma_g(\bm{U}_{\bm{o}} \bm{x}_t + \bm{V}_{\bm{o}} \bm{s}_{t-1}) \\
+  \bm{c}_t & = \bm{f}_t \odot \bm{c}_{t-1} + \bm{i}_t \odot \sigma_{\bm{c}}(\bm{U}_{\bm{c}}\bm{x}_t + \bm{V}_{\bm{c}} \bm{s}_{t-1} + \bm{b}_{\bm{c}}) \\
+  \bm{s}_t & = \bm{o}_t \odot \sigma_{\bm{s}}(\bm{c}_t)
+\end{align}
+
+where $\bm{c}_0 = \bm{0}, \bm{s}_0 = \bm{0}$, and $\bm{f}_t, \bm{i}_t, \bm{o}_t$
+are the forget, input and output gates at time $t$. The activation functions are
+such that $\sigma_g$ are sigmoid functions and $\sigma_{\bm{s}},
+\sigma_{\bm{c}}$ are hyperbolic tangents(CITE LSTM PAPER).
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{rnn}
+  \caption{RNN schematics}
+  \label{fig:rolled_rnn}
+\end{figure}
 
 \subsection{Convolutional Neural Networks}
+
+The CNN we will use will be highly specialised for our case. We use the WaveNet
+as laid out in the paper by DeepMind.
+
+WaveNet works on data of the form $\bm{x}$, were we describe the distribution as
+\begin{equation}
+p(\bm{x}) = \prod_{t=1}^T p(x_t| x_t, \dots, x_{t-1})
+\end{equation}
+which is the form common in NLP and NMT. The output of the model has the same
+time dimensionality as the input, meaning that the model has the ability to
+output a categorical distribution over the next value $x_t$ with a softmax
+layer. In our case this is a parametrisation of the output probability at point $t$.
+
+An important part is that it used dilated convolutions, convolution where the filter
+is applied to an area larger than its length by skipping input values with a certain
+step. Stacking the dilation layers with dilations being powers of 2 leads to output
+of the same dimensions as the input. This configuration of dilation factor results
+in exponential receptive field growth with depth (CITE WAVENET PAPER).
 
 \section{Natural Language Processing}
 
@@ -457,7 +506,6 @@ decoder uses this representation to generate a correct translation $\bm{y} \in
 
 \begin{figure}[H]
   \includestandalone[width=\textwidth]{./scripts/tikz_code/encoder_decoder}% 
-%  \includegraphics[width=\textwidth]{encoderdecoder.pdf}
     \caption{Encoder decoder schematic}
   \label{fig:encoder_decoder}
 \end{figure}

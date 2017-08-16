@@ -5,7 +5,7 @@
 
 \subsection{Dataset}
 
-The dataset we have chosen to evaluate the model on is the Europarl dataset
+The dataset we have chosen to evaluate the models on is the Europarl dataset
 between languages English and French. Europarl is a dataset of the proceedings
 of the European Parliament, comprising in total of the 11 official languages of
 the European Union.
@@ -14,8 +14,7 @@ The dataset was chosen as the number of sentences for English and French is
 enough to be able to generalise (the uncompressed size of the full dataset is
 619MB, 288MB for English, 311MB for French) to new sentences, and furthermore has
 established baseline for NMT in the form of BLEU scores for all the different
-language pairs in the full dataset, English-French in
-particular.\cite{koehn2005epc}
+language pairs in the full dataset, English-French in particular.\cite{koehn2005epc}
 
 \begin{table}[t]
   \begin{center}
@@ -32,39 +31,21 @@ particular.\cite{koehn2005epc}
 \subsection{Preprocessing}
 
 The raw data is unfit for use directly with the model. For one thing the raw
-data is in the form of strings and in order to leverage the mathematics easily
-we need to translate the raw form into a form which take place in a
-high-dimensional space instead, here $\mathbb{R}^N$. Equally we remove aspects
-of the data that will make it harder for the model to learn due to sparsity and
-other statistical peculiarities of the data and NLP in general.
+data is in the form of strings and in order to use neural networks we need to
+transform this into a form using vectors in some space $\mathbb{R}^m$.
 
-Preprocessing the data we make the following simplifications
-
-\subsubsection{Character Level}
-
-% \item Only lowercase characters and common punctuation marks are considered to
-%   be part of our alphabet.
-
-%   \textbf{English Alpabet}: \texttt{abcdefghijklmnopqrstuvwxyz,.`'?!}\\
-%   \textbf{French Alphabet}: \texttt{abcdefghijklmnopqrstuvwxyz,.`'?!âêîôûàèùéëïüç}\\
-
-\subsubsection{Word Level}
-
-The problem with words is that there exist an immense quantity of them, if even
-just due to grammatical constructs (example: run, running, ran etc.). Similarly,
-for any given point in time, words go in and out of use and this necessitates
-choosing which words to include in the dictionary. The dictionary consists of
-all of the words that we consider part of the language, everything not in the
-dictionary are either too rare or for some other reason excluded from use.
+From a linguistical point of view, a language contain a huge number of words at
+any point in time. Furthermore, words never leave the language completely,
+rather they go in and out of fashion and differ in how commonly they are use,
+also depending on what context they are used in.
 
 \begin{itemize}
-\item We only include sentences of length between 2 and 30. This makes sure that
-  the model have long enough sentences such that it may learn from the
-  dependencies between words, but short enough so that the parameters are able
-  to capture the long-term dependencies of sentences.
+\item We specify the maximum and minimum length of the words. This means that
+  when training and testing, we can pad the shorter sentences with Null tokens
+  until they are of the same length as the longest sentence.
 \item We calculate the word frequencies in order to sort all of the words in the
   dataset in terms of how often it appear in absolute terms. This is then used
-  to only retain the 80000 most common words. Words which are not part of this
+  to only retain the 30000 most common words. Words which are not part of this
   list gets replaced by an \texttt{<UNK>} token, specifying that it's an unknown
   word outside of the dictionary. This makes sure that only words which are
   prevalent enough such that the model can derive its relation to other words
@@ -113,65 +94,7 @@ We will evaluate our models on a variety of scores:
   $\bm{z}$, $p_{\theta}(\bm{z})$.
 \end{description}
 
-\section{layout}
+\section{Reconstruction}
 
-We will perform the following experiments, building up the order of doing them
-from least complex to more complex.
+\section{Translation}
 
-We first have different models, depending on how we choose
-
-\begin{description}
-\item[Recognition model]
-  \begin{itemize}
-  \item WaveNet
-  \item RNN
-  \item MLP
-  \end{itemize}
-\item[Factorisation of Rec model]
-  \begin{itemize}
-  \item Independence of $\bm{x}, \bm{y}$
-  \item diagonal sigma
-  \item opposite of these
-  \end{itemize}
-\item[Generative model]
-  \begin{itemize}
-  \item AUTR
-  \item WaveNet
-  \item RNN
-  \end{itemize}
-\end{description}.
-
-We then use these models on different types of language modelling:
-
-\begin{description}
-\item[Reconstruction]
-  \begin{figure}[h]
-    \center
-    \begin{tikzpicture}
-
-      % Define nodes
-      \node[latent] (z) {$z$} ;
-      
-      \node[obs, below=of z] (x) {$x$} ;
-      
-      \edge {z} {x} ;
-    \end{tikzpicture}
-  \end{figure}
-\item[Translation]
-  \begin{figure}[h]
-    \center
-    \begin{tikzpicture}
-
-      % Define nodes
-      \node[latent] (z) {$z$} ;
-      
-      \node[obs, below=of z, xshift=-1cm] (x) {$x$} ;
-      \node[obs, below=of z, xshift=1cm] (y) {$y$} ;
-      
-      \edge {z} {x, y} ;
-    \end{tikzpicture}
-  \end{figure}
-\end{description}
-While using the recognition model to do translation (We let $\bm{x}$ encode all
-information about $\bm{z}$, and then see what the generated $\bm{x}, \bm{y}$
-correspond to).

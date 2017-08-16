@@ -1,0 +1,30 @@
+\documentclass{article}
+\usepackage{tikz}
+
+\begin{document}
+\tikzstyle{vertex}=[draw]
+\begin{tikzpicture}[transform shape]
+\node[vertex, label=right:$1$](t) at (4, 0) {$ \omega_{i} $};
+\node[vertex, label=above:$2$](r1) at (2, 2) {$ r^{\omega_{i}}_{1} $};
+\node[vertex, label=above:$3$](r2) at (6, 2) {$ r^{\omega_{i}}_{2} $};
+\node[vertex, label=below:$4$](q1) at (0,-2) {$ q^{\omega_{i}}_{1} $};
+\node[vertex, label=below:$5$](q2) at (4,-2) {$ q^{\omega_{i}}_{2} $};
+\node[vertex, label=below:$6$](q3) at (8,-2) {$ q^{\omega_{i}}_{2} $};
+\begin{scope}[every path/.style={-, dashed}, every node/.style={inner sep=1pt}]
+       \draw (t) -- node [anchor=north west] {$1$} (q1);
+       \draw (t) -- node [anchor=west]  {$2$} (q2); 
+       \draw (t) -- node [anchor=north east] {$3$} (q3);
+
+       \draw (t) -- node [anchor=north east] {$4$} (r1);
+       \draw (t) -- node [anchor=north west] {$5$} (r2);
+\end{scope}
+\begin{scope}[every path/.style={-}, every node/.style={inner sep=1pt}]
+       \draw (r1) -- node [anchor=east] {$6$} (q1);
+       \draw (r1) -- node [pos=0.15, anchor=north east] {$7$} (q2);
+       \draw (r1) -- node [pos=0.15, anchor=south west] {$8$} (q3);
+       \draw (r2) -- node [pos=0.15, anchor=south east] {$9$} (q1);
+       \draw (r2) -- node [pos=0.15, anchor=north west] {$10$} (q2);
+       \draw (r2) -- node [anchor=west] {$11$} (q3);
+\end{scope} 
+\end{tikzpicture}
+\end{document}
