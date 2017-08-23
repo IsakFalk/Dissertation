@@ -7,6 +7,7 @@
     "eq:non_neg_of_prob"
     "eq:sum_rule"
     "eq:product_rule"
+    "eq:bayes_rule"
     "eq:expectation"
     "eq:covariance"
     "eq:variance"

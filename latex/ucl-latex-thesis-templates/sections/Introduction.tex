@@ -1,139 +1,61 @@
 \chapter{Introduction}
 \label{IntroductionCh}
 
-Natural Language Processing, hereafter called NLP, is a subfield within
-artificial intelligence almost 
-as old as the field itself. Briefly, NLP can be defined as the study of the
-properties of natural language and how these properties may be used
-to answer questions that humans who master the language can do naturally.
-Clearly, if we are to enable machines to cooperate with human beings, it is of
-utmost importance that they can speak our language, since we are not very apt in
-speaking theirs!
+% Layout of introduction
 
-NLP has a plethora of different subfields, however, in this thesis we will limit
-ourselves to the field of machine translation. Machine translation has long been
-a cornerstone of NLP and has undergone many different guises from the beginning
-of the 1940's until today.
+%%%
+%%% Introduce the field briefly: NLP, VAE, Generative models for language
+%%%
 
-Machine translation can essentially be seen as a problem of learning a model
-that maps from one language $\lang{X}$ to another language $\lang{Y}$. Formally,
-we have a dataset $\{(\bm{x}_i, \bm{y}_i)\}_{i = 1}^{N}$, such that $\bm{x}_i
-\in \lang{X}, \bm{y}_i \in \lang{Y}$ represent the same sentence in two
-different languages. The goal is then to find a mapping $f : \lang{X} \to
-\lang{Y}$ such that $f(\bm{x}) \approx \bm{y}$ with regards to some chosen
-metric.
+Natural language processing (NLP) is an old field with roots in many different
+disciplines including but not exclusive to electrical engineering, artificial
+intelligence and linguistics \cite[p.~10-15]{Jurafsky:2000:SLP:555733}. Machine
+learning often view language as a statistical problem. A
+language model is a statistical model that trained on a training corpus assign
+probabilities to new sentences. Using latent variable models enables these
+language models to generate novel sentences from an underlying stochastic
+variable. While using probabilistic models enables us to do inference in a
+principled manner, it is often non-trivial to find the optimal parameters of
+latent variable models. Variational Inference approximates the log-likelihood
+through the Evidence Lower Bound (ELBO) which bound it from below, by
+introducing an approximate distribution of the conditional probability of the
+latent variable, $p(\bm{z} | \bm{x})$ \cite{blei_variational_2017}.
 
-From this several different ways of looking at language has emerged. The two
-different ways depends on how granular you are going. For latin based languages
-and other languages with a phonetic writing system, this means deciding if the
-atomic symbols should be characters of words. Character level gives the
-advantage that your dictionary of characters i finite, it consists of your
-alphabet. Since it's finite there's less of a worry of new characters being
-introduced. The data also gets bigger. For words you have a problem that the
-dictionary swells, often being bigger than 100000 unique words, which are
-troublesome when it comes to calculate the normalizer of the softmax in order to
-get a distribution of the output from the raw model.
+%%%
+%%% Recent advances: ELBO and relation to SGVB, Relation to NLP, training strong
+%%% generative models
+%%%
 
-From the chain rule of probability we have that any sentence $\bm{x}$ is such
-that the joint probability of the atomic units may be rewritten in a recursive
-form,
-\begin{align*}
-  p(\bm{x}) & = p(x_1, \dots, x_n) \\
-            & = \prod_{i = 1}^np(x_i | x_{i - 1}, \dots, x_1)
-\end{align*},
-which shows that one way of modelling language is to try to capture this
-temporal relationship using models catered for long term dependencies. The main
-problem is one of scale. This can be seen from the Markovian models called
-\textit{N-grams} which simply assumes that the dependency in languages can be
-explained by $N$-dimensional tables, meaning that $N$-grams can be seen as
-$N$-step markov models applied to language data. In practice, this means that we
-assume the relationship
-\begin{equation*}
-  p(x_i | x_{i - 1}, \dots, x_1) = p(x_i | x_{i - 1}, \dots, x_{i - N})
-\end{equation*}.
+Although Variational Inference specifies ways of approximating the
+log-likelihood by a variational distribution $q$ it does not specify the form of
+this $q$. Variational Autoencoder (VAE) \cite{kingma_auto-encoding_2013}, also
+under the name of stochastic backpropagation \cite{2014arXiv1401.4082J}, is a
+framework for training deep generative models with latent variables by
+introducing a recognition model $q_{\bm{\phi}}$. Except for the most basic of
+models the ELBO function is not tractable, however, using
+the reparametrisation trick and the law of large numbers, it is possibly to
+approximate the ELBO by sampling the latent variable instead of
+integrating it out, giving us the Stochastic Gradient Variational Bayes (SGVB)
+algoritm. The recognition model may then be optimized jointly with the
+generative model $p_{\bm{\theta}}$ with respect to the SGVB objective \cite{kingma_auto-encoding_2013}. As the recognition model maps the
+input sentences to the latent space, it effectively tries to compress
+information about the sentences through $\bm{z}$, resulting in distributed
+latent representations of sentences \cite{bowman_generating_2015}. After
+learning the recognition mapping from $\bm{x}, \bm{y}$ to $\bm{z}$ we may use
+this form to do translation by omitting one of the input languages, effectively
+letting a source language decide the distribution over the latent space, which
+can be mapped back through the generative model to both $\lang{X}$ and
+$\lang{Y}$ performing both reconstruction and translation concurrently.
 
-Although this is a reasonable assumption from a modelling point of view, given
-that we take $N$ to be large enough, it doesn't work well in practice. Due to
-sparsity, these $N$-dimensional tables will be mostly filled with zeros. This is
-simple to see whether working on a word or character level, I will just give an
-example using words for maximum impact:
-
-Assume we are trying to model the english language using a Tri-gram model,
-meaning we are only considering grouped word of 3. Putting together random words
-from the dictionary of words in the English language gives us by a huge margin
-gibberish, in terms of both semantic meaning and of grammar:
-\begin{center}
-  \begin{tabular}{ |c| } 
-    \hline
-    \textit{moucharaby epithelium sonlike}\\
-    \textit{Bacchides lulliloo oneiromancer}\\
-    \textit{actinology dihydroxy nonmineralogical}\\ 
-    \textit{Homalonotus Vened dyspepsy}\\
-    \textit{uncessant twee femorofibular}\\
-    \hline
-  \end{tabular}
-\end{center}
-. This is due to the fact that only extremely few tuples of word triplets are
-actually valid in the sense that they can be said to exist naturally in the
-English language. Mathematically, this means that the tables we get from running
-maximum likelihood on these tables to find the actual probabilities, which is
-just a matter of counting the number of times the triplets occur compared to the
-number of times that the starting symbol occur in the corpus we have at hand.
-
-Neural Machine Translation, hereafter called NMT, is the use of Neural Networks
-as the models inside 
-the machine translation systems. NMT can be trained end-to-end by specifying the
-data, architecture and the various other components that make up the model
-specification. While NMT is very data-hungry, mostly getting its power from
-being able to unearth the various rules and constructs in a language
-(semantically and grammatically) through the use of the statistical information
-existing within it, it is extremely well-suited for learning these rules given
-enough data. This black box approach means that people without any knowledge of
-language $\lang{X}$ and $\lang{Y}$ can train sophisticated translation systems
-on par with state of the art results, solely relying on the data to speak for
-itself.
-
-In this thesis we will explore fully probabilistic models, meaning that any
-statement about output languages can be given a probability score. Using the
-language of probability enables use to make statements about the plausibility of
-sentences and logical statements about these sentences using the laws of
-probability. Practically, it means that we get a model which is generative, that
-is, we can sample random variables of the hidden variable that encodes the
-sentences in a language-agnostic which through the models can map back to the
-sentences in the original languages. This gives us some hope that the model have
-some kind of internal language model and not only learns the specific output
-relation when mapping from $\lang{X}$ to $\lang{Y}$.
-
-In essence, we will use recent techniques that enables us to train
-latent-variable models, that is models where the observed output, in our case
-the language sentence tuples depend on a hidden variable $\bm{z}$ that encodes
-the information about the sentence in a language-agnostic way. Consider the
-sentence \textit{The quick brown fox jumps over the lazy dog}. The sentence is
-written using the English language, but it's easy to imagine the if we disregard
-the language we are saying it in, whether it be German, \textit{Der schnelle
-  braune Fuchs sprang über den faulen Hund} or in Latin, \textit{Lorem ipsum
-  vulpes salit super piger canis}, there is some underlying meaning which all
-languages are trying to convey. Our model tries to encode this meaning in terms
-of a hidden stochastic variable $\bm{z}$.
-
-This leads to the realisation given that we can encode $\bm{z}$ properly we
-should be able to translate from language $\lang{X}$ to $\lang{Q}$ without the
-model having ever seen a sentence pair of the form $(\bm{x}, \bm{q}), \bm{x} \in
-\lang{X}, \bm{q} \in \lang{Q}$.
-
-\section{Things to talk about}
-
-\begin{itemize}
-\item NLP (History, challenges)
-\item Deep Learning (What it is)
-\item Neural Machine Translation
-\end{itemize}
+%%%
+%%% Compare this to other approaches: RNNLM, Context vectors
+%%%
 
 
+%%%
+%%% What this thesis tries to do
+%%%
 
-
-
-
-
-
-
+%%%
+%%% Layout of the thesis
+%%%

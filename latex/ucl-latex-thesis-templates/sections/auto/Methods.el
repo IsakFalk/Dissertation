@@ -8,6 +8,7 @@
     "eq:SGVB"
     "eq:SGVB_analytical_KL"
     "eq:joint_generative"
-    "eq:translation_SGVB"))
+    "eq:translation_SGVB"
+    "eq:KL_annealing_ELBO"))
  :latex)
 

@@ -8,26 +8,25 @@ $\ell(\bm{\theta} ; \mathcal{D})$. For many models, it is not possible to
 evaluate this quantity directly due to it being computationally and/or
 analytically intractable.
 
-Instead we make the following observation
+Instead we make the following observation, letting $\mathcal{D} = \{\bm{x}_i\}_{i=1}^N$
 \begin{equation}
   \label{eq:log_likelihood_sum}
   \log p_{\bm{\theta}}(\mathcal{D}) = \sum_{i=1}^N \log p_{\bm{\theta}}(\bm{x}_i)
 \end{equation}
-and looking at each term in the sum we can see that we may rewrite this as (Let
-$\bm{x}$ be known from context)
+and looking at each term in the sum we can see that we may rewrite this as
 \begin{align*}
-  \log p_{\bm{\theta}}(\bm{x}) & = \log \int_{\mathcal{Z}} p_{\bm{\theta}}(\bm{z}, \bm{x})\\
-                               & = \log \int_{\mathcal{Z}}q_{\bm{\phi}}(\bm{z} | \bm{x}) \frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\phi}}(\bm{z} | \bm{x})} \\
-                               & = \log \E_{q_{\bm{\phi}}(\bm{z} | \bm{x})}[\frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\phi}}(\bm{z} | \bm{x})}] \\
-                               & \geq \E_{q_{\bm{\phi}}(\bm{z} | \bm{x})}[\log \frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\phi}}(\bm{z} | \bm{x})}] \\
-                               & = \E_{q_{\bm{\phi}}(\bm{z} | \bm{x})}[\log \frac{p_{\bm{\theta}}(\bm{x} | z) p_{\bm{\theta}}(\bm{z})}{q_{\bm{\phi}(\bm{z} | \bm{x})}}] \\
-                               & = \E_{q_{\bm{\phi}}(\bm{z} | \bm{x})}[\log p_{\bm{\theta}}(\bm{x} | \bm{z})] - \KL{q_{\bm{\phi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
+  \log p_{\bm{\theta}}(\bm{x}_i) & = \log \int_{\mathcal{Z}} p_{\bm{\theta}}(\bm{z}, \bm{x}_i) \dif \bm{z}\\
+                               & = \log \int_{\mathcal{Z}}q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)  \frac{p_{\bm{\theta}}(\bm{x}_i, \bm{z})}{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)} \dif \bm{z} \\
+                               & = \log \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}\left[\frac{p_{\bm{\theta}}(\bm{x}_i, \bm{z})}{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}\right] \\
+                               & \geq \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}\left[\log \frac{p_{\bm{\theta}}(\bm{x}_i, \bm{z})}{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}\right] \\
+                               & = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}\left[\log \frac{p_{\bm{\theta}}(\bm{x}_i | z) p_{\bm{\theta}}(\bm{z})}{q_{\bm{\varphi}(\bm{z} | \bm{x}_i)}}\right] \\
+                               & = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}\left[\log p_{\bm{\theta}}(\bm{x}_i | \bm{z})] - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x}_i)}{p_{\bm{\theta}}(\bm{z})}\right]
 \end{align*}
 Which leads to the following observation, if we call the lower bound
-$\mathcal{L}(\bm{\theta}, \bm{\phi}; \bm{x})$, that
+$\mathcal{L}(\bm{\theta}, \bm{\varphi}; \bm{x})$, that
 \begin{equation}
   \label{eq:ELBO_inequality}
-  \log p_{\bm{\theta}}(\bm{x}) \geq \mathcal{L}(\bm{\theta}, \bm{\phi}; \bm{x}) = \E_{q_{\bm{\phi}}(\bm{z} | \bm{x})}[\log p_{\bm{\theta}}(\bm{x} | \bm{z})] - \KL{q_{\bm{\phi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
+  \log p_{\bm{\theta}}(\bm{x}) \geq \mathcal{L}(\bm{\theta}, \bm{\varphi}; \bm{x}) = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}[\log p_{\bm{\theta}}(\bm{x} | \bm{z})] - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
 \end{equation}.
 
 In general this lower bound is still not tractable, however appealing to the
@@ -35,16 +34,16 @@ Strong Law of Large Numbers (SLLN) we can sample $\bm{z}^{l}$ and use the
 reparametrisation trick (Include how the reparametrisation trick works) to approximate the lower bound by
 \begin{equation}
   \label{eq:SGVB}
-  \tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\phi}; \bm{x}) = \frac{1}{L} \sum_{l = 1}^L \log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log q_{\bm{\phi}}(\bm{z} | \bm{x})
+  \tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\varphi}; \bm{x}) = \frac{1}{L} \sum_{l = 1}^L \log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log q_{\bm{\varphi}}(\bm{z} | \bm{x})
 \end{equation}.
 This can also be expressed in the closed form of the KL so
 \begin{equation}
   \label{eq:SGVB_analytical_KL}
-  \tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\phi}; \bm{x}) = (\frac{1}{L} \sum_{l = 1}^L \log p_{\bm{\theta}}(\bm{x} | \bm{z})) - \KL{q_{\bm{\phi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
+  \tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\varphi}; \bm{x}) = (\frac{1}{L} \sum_{l = 1}^L \log p_{\bm{\theta}}(\bm{x} | \bm{z})) - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
 \end{equation}
 
 Since all quantities in this form have analytically known forms, it is simple to
-evaluate and sample from $\tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\phi}; \bm{x})$.
+evaluate and sample from $\tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\varphi}; \bm{x})$.
 
 \section{Models}
 
@@ -58,9 +57,11 @@ The generative model follows the one laid out in
     % Define nodes
     \node[latent] (z) {$\bm{z}$} ;
     \node[obs, below=of z] (x) {$\bm{x}$} ;
+    \node[const, right=of z] (thetax){$\bm{\theta}$} ;
     
     % Connect the nodes
     \edge {z} {x} ;
+    \edge {thetax} {x} ;
 
     % Make plate
     \plate {zx} {(z)(x)} {$N$};
@@ -111,12 +112,15 @@ $\lang{Y}$. The probabilistic model looks like:
 From the graphical model we see that the joint distribution factorises such that
 \begin{equation}
   \label{eq:joint_generative}
-  p(\bm{\bm{z}}, \bm{x}, \bm{y}) = p(\bm{z})p(\bm{x} | \bm{z})p(\bm{y} | \bm{z}) = N(0, I)N(\mu_{\bm{x}}(\bm{z}), \sigma_{\bm{x}}(\bm{z}))N(\mu_{\bm{y}}(\bm{z}), \sigma_{\bm{y}}(\bm{z}))
-\end{equation}
-where the normal quantities are parametrised by neural networks.
+  p(\bm{\bm{z}}, \bm{x}, \bm{y}) = p(\bm{z})p(\bm{x} | \bm{z})p(\bm{y} | \bm{z}) = \mathcal{N}(0, I)\mathcal{N}(\mu_{\bm{\theta}_{\bm{x}}}(\bm{z}), \sigma_{\bm{\theta}_{\bm{x}}}(\bm{z}))\mathcal{N}(\mu_{\bm{\theta}_{\bm{y}}}(\bm{z}), \sigma_{\bm{\theta}_{\bm{y}}}(\bm{z}))
+\end{equation}.
+The notation $\mathcal{N}(\mu_{\bm{\theta}}(\bm{z}), \sigma_{\bm{\theta}}(\bm{z}))$
+means that the mean and variance diagonal of the normal are represented by a
+functional relationship $f: \bm{z} \mapsto (\mu, \sigma)$ where $f$ is a function
+represented a a learnable neural network with parameters $\bm{\theta}$.
 
 The recognition model is parametrised by the probability distribution
-$q_{\phi}(z | x, y)$. We are free to choose this however we like, but the closer
+$q_{\varphi}(z | x, y)$. We are free to choose this however we like, but the closer
 this is to the actual conditional distribution over the latent, $p(z | x, y)$
 the tighter the ELBO inequality $\ell(x, y) \geq \mathcal{L}(x, y)$ will be. We
 let the distributions all be gaussians to have analytical tractability
@@ -138,11 +142,28 @@ translation case reduces to the equation
 \begin{equation}
   \begin{split}
   \label{eq:translation_SGVB}
-  \tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\phi}; \bm{x}) = (\frac{1}{L} \sum_{l=1}^L \log(\mathcal{N}(\bm{x} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z}))) + \log(\mathcal{N}(\bm{y} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z})))) + \\ \frac{1}{2} \sum_{j=1}^J(1 + \log((\sigma_j^{(i)})^2) - (\mu_j^{(i)})^2 - (\sigma_j^{(i)})^2))
+  \tilde{\mathcal{L}}^A(\bm{\theta}, \bm{\varphi}; \bm{x}) = (\frac{1}{L} \sum_{l=1}^L \log(\mathcal{N}(\bm{x} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z}))) + \log(\mathcal{N}(\bm{y} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z})))) + \\ \frac{1}{2} \sum_{j=1}^J(1 + \log((\sigma_j^{(i)})^2) - (\mu_j^{(i)})^2 - (\sigma_j^{(i)})^2))
   \end{split}
 \end{equation}
 
 where the $\mu, \sigma$ is from the normal $\mathcal{N}(\bm{z} | \mu(\bm{x},
 \bm{y}), \sigma(\bm{x}, \bm{y}))$.
 
+\subsection{Training}
+Variational Autoencoders in NLP have a tendency to collapse the KL term in the SGVB
+objective to zero, effectively being reduced a RNNLM (CITE PAPER). As the KL can
+be seen as a measure of how much information is encoded in $\bm{z}$ this event
+makes the use of VAE's to model language-agnostic features in the latent space
+useless. One of the objectives is to make sure this KL-collapse doesn't happen.
+
+Following the tips laid out in (CITE PAPER VAE FOR NLP) we use KL-annealing
+where we anneal the ELBO by a pseudo-objective
+\begin{equation}
+  \label{eq:KL_annealing_ELBO}
+  ELBO_{\beta_t} = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}[\log p_{\bm{\theta}}(\bm{x} | \bm{z})] - \beta_t * \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
+\end{equation}
+where $\beta_t$ is an annealing term going from $0$ to $1$ as we train. We do
+this by choosing a warm-up $\beta$ and let $\beta_t = \min(1, \frac{t}{\beta})$,
+letting this warm up be done linearly until we recover the original ELBO
+objective, similar to normal simulated annealing (CITE ANNEALING PAPER).
 

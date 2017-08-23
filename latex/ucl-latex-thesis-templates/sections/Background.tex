@@ -1,21 +1,18 @@
 \chapter{Background Knowledge}
 \label{BackgroundKnowledgeCh}
 
-From here on I will assume familiarity with some concepts which will be
-important for the experiments that we will conduct and analyse.
+This chapter will introduce the necessary background knowledge to follow the
+theoretical derivations later.
 
 \section{Probability Theory and Statistics}
 
-Probability theory is a natural candidate for doing principled reasoning about
-uncertainty, in that is isomorphic to believes which follow Cox desiderata. This
-is one of the reasons it has gained such widespread use in machine learning\cite[p.~3-23]{jaynes2003probability}.
+We go over the rules of probability and statistics.
 
 \subsection{Rules and Theorems}
-(might just want to dump Maneesh's stuff on probability basics, page 2)
 
 Rules of probability that will be useful to us are the following, if we let $X
-\in \mathcal{X}$ be a random variable and $p(X)$ the measure with respect to
-this variable, then
+\in \mathcal{X}$ be a random variable and $p(X)$ the probability distribution with
+respect to this variable, then
 \begin{description}
 \item[Unit volume]
   \begin{equation}
@@ -28,15 +25,11 @@ this variable, then
     p(X) \geq 0
   \end{equation}
 \end{description}
-the integral is interpreted as the Lebesgue integral if $X$ is continuous and as
+where the integral is interpreted as the Lebesgue integral if $X$ is continuous and as
 a sum over the possible values of $X$ if it is discrete.
 
-I will assume familiarity with random variables and random vectors, difference
-between continuous and discrete variables.
-
-Most manipulation of statements about random variables can be stated as a consequence
-of the two following fundamental rules, given two random variables $X, Y$
-defined on the support $\mathcal{X}, \mathcal{Y}$ respectively, then
+Most manipulations of random variables reduces to the following two rules of
+probability: given two random variables $X, Y$ defined on the domains $\mathcal{X}, \mathcal{Y}$ respectively, then
 \begin{description}
 \item[Sum rule]
   \begin{equation}
@@ -48,13 +41,20 @@ defined on the support $\mathcal{X}, \mathcal{Y}$ respectively, then
     \label{eq:product_rule}
     p(X, Y) = p(Y | X)p(X)
   \end{equation}
-\end{description}
+\end{description}.
+The product rule leads directly to Bayes Rule
+\begin{description}
+\item[Bayes Rule]
+  \begin{equation}
+    \label{eq:bayes_rule}
+    p(X | Y) = \frac{p(Y | X)p(X)}{p(Y)}
+  \end{equation}
+\end{description}.
 
 Two very important operations involving probabilities of random variables are
-those of \textit{Expectation} and \textit{Covariance}. These take as input a
-function $f$ and maps to the real number line $\mathbb{R}$, and are defined
-implicitly with regards to some random variable $X$ and its 
-probability distribution $p(X)$.
+those of \textit{Expectation} and \textit{Covariance}. Assume $X \in \mathcal{X}$ is
+a random variable with probability distribution $p(X)$ and $f : \mathcal{X} \to
+\mathbb{R}$:
 \begin{description}
 \item[Expectation]
   \begin{equation}
@@ -67,15 +67,17 @@ probability distribution $p(X)$.
     \Cov(X, Y) = \E_{XY}[(X - \E_X[X])(Y - \E_Y[Y])]
   \end{equation}
 \end{description}
-We then define the variance operator as
-\begin{equation}
-  \label{eq:variance}
-  \Var(X) = \Cov(X, X)
-\end{equation}
-
+We then define the variance operator as:
+\begin{description}
+\item[Variance]
+  \begin{equation}
+    \label{eq:variance}
+    \Var(X) = \Cov(X, X)
+  \end{equation}
+\end{description}
 The generalisation from $f: \mathcal{X} \to \mathbb{R}$ to $f: \mathcal{X} \to
-\mathbb{R}^n$ is defined in the straightforward manner such that if $\bm{f} =
-f(X)$ then
+\mathbb{R}^n$ is defined in the straightforward manner. If $\bm{f} =
+f(X)$ then:
 \begin{equation*}
   \E_X
   \begin{bmatrix}
@@ -90,7 +92,7 @@ f(X)$ then
   \end{bmatrix}
 \end{equation*}
 similarly $\Cov(\bm{f})$ is a $D \times D$-dimensional matrix where
-$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i, \bm{f}_j)$.\cite{Bishop:2006}
+$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i, \bm{f}_j)$\cite{Bishop:2006}.
 
 \subsection{The Gaussian Distribution}
 
@@ -398,13 +400,13 @@ The CNN we will use will be highly specialised for our case. We use the WaveNet
 as laid out in the paper by DeepMind.
 
 WaveNet works on data of the form $\bm{x}$, were we describe the distribution as
-\begin{equation}
-p(\bm{x}) = \prod_{t=1}^T p(x_t| x_t, \dots, x_{t-1})
-\end{equation}
+\begin{equation*}
+p(\bm{x}) = \prod_{l=1}^L p(\bm{x}_l| \bm{x}_1, \dots, \bm{x}_{l-1})
+\end{equation*}
 which is the form common in NLP and NMT. The output of the model has the same
 time dimensionality as the input, meaning that the model has the ability to
-output a categorical distribution over the next value $x_t$ with a softmax
-layer. In our case this is a parametrisation of the output probability at point $t$.
+output a categorical distribution over the next value $x_l$ with a softmax
+layer. In our case this is a parametrisation of the output probability at point $l$.
 
 An important part is that it used dilated convolutions, convolution where the filter
 is applied to an area larger than its length by skipping input values with a certain

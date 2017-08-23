@@ -81,6 +81,8 @@ We will evaluate our models on a variety of scores:
 \item[BLEU] BLEU compares the generated sentences with sentences translated by
   professional translators, yielding a score telling us how well the generated
   translation does in relation to the translated benchmarks for each sentence.
+
+  We follow the thing as laid out in this link http://www.statmt.org/wpt05/mt-shared-task/\#TEST.
 \item[KL] Part of our investigation is about building models that take into
   account the latent space, enforcing the model to encode the information in the
   latent variable z instead of the encoder/decoder part. Luckily, we have a
@@ -92,9 +94,34 @@ We will evaluate our models on a variety of scores:
   , where the KL is a measure of how much information is put into the
   q-distribution compared to just using the prior isotropic gaussian over
   $\bm{z}$, $p_{\theta}(\bm{z})$.
+\item[Perplexity] After training the model we want the sentences in the test set
+  to be probable under the probability distribution parametrised by
+  $\bm{\theta}$. Perplexity is one measure of model fit. Given a sentence
+  $\bm{w}_{1:L}$ the perplexity, $\text{PP}$, is defined as the per-word inverse
+  probability,
+  \begin{equation}
+    \label{eq:perplexity}
+    \text{PP}(\bm{w}_{1:L}) = p(\bm{w}_{1:L})^{-\frac{1}{L}}
+  \end{equation}.
+  In practice, this can be expressed in the form
+  \begin{equation}
+    \label{eq:perplexity_log_form}
+    \text{PP}(\bm{w}_{1:L}) = \exp(-\frac{1}{L}\prod_{l=1}^L \log p(\bm{w}_l | \bm{w}_1, \dots, \bm{w}_{l-1}))
+  \end{equation}
 \end{description}
 
 \section{Reconstruction}
 
-\section{Translation}
+We ran a couple of experiments on reconstruction as a proof of concept to show
+that the model worked on data with only one language.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{reconstruction_compare_fig.eps}
+  \caption{Runs with various different recognition model}
+  \label{fig:mlp_reconstruction_plot}
+\end{figure}
+
+
+
+\section{Translation}
