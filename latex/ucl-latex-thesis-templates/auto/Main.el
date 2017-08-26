@@ -1,29 +1,49 @@
 (TeX-add-style-hook
  "Main"
  (lambda ()
-   (TeX-add-to-alist 'LaTeX-provided-class-options
-                     '(("ucl_thesis" "12pt" "mphil" "a4paper" "oneside")))
-   (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("nag" "l2tabu" "orthodox")))
-   (TeX-run-style-hooks
-    "latex2e"
-    "MainPackages"
-    "LinksAndMetadata"
-    "FloatSettings"
-    "BibSettings"
-    "./sections/Preamble"
-    "./sections/Nomenclature"
-    "./sections/Introduction"
-    "./sections/Background"
-    "./sections/Methods"
-    "./sections/Experiments"
-    "./sections/Conclusions"
-    "./sections/Appendices"
-    "nag"
-    "ucl_thesis"
-    "ucl_thesis12"
-    "Dissertation")
-   (LaTeX-add-bibliographies
-    "Dissertation"))
+   (LaTeX-add-bibitems
+    "DBLP:journals/corr/OordDZSVGKSK16"
+    "Jurafsky:2000:SLP:555733"
+    "blei_variational_2017"
+    "kingma_auto-encoding_2013"
+    "bowman_generating_2015"
+    "Bishop:2006"
+    "Barber:2012:BRM:2207809"
+    "Press:2007:NRE:1403886"
+    "CaseBerg:01"
+    "goldberg2015primer"
+    "Hornik:1989:MFN:70405.70408"
+    "Cybenko1989univapprox"
+    "BarberAppliedML"
+    "DBLP:journals/corr/KlambauerUMH17"
+    "KarpathyRNN"
+    "Hochreiter:1997:LSM:1246443.1246450"
+    "sundermeyer2012lstm"
+    "Rosenfeld00twodecades"
+    "sep-computational-linguistics"
+    "Bengio:2003:NPL:944919.944966"
+    "DBLP:journals/corr/abs-1301-3781"
+    "Mikolov:2013:DRW:2999792.2999959"
+    "Pennington14glove:global"
+    "Koehn:2003:SPT:1073445.1073462"
+    "Koehn:2007:MOS:1557769.1557821"
+    "wolk_neural-based_2015"
+    "wu_googles_2016"
+    "cho_properties_2014"
+    "Ruder17"
+    "series/lncs/Bottou12"
+    "Tieleman2012"
+    "Duchi:EECS-2010-24"
+    "kingma_adam:_2014"
+    "Rumelhart:1986:LIR:104279.104293"
+    "Barber15deeplearning:"
+    "brooks2011handbook"
+    "Carpenter_stan:a"
+    "journals/peerj-cs/SalvatierWF16"
+    "Dempster77maximumlikelihood"
+    "Neal98aview"
+    "bengio_practical_2012"
+    "Larochelle:2009:EST:1577069.1577070"
+    "koehn2005epc"))
  :latex)
 

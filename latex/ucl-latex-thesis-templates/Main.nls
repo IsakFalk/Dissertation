@@ -1,0 +1,161 @@
+\begin{thenomenclature} 
+
+ \nomgroup{A}
+
+  \item [{GD}]\begingroup Gradient Descent\nomeqref {0}\nompageref{9}
+  \item [{MCMC}]\begingroup Markov Chain Monte Carlo\nomeqref {0}
+		\nompageref{9}
+  \item [{MLE}]\begingroup Maximum Likelihood Estimation\nomeqref {0}
+		\nompageref{9}
+  \item [{NLP}]\begingroup Natural Language Processing\nomeqref {0}
+		\nompageref{9}
+  \item [{NMT}]\begingroup Neural Machine Translation\nomeqref {0}
+		\nompageref{9}
+  \item [{SGD}]\begingroup Stochastic Gradient Descent\nomeqref {0}
+		\nompageref{9}
+  \item [{VI}]\begingroup Variational Inference\nomeqref {0}
+		\nompageref{9}
+
+ \nomgroup{L}
+
+  \item [{$\bm{\theta} \in \bm{\Theta}$}]\begingroup Parameters $\bm{\theta}$   belonging to the parameter space $\bm{\Theta}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{v}_{\mathsf{w}}$}]\begingroup Word embedding of $\mathsf{w}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{w}$}]\begingroup One-hot encoding of $\mathsf{w}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{x}_i \in \mathcal{Y}$}]\begingroup Sentence $\bm{x}_i$ belonging to   language $X$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{y}_i \in \mathcal{Y}$}]\begingroup Sentence $\bm{y}_i$ belonging to   language $Y$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathcal{M}$}]\begingroup A model $\mathcal{M}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathcal{X}$}]\begingroup Set of sentences belonging to language $X$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathcal{Y}$}]\begingroup Set of sentences belonging to language $Y$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathsf{w}$}]\begingroup The word as a symbol\nomeqref {0}
+		\nompageref{9}
+  \item [{$\sigma(x)$}]\begingroup An activation function with respect to $x$\nomeqref {0}
+		\nompageref{9}
+  \item [{$N$}]\begingroup Number of data points\nomeqref {0}
+		\nompageref{9}
+  \item [{$V$}]\begingroup Dictionary; set of all words in vocabulary\nomeqref {0}
+		\nompageref{9}
+
+ \nomgroup{M}
+
+  \item [{$\bm{0}_d$}]\begingroup The $d$-dimensional zero vector\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{0}_{d \times d}$}]\begingroup The $d \times d$-dimensional zero matrix\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{A} \in \mathbf{R}^{n \times m}$}]\begingroup Real matrix $\bm{A}$ of   dimensions $n \times m$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{A} \odot \bm{B}$}]\begingroup Elementwise multiplication of matrices   $\bm{A}$ and $\bm{B}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{I}_d$}]\begingroup The $d \times d$ unit matrix\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{x}$}]\begingroup A real column vector\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathbb{R}$}]\begingroup Set of real numbers\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathbb{R}^d$}]\begingroup Real vector space of dimension $d$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\nabla_{\bm{x}} Q(\bm{x})$}]\begingroup Gradient of function $Q$ with respect to   vector $\bm{x}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\text{pa}(x)$}]\begingroup Set of parent nodes for node $x$ in a   graphical model\nomeqref {0}
+		\nompageref{9}
+  \item [{$\bm{0}_d$}]\begingroup The $d$-dimensional zero vector\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{0}_{d \times d}$}]\begingroup The $d \times d$-dimensional zero matrix\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{A} \in \mathbf{R}^{n \times m}$}]\begingroup Real matrix $\bm{A}$ of   dimensions $n \times m$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{A} \odot \bm{B}$}]\begingroup Elementwise multiplication of matrices   $\bm{A}$ and $\bm{B}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{I}_d$}]\begingroup The $d \times d$ unit matrix\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{x}$}]\begingroup A real column vector\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathbb{R}$}]\begingroup Set of real numbers\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathbb{R}^d$}]\begingroup Real vector space of dimension $d$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\nabla_{\bm{x}} Q(\bm{x})$}]\begingroup Gradient of function $Q$ with respect to   vector $\bm{x}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\text{pa}(x)$}]\begingroup Set of parent nodes for node $x$ in a   graphical model\nomeqref {C.0}
+		\nompageref{42}
+
+ \nomgroup{N}
+
+  \item [{$\bm{\theta} \in \bm{\Theta}$}]\begingroup Parameters $\bm{\theta}$   belonging to the parameter space $\bm{\Theta}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{v}_{\mathsf{w}}$}]\begingroup Word embedding of $\mathsf{w}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{w}$}]\begingroup One-hot encoding of $\mathsf{w}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{x}_i \in \mathcal{Y}$}]\begingroup Sentence $\bm{x}_i$ belonging to   language $X$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\bm{y}_i \in \mathcal{Y}$}]\begingroup Sentence $\bm{y}_i$ belonging to   language $Y$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathcal{M}$}]\begingroup A model $\mathcal{M}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathcal{X}$}]\begingroup Set of sentences belonging to language $X$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathcal{Y}$}]\begingroup Set of sentences belonging to language $Y$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathsf{w}$}]\begingroup The word as a symbol\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\sigma(x)$}]\begingroup An activation function with respect to $x$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$N$}]\begingroup Number of data points\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$V$}]\begingroup Dictionary; set of all words in vocabulary\nomeqref {C.0}
+		\nompageref{42}
+  \item [{GD}]\begingroup Gradient Descent\nomeqref {C.0}
+		\nompageref{42}
+  \item [{MCMC}]\begingroup Markov Chain Monte Carlo\nomeqref {C.0}
+		\nompageref{42}
+  \item [{MLE}]\begingroup Maximum Likelihood Estimation\nomeqref {C.0}
+		\nompageref{42}
+  \item [{NLP}]\begingroup Natural Language Processing\nomeqref {C.0}
+		\nompageref{42}
+  \item [{NMT}]\begingroup Neural Machine Translation\nomeqref {C.0}
+		\nompageref{42}
+  \item [{SGD}]\begingroup Stochastic Gradient Descent\nomeqref {C.0}
+		\nompageref{42}
+  \item [{VI}]\begingroup Variational Inference\nomeqref {C.0}
+		\nompageref{42}
+
+ \nomgroup{P}
+
+  \item [{$\Cov(\bm{x}, \bm{y})$}]\begingroup Multivariate covariance with respect   to $\bm{x}$ and $\bm{y}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\Cov(x, y)$}]\begingroup Covariance with respect to $x$ and $y$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\E_x[f(x, y)]$}]\begingroup Expectation of a function $f(x, y)$ with   respect to a random variable $x$. If no ambiguity to which   variable we are taking expectation with respect to exists the subscript may be   left out\nomeqref {0}
+		\nompageref{9}
+  \item [{$\KL{p, q}$}]\begingroup Kullback-Leibler divergence from distribution   $q$ to $p$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathcal{D}$}]\begingroup Set of data points\nomeqref {0}
+		\nompageref{9}
+  \item [{$\mathcal{N}(\bm{\mu}, \bm{\Sigma})$}]\begingroup Normal distribution   with mean $\bm{\mu}$ and covariance matrix $\bm{\Sigma}$\nomeqref {0}
+		\nompageref{9}
+  \item [{$p(x)$}]\begingroup Probability distribution with respect to random   variable $x$\nomeqref {0}
+		\nompageref{9}
+  \item [{$\Cov(\bm{x}, \bm{y})$}]\begingroup Multivariate covariance with respect   to $\bm{x}$ and $\bm{y}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\Cov(x, y)$}]\begingroup Covariance with respect to $x$ and $y$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\E_x[f(x, y)]$}]\begingroup Expectation of a function $f(x, y)$ with   respect to a random variable $x$. If no ambiguity to which   variable we are taking expectation with respect to exists the subscript may be   left out\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\KL{p, q}$}]\begingroup Kullback-Leibler divergence from distribution   $q$ to $p$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathcal{D}$}]\begingroup Set of data points\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$\mathcal{N}(\bm{\mu}, \bm{\Sigma})$}]\begingroup Normal distribution   with mean $\bm{\mu}$ and covariance matrix $\bm{\Sigma}$\nomeqref {C.0}
+		\nompageref{42}
+  \item [{$p(x)$}]\begingroup Probability distribution with respect to random   variable $x$\nomeqref {C.0}
+		\nompageref{42}
+
+\end{thenomenclature}

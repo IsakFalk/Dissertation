@@ -1,0 +1,105 @@
+
+@article{kingma_adam:_2014,
+	title = {Adam: {A} {Method} for {Stochastic} {Optimization}},
+	shorttitle = {Adam},
+	url = {http://arxiv.org/abs/1412.6980},
+	abstract = {We introduce Adam, an algorithm for first-order gradient-based optimization of stochastic objective functions, based on adaptive estimates of lower-order moments. The method is straightforward to implement, is computationally efficient, has little memory requirements, is invariant to diagonal rescaling of the gradients, and is well suited for problems that are large in terms of data and/or parameters. The method is also appropriate for non-stationary objectives and problems with very noisy and/or sparse gradients. The hyper-parameters have intuitive interpretations and typically require little tuning. Some connections to related algorithms, on which Adam was inspired, are discussed. We also analyze the theoretical convergence properties of the algorithm and provide a regret bound on the convergence rate that is comparable to the best known results under the online convex optimization framework. Empirical results demonstrate that Adam works well in practice and compares favorably to other stochastic optimization methods. Finally, we discuss AdaMax, a variant of Adam based on the infinity norm.},
+	urldate = {2017-08-03},
+	journal = {arXiv:1412.6980 [cs]},
+	author = {Kingma, Diederik P. and Ba, Jimmy},
+	month = dec,
+	year = {2014},
+	note = {arXiv: 1412.6980},
+	keywords = {Computer Science - Learning}
+}
+
+@article{mandt_stochastic_2017,
+	title = {Stochastic {Gradient} {Descent} as {Approximate} {Bayesian} {Inference}},
+	url = {http://arxiv.org/abs/1704.04289},
+	abstract = {Stochastic Gradient Descent with a constant learning rate (constant SGD) simulates a Markov chain with a stationary distribution. With this perspective, we derive several new results. (1) We show that constant SGD can be used as an approximate Bayesian posterior inference algorithm. Specifically, we show how to adjust the tuning parameters of constant SGD to best match the stationary distribution to a posterior, minimizing the Kullback-Leibler divergence between these two distributions. (2) We demonstrate that constant SGD gives rise to a new variational EM algorithm that optimizes hyperparameters in complex probabilistic models. (3) We also propose SGD with momentum for sampling and show how to adjust the damping coefficient accordingly. (4) We analyze MCMC algorithms. For Langevin Dynamics and Stochastic Gradient Fisher Scoring, we quantify the approximation errors due to finite learning rates. Finally (5), we use the stochastic process perspective to give a short proof of why Polyak averaging is optimal. Based on this idea, we propose a scalable approximate MCMC algorithm, the Averaged Stochastic Gradient Sampler.},
+	urldate = {2017-08-03},
+	journal = {arXiv:1704.04289 [cs, stat]},
+	author = {Mandt, Stephan and Hoffman, Matthew D. and Blei, David M.},
+	month = apr,
+	year = {2017},
+	note = {arXiv: 1704.04289},
+	keywords = {Computer Science - Learning, Statistics - Machine Learning}
+}
+
+@article{bottou_optimization_2016,
+	title = {Optimization {Methods} for {Large}-{Scale} {Machine} {Learning}},
+	url = {http://arxiv.org/abs/1606.04838},
+	abstract = {This paper provides a review and commentary on the past, present, and future of numerical optimization algorithms in the context of machine learning applications. Through case studies on text classification and the training of deep neural networks, we discuss how optimization problems arise in machine learning and what makes them challenging. A major theme of our study is that large-scale machine learning represents a distinctive setting in which the stochastic gradient (SG) method has traditionally played a central role while conventional gradient-based nonlinear optimization techniques typically falter. Based on this viewpoint, we present a comprehensive theory of a straightforward, yet versatile SG algorithm, discuss its practical behavior, and highlight opportunities for designing algorithms with improved performance. This leads to a discussion about the next generation of optimization methods for large-scale machine learning, including an investigation of two main streams of research on techniques that diminish noise in the stochastic directions and methods that make use of second-order derivative approximations.},
+	urldate = {2017-08-03},
+	journal = {arXiv:1606.04838 [cs, math, stat]},
+	author = {Bottou, Léon and Curtis, Frank E. and Nocedal, Jorge},
+	month = jun,
+	year = {2016},
+	note = {arXiv: 1606.04838},
+	keywords = {Computer Science - Learning, Mathematics - Optimization and Control, Statistics - Machine Learning}
+}
+
+@article{choromanska_loss_2014,
+	title = {The {Loss} {Surfaces} of {Multilayer} {Networks}},
+	url = {http://arxiv.org/abs/1412.0233},
+	abstract = {We study the connection between the highly non-convex loss function of a simple model of the fully-connected feed-forward neural network and the Hamiltonian of the spherical spin-glass model under the assumptions of: i) variable independence, ii) redundancy in network parametrization, and iii) uniformity. These assumptions enable us to explain the complexity of the fully decoupled neural network through the prism of the results from random matrix theory. We show that for large-size decoupled networks the lowest critical values of the random loss function form a layered structure and they are located in a well-defined band lower-bounded by the global minimum. The number of local minima outside that band diminishes exponentially with the size of the network. We empirically verify that the mathematical model exhibits similar behavior as the computer simulations, despite the presence of high dependencies in real networks. We conjecture that both simulated annealing and SGD converge to the band of low critical points, and that all critical points found there are local minima of high quality measured by the test error. This emphasizes a major difference between large- and small-size networks where for the latter poor quality local minima have non-zero probability of being recovered. Finally, we prove that recovering the global minimum becomes harder as the network size increases and that it is in practice irrelevant as global minimum often leads to overfitting.},
+	urldate = {2017-08-03},
+	journal = {arXiv:1412.0233 [cs]},
+	author = {Choromanska, Anna and Henaff, Mikael and Mathieu, Michael and Arous, Gérard Ben and LeCun, Yann},
+	month = nov,
+	year = {2014},
+	note = {arXiv: 1412.0233},
+	keywords = {Computer Science - Learning}
+}
+
+@article{bengio_practical_2012,
+	title = {Practical recommendations for gradient-based training of deep architectures},
+	url = {http://arxiv.org/abs/1206.5533},
+	abstract = {Learning algorithms related to artificial neural networks and in particular for Deep Learning may seem to involve many bells and whistles, called hyper-parameters. This chapter is meant as a practical guide with recommendations for some of the most commonly used hyper-parameters, in particular in the context of learning algorithms based on back-propagated gradient and gradient-based optimization. It also discusses how to deal with the fact that more interesting results can be obtained when allowing one to adjust many hyper-parameters. Overall, it describes elements of the practice used to successfully and efficiently train and debug large-scale and often deep multi-layer neural networks. It closes with open questions about the training difficulties observed with deeper architectures.},
+	urldate = {2017-07-30},
+	journal = {arXiv:1206.5533 [cs]},
+	author = {Bengio, Yoshua},
+	month = jun,
+	year = {2012},
+	note = {arXiv: 1206.5533},
+	keywords = {Computer Science - Learning}
+}
+
+@article{blei_variational_2017,
+	title = {Variational {Inference}: {A} {Review} for {Statisticians}},
+	volume = {112},
+	issn = {0162-1459, 1537-274X},
+	shorttitle = {Variational {Inference}},
+	url = {http://arxiv.org/abs/1601.00670},
+	doi = {10.1080/01621459.2017.1285773},
+	abstract = {One of the core problems of modern statistics is to approximate difficult-to-compute probability densities. This problem is especially important in Bayesian statistics, which frames all inference about unknown quantities as a calculation involving the posterior density. In this paper, we review variational inference (VI), a method from machine learning that approximates probability densities through optimization. VI has been used in many applications and tends to be faster than classical methods, such as Markov chain Monte Carlo sampling. The idea behind VI is to first posit a family of densities and then to find the member of that family which is close to the target. Closeness is measured by Kullback-Leibler divergence. We review the ideas behind mean-field variational inference, discuss the special case of VI applied to exponential family models, present a full example with a Bayesian mixture of Gaussians, and derive a variant that uses stochastic optimization to scale up to massive data. We discuss modern research in VI and highlight important open problems. VI is powerful, but it is not yet well understood. Our hope in writing this paper is to catalyze statistical research on this class of algorithms.},
+	number = {518},
+	urldate = {2017-07-29},
+	journal = {Journal of the American Statistical Association},
+	author = {Blei, David M. and Kucukelbir, Alp and McAuliffe, Jon D.},
+	month = apr,
+	year = {2017},
+	note = {arXiv: 1601.00670},
+	keywords = {Computer Science - Learning, Statistics - Computation, Statistics - Machine Learning},
+	pages = {859--877}
+}
+
+@misc{noauthor_ucl_nodate,
+	title = {{UCL} {ML}/{CSML}/{DS} {MSc} 2016/17},
+	url = {https://www.facebook.com/groups/282485958772388/?multi_permalinks=482269398794042&notif_t=group_activity&notif_id=1500817906821629},
+	urldate = {2017-07-23}
+}
+
+@article{roeder_sticking_2017,
+	title = {Sticking the {Landing}: {Simple}, {Lower}-{Variance} {Gradient} {Estimators} for {Variational} {Inference}},
+	shorttitle = {Sticking the {Landing}},
+	url = {http://arxiv.org/abs/1703.09194},
+	abstract = {We propose a simple and general variant of the standard reparameterized gradient estimator for the variational evidence lower bound. Specifically, we remove a part of the total derivative with respect to the variational parameters that corresponds to the score function. Removing this term produces an unbiased gradient estimator whose variance approaches zero as the approximate posterior approaches the exact posterior. We analyze the behavior of this gradient estimator theoretically and empirically, and generalize it to more complex variational distributions such as mixtures and importance-weighted posteriors.},
+	urldate = {2017-07-06},
+	journal = {arXiv:1703.09194 [cs, stat]},
+	author = {Roeder, Geoffrey and Wu, Yuhuai and Duvenaud, David},
+	month = mar,
+	year = {2017},
+	note = {arXiv: 1703.09194},
+	keywords = {Computer Science - Learning, Statistics - Machine Learning}
+}

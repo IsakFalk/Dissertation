@@ -1,6 +1,13 @@
 % contains all used global packages
 \ProvidesPackage{Dissertation}
 
+\let\openbox\relax
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conj}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+%\newtheorem{rule}[theorem]{Rule}
 %\usepackage{subcaption}
 \usepackage{graphicx}
 % % --- all packages
@@ -94,8 +101,8 @@
 
 % Mathematics commands
 \DeclareMathOperator{\E}{\mathbb{E}}
-\DeclareMathOperator{\Cov}{\text{Cov}}
-\DeclareMathOperator{\Var}{\text{Var}}
+\DeclareMathOperator{\Cov}{\textnormal{Cov}}
+\DeclareMathOperator{\Var}{\textnormal{Var}}
 \newcommand\KL[2]{D_{KL}(#1 || #2)}
 \DeclareMathOperator*{\argmin}{\arg\!\min}
 \DeclareMathOperator*{\argmax}{\arg\!\max}

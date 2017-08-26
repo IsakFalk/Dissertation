@@ -64,6 +64,19 @@
     "LeCun:1989:BAH:1351079.1351090"
     "Hornik:1989:MFN:70405.70408"
     "Jurafsky:2000:SLP:555733"
-    "2014arXiv1401.4082J"))
+    "2014arXiv1401.4082J"
+    "Barber:2012:BRM:2207809"
+    "Kohonen:1988:SFT:65669.104428"
+    "Cybenko1989univapprox"
+    "BarberAppliedML"
+    "DBLP:journals/corr/OordDZSVGKSK16"
+    "KarpathyRNN"
+    "Hochreiter:1997:LSM:1246443.1246450"
+    "sundermeyer2012lstm"
+    "DBLP:journals/corr/KlambauerUMH17"
+    "2016arXiv160502688short"
+    "lasagne"
+    "DBLP:journals/corr/BahrampourRSS15"
+    "Barber15deeplearning:"))
  :bibtex)
 

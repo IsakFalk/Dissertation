@@ -1,6 +1,89 @@
 \chapter{Methods and Theory}
 \label{MethodsCh}
 
+This chapter deals with the theory we will be using in order to use VAE in the
+our setting. It will also deal with extending the theory and necessary calculations.
+
+\subsection{Variational Inference}
+Consider the following general graphical model of a latent variable $\bm{z}$ and
+an observed variable $\bm{x}$:
+\begin{figure}[H]
+  \center
+  \label{tikz:latent_variable_model}
+  \begin{tikzpicture}
+    % Define nodes
+    \node[latent] (z) {$\bm{z}$} ;
+    \node[obs, below=of z] (x) {$\bm{x}$} ;
+    %\node[const, right=of z, xshift=-0.5] (theta) {$\bm{\theta}$} ;
+
+    % Connect the nodes
+    \edge {z} {x} ;
+    %\edge {theta} {z, x} ;
+
+    % Plate
+    % \plate {zx} {(z)(x)} {$n$} ;
+  \end{tikzpicture}
+  \caption{Latent variable model}
+\end{figure}
+implying the joint distribution
+\begin{equation}
+  \label{eq:latent_variable_model}
+  p(\bm{x}, \bm{z}) = p(\bm{x} | \bm{z}) p(\bm{z})
+\end{equation}
+
+In order to fit the parameters of the model using MLE we need to be able to to
+find the gradient and value of $\ell(\bm{\theta})$ to use ADAM. We can rewrite
+the likelihood for a datapoint $\bm{x}$ as
+\begin{equation}
+  \label{eq:likelihood_integrate_out_latent}
+  \mathcal{L}(\bm{\theta} ; \bm{x}) = \int_{\mathcal{X}} p(\bm{x}, \bm{z}) \dif X
+\end{equation}
+by using the sum rule \ref{eq:sum_rule}. For many models, this integral is
+either not available in a closed form or requires exponential time to compute
+\cite{blei_variational_2017} and while for some special cases it is possible to
+find a local optimum of the likelihood by using the EM algorithm
+\cite{Dempster77maximumlikelihood} in general it is too restrictive since we
+need to be able to find $p(\bm{z} | \bm{x})$ analytically.
+
+While it is possible to use sampling based techniques such as MCMC
+\cite{brooks2011handbook} to sample from $p(\bm{z} | \bm{x})$ in practice it is
+often slow and depending on the problem may be less than ideal. Especially for
+problems where we use complex models and have large datasets it's not possible
+in practice to use MCMC.
+
+Variational inference approaches the problem of optimizing the intractable
+log-likelihood by introducing a variational distribution $q$ belonging to some
+constrained set of predefined distributions $\mathcal{Q}$. Since the
+log-likelihood is intractable, we try to bound the log-likelihood from below by
+an expression that is easier to deal with. Using Jensen's inequality with the
+$\log( \cdot )$ function, we have that
+
+\begin{align*}
+  \log p_{\bm{\theta}}(\bm{x}) & = \log \int_{\mathcal{Z}} p_{\bm{\theta}}(\bm{z}, \bm{x}) \dif \bm{z}\\
+                               & = \log \int_{\mathcal{Z}}q_{\bm{\varphi}}(\bm{z})  \frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\varphi}}(\bm{z})} \dif \bm{z} \\
+                               & = \log \E_{q_{\bm{\varphi}}(\bm{z})}\left[\frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\varphi}}(\bm{z})}\right] \\
+                               & \geq \E_{q_{\bm{\varphi}}(\bm{z})}\left[\log \frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\varphi}}(\bm{z})}\right] \\
+                               & = \E_{q_{\bm{\varphi}}(\bm{z})}\left[\log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log q_{\bm{\varphi}}(\bm{z})\right] \\
+\end{align*}
+
+Defining the term Evidence Lower Bound Objective,
+\begin{equation}
+  \label{eq:ELBO}
+  \text{ELBO}(q_{\bm{\varphi}}) =
+  \E_{q_{\bm{\varphi}}(\bm{z})}\left[ \log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log
+    q_{\bm{\varphi}}(\bm{z}) \right]  
+\end{equation}
+we express this as the following resulting inequality
+\begin{equation}
+  \label{eq:ELBO_inequality}
+  \log p_{\bm{\theta}}(\bm{x}) \geq \text{ELBO}(q_{\bm{\varphi}})
+\end{equation}.
+However, we note that we can rewrite the ELBO as
+\begin{equation}
+  \label{eq:ELBO_decomposed}
+  \text{ELBO}(q_{\bm{\varphi}})) = \log p_{\bm{\theta}}(\bm{x}) - \KL{q_{\bm{\varphi}}}{}
+\end{equation}
+
 \section{ELBO}
 
 Ideally we would like to optimize the log-likelihood of the data,
