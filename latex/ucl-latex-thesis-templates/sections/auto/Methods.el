@@ -9,9 +9,12 @@
     "eq:ELBO"
     "eq:ELBO_inequality"
     "eq:ELBO_decomposed"
-    "eq:log_likelihood_sum"
+    "eq:ELBO_VAE"
+    "eq:VAE_ELBO"
+    "eq:reparametrisation_trick"
     "eq:SGVB"
     "eq:SGVB_analytical_KL"
+    "tikz:reconstruction_model"
     "eq:joint_generative"
     "eq:translation_SGVB"
     "eq:KL_annealing_ELBO"))

@@ -77,6 +77,8 @@
     "2016arXiv160502688short"
     "lasagne"
     "DBLP:journals/corr/BahrampourRSS15"
-    "Barber15deeplearning:"))
+    "Barber15deeplearning:"
+    "conf/icassp/MikolovKBCK11"
+    "Kirkpatrick1983"))
  :bibtex)
 
