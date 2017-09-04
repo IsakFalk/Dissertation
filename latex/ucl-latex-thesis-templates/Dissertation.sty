@@ -8,17 +8,23 @@
 \newtheorem{conj}[theorem]{Conjecture}
 \newtheorem{definition}[theorem]{Definition}
 %\newtheorem{rule}[theorem]{Rule}
-%\usepackage{subcaption}
+\usepackage{subcaption}
 \usepackage{graphicx}
 % % --- all packages
 \usepackage[mode=buildnew]{standalone}
 \usepackage{tikz}
 \usetikzlibrary{bayesnet}
 \usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 % \usepackage{microtype}
 % \usepackage{xfrac}
 % \usepackage{lscape}
-\usepackage{subfig}
+%\usepackage{subfig}
 \usetikzlibrary{arrows ,bending, calc, automata, chains, arrows.meta, quotes}
 \tikzset{->,>=stealth',auto,node distance=3cm,
   thick,main node/.style={circle,draw,minimum size=1cm,inner sep=10pt},}
@@ -74,7 +80,7 @@
 
 % % typesetting
 % \usepackage[english]{babel}
-% \usepackage{setspace}
+\usepackage{setspace}
 
 % % for pseudocode etc
 % \usepackage{algpseudocode}

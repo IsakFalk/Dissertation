@@ -53,7 +53,7 @@
 %  mres
 %  mphil 
 %  \documentclass[12pt,phd,draft,a4paper,oneside]{ucl_thesis}
-\documentclass[12pt,mphil,a4paper,oneside]{ucl_thesis}
+\documentclass[12pt,mphil,a4paper,oneside]{ucl_thesis} 
 
 % Include the .sty file. Check so that it doesn't fuck up
 % the whole document. Might want to rewrite it.
@@ -65,17 +65,17 @@
 % Package configuration:
 %  LaTeX uses "packages" to add extra commands and features.
 %  There are quite a few useful ones, so we've put them in a 
-%   separate file.
-\input{MainPackages}
+%   separate file.\
+\input{MainPackages} 
 
 % Sets up links within your document, for e.g. contents page entries
-%  and references, and also PDF metadata.
+%  and references, and also PDF metaata.
 % You should edit this!
 \input{LinksAndMetadata}
 
 % And then some settings in separate files.
 \input{FloatSettings} % For things like figures and tables
-\input{BibSettings}   % For bibliographies
+\input{BibSettings}   % For bibliographie
 
 % These control how many number sections your subsections will take
 %    e.g. Section 2.3.1.5.6.3
@@ -84,7 +84,7 @@
 \setcounter{tocdepth}{3}
 
 \begin{document}
-
+\doublespacing
 \nobibliography*
 % ^-- This is a dumb trick that works with the bibentry package to let
 %  you put bibliography entries whereever you like.
@@ -94,14 +94,14 @@
 
 % At last, content! Remember filenames are case-sensitive and 
 %  *must not* include spaces.
-%\include{./sections/Preamble}
+\include{./sections/Preamble}
 %\include{./sections/Nomenclature}
 \include{./sections/Introduction}
 \include{./sections/Background}
 \include{./sections/Methods}
 \include{./sections/Experiments}
-%\include{./sections/Conclusions} 
-%\include{./sections/Appendices}
+\include{./sections/Conclusions} 
+\include{./sections/Appendices}
 
 % You could separate these out into different files if you have
 % particularly large appendices.

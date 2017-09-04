@@ -27,6 +27,7 @@
     "eq:tanh"
     "eq:SELU"
     "eq:softmax"
+    "ch:WaveNet"
     "fig:wavenet_dilated_convolutions"
     "eq:conditional_language_probability"
     "eq:one_hot_encoding"
@@ -34,6 +35,7 @@
     "fig:encoder_decoder"
     "eq:GD_update"
     "eq:SGD_update"
-    "ADAM"))
+    "ADAM"
+    "ch:autodiff"))
  :latex)
 

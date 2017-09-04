@@ -28,16 +28,16 @@ an observed variable $\bm{x}$ parametrised by $\bm{\theta}$:
 implying the joint distribution
 \begin{equation}
   \label{eq:latent_variable_model}
-  p(\bm{x}, \bm{z}) = p(\bm{x} | \bm{z}) p(\bm{z})
-\end{equation}.
+  p(\bm{x}, \bm{z}) = p(\bm{x} | \bm{z}) p(\bm{z}).
+\end{equation}
 
 In order to fit the parameters of the model using optimisation of
-$\ell(\bm{\theta} ; \mathcal{D})$ we need to be able to to find the gradient and
-value of $\ell(\bm{\theta} ; \bm{x})$ to use ADAM. We can rewrite
+$\ell(\bm{\theta} | \mathcal{D})$ we need to be able to to find the gradient and
+value of $\ell(\bm{\theta} | \bm{x})$ to use ADAM. We can rewrite
 the likelihood for a datapoint $\bm{x}$ as
 \begin{equation}
   \label{eq:likelihood_integrate_out_latent}
-  \mathcal{L}(\bm{\theta} ; \bm{x}) = \int_{\mathcal{Z}} p(\bm{x}, \bm{z}) \dif \bm{z}
+  \mathcal{L}(\bm{\theta} | \bm{x}) = \int_{\mathcal{Z}} p(\bm{x}, \bm{z}) \dif \bm{z}
 \end{equation}
 by using the sum rule of \ref{eq:sum_rule}. For many models, this integral is
 either not available in a closed form or requires exponential time to compute
@@ -55,7 +55,7 @@ in practice to use MCMC \cite{blei_variational_2017}.
 Variational inference approaches the problem of optimizing the intractable
 log-likelihood by positing a variational family of distributions,
 $\mathcal{Q}$ and introducing a variational distribution $q \in \mathcal{Q}$. The
-log-likelihood is then bounded from below using concavity with the
+log-likelihood is then bounded from below using the concavity of the
 $\log( \cdot )$ function in order to apply Jensen's inequality and the fact that
 $q$ is a distribution:
 \begin{align*}
@@ -63,34 +63,59 @@ $q$ is a distribution:
                                & = \log \int_{\mathcal{Z}}q_{\bm{\varphi}}(\bm{z})  \frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\varphi}}(\bm{z})} \dif \bm{z} \\
                                & = \log \E_{q_{\bm{\varphi}}(\bm{z})}\left[\frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\varphi}}(\bm{z})}\right] \\
                                & \geq \E_{q_{\bm{\varphi}}(\bm{z})}\left[\log \frac{p_{\bm{\theta}}(\bm{x}, \bm{z})}{q_{\bm{\varphi}}(\bm{z})}\right] \\
-                               & = \E_{q_{\bm{\varphi}}(\bm{z})}\left[\log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log q_{\bm{\varphi}}(\bm{z})\right] \\
-\end{align*}.
+                               & = \E_{q_{\bm{\varphi}}(\bm{z})}\left[\log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log q_{\bm{\varphi}}(\bm{z})\right].
+\end{align*}
 
 We call the lower bound the Evidence Lower Bound Objective (ELBO),
 \begin{equation}
   \label{eq:ELBO}
-  \text{ELBO}(q_{\bm{\varphi}}) =
+  \text{ELBO}(q_{\bm{\varphi}}(\bm{z})) =
   \E_{q_{\bm{\varphi}}(\bm{z})}\left[ \log p_{\bm{\theta}}(\bm{x}, \bm{z}) - \log
     q_{\bm{\varphi}}(\bm{z}) \right]
 \end{equation}
 and we get the following inequality
 \begin{equation}
   \label{eq:ELBO_inequality}
-  \log p_{\bm{\theta}}(\bm{x}) \geq \text{ELBO}(q_{\bm{\varphi}})
-\end{equation}.
+  \log p_{\bm{\theta}}(\bm{x}) \geq \text{ELBO}(q_{\bm{\varphi}}(\bm{z})).
+\end{equation}
 
 Rewriting the ELBO in terms of the log-likelihood
 \begin{equation}
   \label{eq:ELBO_decomposed}
-  \text{ELBO}(q_{\bm{\varphi}}) = \log p_{\bm{\theta}}(\bm{x}) - \KL{q_{\bm{\varphi}}(\bm{z})}{p_{\bm{\theta}}(\bm{z} | \bm{x})}
+  \text{ELBO}(q_{\bm{\varphi}}(\bm{z})) = \log p_{\bm{\theta}}(\bm{x}) - \KL{q_{\bm{\varphi}}(\bm{z})}{p_{\bm{\theta}}(\bm{z} | \bm{x})}
 \end{equation}
-we see how the choice of $q_{\bm{\varphi}}$ affects the tightness of the
+we see how the choice of $q_{\bm{\varphi}}(\bm{z})$ affects the tightness of the
 lower bound through the closeness to the true posterior $p_{\bm{\theta}}(\bm{z}
-| \bm{x})$ in terms of KL-divergence \cite{blei_variational_2017}.
+| \bm{x})$ in terms of the KL-divergence \cite{blei_variational_2017}.
 
 \section{VAE and SGVB}
 
-The Variational Autoencoder by Kingma et. al \cite{kingma_auto-encoding_2013}
+\begin{figure}[H]
+  \label{tikz:VAE_graphical_model}
+  \centering
+  \begin{tikzpicture}
+    % Define nodes
+    \node[latent] (z) {$\bm{z}$} ;
+    \node[obs, below=of z] (x) {$\bm{x}$} ;
+    \node[const, right=of z, xshift=-0.5] (theta) {$\bm{\theta}$} ;
+    \node[const, left=of z, xshift=-0.5] (phi) {$\bm{\varphi}$} ;
+    
+    % Connect the nodes
+    \edge {z} {x} ;
+    \edge {theta} {x} ;
+    \edge {theta} {z} ;
+    \edge[dashed] {phi} {z} ;
+    \edge[bend left, dashed] {x} {z} ;
+    
+    % \draw[dashed,->] (x) -- (z)
+    
+    % Plate
+    \plate {zx} {(z)(x)} {$N$} ;
+  \end{tikzpicture}
+  \caption{Variational Autoencoder}
+\end{figure}
+
+The Variational Autoencoder by Kingma et al. \cite{kingma_auto-encoding_2013}
 introduces a recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ that serves as
 an approximation to the true posterior $p_{\bm{\theta}}( \bm{z} | \bm{x})$. We let $q_{\bm{\varphi}}(\bm{z} | \bm{x}) \sim
 \mathcal{N}(\bm{z}| \bm{\mu_{\bm{\varphi}}}(\bm{x}),
@@ -99,26 +124,27 @@ $(\bm{\mu}_{\bm{\varphi}}(\bm{x}), \bm{\sigma}_{\bm{\varphi}}(\bm{x}))$ is the
 output of a neural network, and let this Gaussian have a diagonal covariance
 structure with the vector $\bm{\sigma}_{\bm{\varphi}}(\bm{x})$ as the diagonal.
 
-If we consider the ELBO again we can rewrite it in terms that only involve known
-functions and quantities
+In the following we assume that $\bm{x}$ is an observed datapoint from our
+dataset and $\bm{z}$ is the corresponding latent variable. If we consider the
+ELBO again we can rewrite it in terms that only involve known functions and quantities
 \begin{equation}
   \label{eq:ELBO_VAE}
-  \text{ELBO}(q_{\bm{\varphi}}(\bm{z} | \bm{x})) = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}\left[ \log p_{\bm{\theta}}(\bm{x} | \bm{z}) \right] - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
-\end{equation}.
+  \text{ELBO}(q_{\bm{\varphi}}(\bm{z} | \bm{x})) = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}\left[ \log p_{\bm{\theta}}(\bm{x} | \bm{z}) \right] - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}.
+\end{equation}
 Since this depends on both the parameters of the generative model and the
 recognition model, $(\bm{\theta}, \bm{\varphi})$ we make this explicit and write
 \begin{equation}
   \label{eq:VAE_ELBO}
-  \mathcal{L}^{\text{ELBO}}(\bm{\theta}, \bm{\varphi} ; \bm{x}) = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}\left[ \log p_{\bm{\theta}}(\bm{x} | \bm{z}) \right] - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
-\end{equation}.
+  \mathcal{L}^{\text{ELBO}}(\bm{\theta}, \bm{\varphi} | \bm{x}) = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}\left[ \log p_{\bm{\theta}}(\bm{x} | \bm{z}) \right] - \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}.
+\end{equation}
 
-Note that since for most models we are not able to get an analytical form of the
+Note that for most models we are not able to get an analytical form of the
 expectation over $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ due to the non-linear
 relationship between $\bm{x}$ and $\bm{z}$. Instead we sample $\bm{z}$ to
 estimate this expectation using normal Monte Carlo estimation.
 
 While it would be possible to differentiate and optimize the lower bound
-$\mathcal{L}^{\text{ELBO}}(\bm{\theta}, \bm{\varphi} ; \bm{x})$ jointly with
+$\mathcal{L}^{\text{ELBO}}(\bm{\theta}, \bm{\varphi} | \bm{x})$ jointly with
 respect to both the variational and generative parameters $\bm{\varphi}$ and
 $\bm{\theta}$ by using a straightforward Monte Carlo gradient estimator with respect
 to $q_{\bm{\varphi}}(\bm{z} | \bm{x})$, this gradient exhibits very high
@@ -127,15 +153,14 @@ variance and is impractical compared to the reparametrisation trick which we wil
 \subsection{Reparametrisation Trick}
 Under certain mild regularity conditions, for a chosen approximate posterior
 $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ we can express the distribution of $\bm{z}
-\sim q_{\bm{\varphi}}(\bm{z} | \bm{x})$ in terms of a simpler distribution, in
-our case a standard unit normal $\bm{\epsilon}$ and a differentiable
-reparametrisation trick which will be introduced below
-\cite{kingma_auto-encoding_2013} transformation $g_{\bm{\varphi}}(\bm{\epsilon},
+\sim q_{\bm{\varphi}}(\bm{z} | \bm{x})$ in terms of a simpler distribution using
+reparametrisation, called the reparametrisation trick
+\cite{kingma_auto-encoding_2013}. For our case, let transformation $g_{\bm{\varphi}}(\bm{\epsilon},
 \bm{x})$ such that
 \begin{equation}
   \label{eq:reparametrisation_trick}
-  \bm{z} = g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x}), \quad \text{such that} \quad \bm{\epsilon} \sim \mathcal{N}(\bm{0}, \bm{I})
-\end{equation}.
+  \bm{z} = g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x}), \quad \text{such that} \quad \bm{\epsilon} \sim \mathcal{N}(\bm{0}, \bm{I}).
+\end{equation}
 In our case we use \eqref{eq:sample_x_diag_covariance} in order to write
 $g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x}) = \bm{\mu}_{\bm{\varphi}}(\bm{x}) +
 \bm{\sigma}_{\bm{\varphi}}(\bm{x}) \odot \bm{\epsilon}$.
@@ -151,26 +176,26 @@ where $\bm{z}^{l} = g_{\bm{\varphi}}(\bm{\epsilon}^{l}, \bm{x})$ and
 $\bm{\epsilon}^{l} \sim \mathcal{N}(\bm{0}, \bm{I})$.
 
 Equation \eqref{eq:SGVB} is the Stochastic Gradient Variational Bayes estimator
-of the ELBO, which we call $\mathcal{L}^{VAE}(\bm{\theta}, \bm{\varphi};
+of the ELBO, which we call $\mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}|
 \bm{x})$ and is an unbiased estimator of the ELBO since we sample $\bm{z}$ from
 the recognition model.
 
 \subsection{AEVB algorithm}
 The AEVB algorithm optimises the SGVB equation \eqref{eq:SGVB} in order to in
-drive up the ELBO and push the lower bound often the log-likelihood up. If the
+drive up the ELBO and push the lower bound of the the log-likelihood up. If the
 recognition model and the prior are chosen to be from appropriate distributions
 it is possible to get an analytical form of the KL-divergence. Choosing
 $p_{\bm{\theta}}(\bm{z})$ and $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ to be
 Gaussianly distributed enables us to write the SGVB in an alternative form which
-typically has less variance than the SGVB form in equation \eqref{eq:SGVB}:
+typically has less variance than the SGVB form of equation \eqref{eq:SGVB}:
 \begin{equation}
   \label{eq:SGVB_analytical_KL}
-  \mathcal{L}^{VAE}(\bm{\theta}, \bm{\varphi}) = -\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})} + \frac{1}{L} \sum_{l=1}^L \log p_{\bm{\theta}}(\bm{x} | \bm{z}^{l})
+  \mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}) = -\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})} + \frac{1}{L} \sum_{l=1}^L \log p_{\bm{\theta}}(\bm{x} | \bm{z}^{l})
 \end{equation}
 where $\bm{z}^{l} = g_{\bm{\varphi}}(\bm{\epsilon}^{l}, \bm{x})$ and
 $\bm{\epsilon}^{l} \sim \mathcal{N}(\bm{0},
-\bm{I})$ \cite{kingma_auto-encoding_2013}. We let $L = 1$ following the advice
-of Kingma et. al.
+\bm{I})$. We let $L = 1$ following the advice
+of Kingma et al. \cite{kingma_auto-encoding_2013}.
 
 \section{Models}
 
@@ -208,7 +233,7 @@ and the joint factorizes as $p_{\bm{\theta}}(\bm{x}, \bm{z}) =
 p_{\bm{\theta}}(\bm{x} | \bm{z})p(\bm{z})$.
 
 The reconstruction model is the same model specified in
-\cite{kingma_auto-encoding_2013}. Bowman et. al has successfully showed that it
+\cite{kingma_auto-encoding_2013}. Bowman et al. has successfully showed that it
 can be applied to natural language, learning meaningful representations of
 language in the latent dimension \cite{bowman_generating_2015} while improving
 on previous models such as RNNLM \cite{conf/icassp/MikolovKBCK11}.
@@ -267,13 +292,14 @@ inequality in \eqref{eq:ELBO_inequality} will be as shown by equation
 analytical tractability, 
 \begin{align*}
   q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y}) & = q_{\bm{\varphi}_{\bm{x}}}(\bm{z} | \bm{x})q_{\bm{\varphi}_{\bm{y}}}(\bm{z} | \bm{y}) \\
-                                            & = \mathcal{N}(\mu_{\bm{\varphi}_{\bm{x}}}(\bm{x}), \sigma_{\bm{\varphi}_{\bm{x}}}(\bm{x}))\mathcal{N}(\mu_{\bm{\varphi}_{\bm{y}}}(\bm{y}), \sigma_{\bm{\varphi}_{\bm{y}}}(\bm{y}))
-\end{align*}.
+                                            & = \mathcal{N}(\mu_{\bm{\varphi}_{\bm{x}}}(\bm{x}), \sigma_{\bm{\varphi}_{\bm{x}}}(\bm{x}))\mathcal{N}(\mu_{\bm{\varphi}_{\bm{y}}}(\bm{y}), \sigma_{\bm{\varphi}_{\bm{y}}}(\bm{y})).
+\end{align*}
 
 This is again a Gaussian distribution
-\begin{equation*}
+\begin{equation}
+  \label{eq:joint_variational_gaussian}
   q(\bm{z} | \bm{x}, \bm{y}) = \mathcal{N}(\bm{z} | \mu(\bm{x}, \bm{y}), \sigma(\bm{x}, \bm{y}))
-\end{equation*} which reduces to the expressions
+\end{equation} which reduces to the expressions
 \eqref{eq:joint_indep_normal_mean} for the mean and
 \eqref{eq:joint_indep_normal_covariance} for the covariance as shown in the
 background section on the Gaussian distribution.
@@ -282,18 +308,18 @@ translation case reduces to the equation
 \begin{equation}
   \begin{split}
   \label{eq:translation_SGVB}
-  \mathcal{L}^{VAE}(\bm{\theta}, \bm{\varphi}; \bm{x}, \bm{y}) = (\frac{1}{L} \sum_{l=1}^L \log(\mathcal{N}(\bm{x} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z}))) + \log(\mathcal{N}(\bm{y} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z})))) + \\ \frac{1}{2} \sum_{j=1}^J(1 + \log((\sigma_j^{(i)})^2) - (\mu_j^{(i)})^2 - (\sigma_j^{(i)})^2))
+  \mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}| \bm{x}, \bm{y}) = (\frac{1}{L} \sum_{l=1}^L \log(\mathcal{N}(\bm{x} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z}))) + \log(\mathcal{N}(\bm{y} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z})))) + \\ \frac{1}{2} \sum_{j=1}^J(1 + \log((\sigma_j^{(i)})^2) - (\mu_j^{(i)})^2 - (\sigma_j^{(i)})^2))
   \end{split}
 \end{equation}
 
-where the $\mu, \sigma$ is from the normal $\mathcal{N}(\bm{z} | \mu(\bm{x},
-\bm{y}), \sigma(\bm{x}, \bm{y}))$, and the second expression on the right is the
-analytical form of $\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})}{p(\bm{z})}$ \cite{kingma_auto-encoding_2013}.
-
+where the parameters $\mu, \sigma$ are from the normal in equation
+\eqref{eq:joint_variational_gaussian}, with $\mu_j^{(i)}, \sigma_j^{(i)}$ being
+the $i$'th entry in the mean and covariance of the $j$'th latent sampled. The
+second expression on the right is the analytical form of $-\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})}{p(\bm{z})}$ \cite{kingma_auto-encoding_2013}.
 \subsection{Training}
 Variational Autoencoders in NLP have a tendency to collapse the KL term in the
 SGVB objective to zero, effectively being reduced a RNNLM. As the KL can be seen
-as a measure of how much information is encoded in $\bm{z}$ this event makes the
+as a measure of how much information is encoded in $\bm{z}$, the KL-collapse makes the
 use of VAE's to model language-agnostic features in the latent space useless.
 One of the objectives is to make sure this KL-collapse doesn't happen.
 
@@ -303,7 +329,11 @@ We use KL-annealing where we anneal the ELBO by a pseudo-objective
   ELBO_{\beta_t} = \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})}[\log p_{\bm{\theta}}(\bm{x} | \bm{z})] - \beta_t * \KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})}
 \end{equation}
 where $\beta_t$ is an annealing term going from $0$ to $1$ as we train. We do
-this by choosing a warm-up $\beta$ and let $\beta_t = \min(1, \frac{t}{\beta})$,
+this by choosing a warm-up $\beta$ and let $\beta_t = \min(1, \frac{t}{\beta})$ \cite{bowman_generating_2015},
 letting this warm up be done linearly until we recover the original ELBO
-objective, similar to normal simulated annealing \cite{Kirkpatrick1983, kingma_auto-encoding_2013}.
+objective, similar to normal simulated annealing \cite{Kirkpatrick1983}.
 
+The training is then carried out using ADAM on the objective
+$\mathcal{L}^{SGVB}$ where we take into account the KL-annealing. In order to
+calculate the gradients efficiently we use Theano which has automatic support
+for AutoDiff \ref{ch:autodiff}.

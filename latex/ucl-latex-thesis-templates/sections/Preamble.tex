@@ -11,30 +11,32 @@
 \department{The Centre for Computational Statistics and Machine Learning}
 
 \maketitle
-\makedeclaration
+%\makedeclaration
 
-\begin{abstract} % 300 word limit
-Neural Machine translation is a direction in automated translation which learns
-the mapping from the source to the target language directly in an end-to-end
-fashion using the framework of neural networks. As NMT hinges on advances in
-neural network methods and architectures, it is able to directly use
-improvements there in its own domain.
+\leavevmode\thispagestyle{empty}\newpage
 
-We use recent improvements in latent variables models in order to train a
-completely probabilistic generative model with a latent variable representing a
-language-agnostic representation of a sentence mapping through deep neural
-networks to two different output languages. Following recent advances in
-training deep generative latent variable models we approximate the posterior of
-the latents given output with a recognition model, mimicking a VAE. Following
-the SGVB method to find a stochastic lower bound to the true log-likelihood of
-the observed data, we train the parameters of the generative model and the
-variational recognition model jointly to optimise this bound.
+% Info in: https://users.ece.cmu.edu/~koopman/essays/abstract.html
 
-Since the recognition model acts as a pseudo-posterior (it approximates it given
-constraints on the distributional form of the recognition model) we can use this
-to translate from one language to another by finding the posterior
-q-distribution over z and then from sampled z find the most likely output of the
-languages.
+\begin{abstract}
+  Neural machine translation is the application of neural networks to perform
+  translation between two languages, natural language generation concerns itself
+  with the generation of sentences using a probabilistic model. Employing latent
+  variable models for language generation enables generation of sentences from
+  an underlying latent cause. Latent variable models using neural
+  networks are very powerful but hard to optimise since the log-likelihood is
+  intractable. Variational Autoencoder is a framework for optimising a stochastic approximation of the
+  ELBO, a lower bound on the log-likelihood, letting us train these models. While variational autoencoders have been applied with some success to natural language
+  processing, it is still unclear if this could be used as a way of translating
+  sentence between two languages. We apply the variational autoencoder framework
+  to a latent variable model mapping the latent variable to a sentence in two
+  distinct languages, showing that after completing training, we can perform
+  translation through the use of the recognition model. We evaluate how the
+  quality of the generated and translated sentences differ with the power of the
+  generative model by qualitative inspection, BLEU, upper bounded perplexity and
+  an estimate of the ELBO on a small and big dataset. The results show that
+  while the model manages to perform well on shorter sentences it has problems
+  generating coherent sentences over longer sequences and that translation is
+  possible but unlikely to be competitive with the currently best models.
 \end{abstract}
 
 \begin{acknowledgements}

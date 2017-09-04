@@ -3,8 +3,7 @@
  (lambda ()
    (LaTeX-add-labels
     "ExperimentsCh"
-    "eq:perplexity"
-    "eq:perplexity_log_form"
-    "fig:mlp_reconstruction_plot"))
+    "eq:prior_distribution_generative"
+    "eq:rec_model_reconstruction"))
  :latex)
 

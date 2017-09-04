@@ -428,7 +428,8 @@
 %%%
     \begin{center}%
         {\huge \bfseries \@title}\\[5em]%
-        {\Large \itshape \@author}\\%
+        {\Large Author: \itshape \@author}\\%
+        {\Large Supervisor: \itshape Pr. David Barber}\\%
     \end{center}%
     \vfill%
     \begin{center}%
@@ -436,7 +437,7 @@
     of the requirements for the degree of \\
     \textbf{\@degree@string} \\
     of \\
-    \textbf{University College London}.
+    \textbf{Computational Statistics and Machine Learning}.
     \end{center}%
     \vspace{2em}%
     \begin{center}%
@@ -444,6 +445,12 @@
     University College London\\
     \end{center}%
     \vspace{2em}%
+    \begin{center}%
+      This report is submitted as part requirement for the MSc Degree in
+      CSML at University College London. It is
+      substantially the result of my own work except where explicitly indicated
+      in the text. The report may be freely copied and distributed provided the source is explicitly acknowledged.
+    \end{center}%
     \begin{center}%
     \@date%
     \end{center}%

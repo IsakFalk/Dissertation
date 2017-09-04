@@ -12,21 +12,21 @@ We go over the rules of probability and statistics.
 \subsection{Rules and Theorems}
 
 We here lay out definitions and theorems that we will make use of in the thesis.
-For all parts below, assume that $X \in \mathcal{X}$ and $Y \in \mathcal{Y}$ are
-random variables and $p(X)$ respectively $p(Y)$ the probability distributions
-of these variables. We interpret the integral over $X$ to be a sum over
-$\mathcal{X}$ if $X$ is discrete and a regular Lebesgue integral over
-$\mathcal{X}$ if $X$ is continuous. Then:
+For all parts below, assume that $x \in \mathcal{X}$ and $y \in \mathcal{Y}$ are
+random variables and $p(x)$ respectively $p(y)$ the probability distributions
+of these variables. We interpret the integral over $x$ to be a sum over
+$\mathcal{X}$ if $x$ is discrete and a regular Lebesgue integral over
+$\mathcal{X}$ if $x$ is continuous. Then:
 \begin{definition}[Unit Volume]
   \label{eq:unit_vol_prob_axiom}
   \begin{equation*}
-    \int_{\mathcal{X}}p(X) \dif X = 1
+    \int_{\mathcal{X}}p(x) \dif x = 1
   \end{equation*}
 \end{definition}
 \begin{definition}[Non-negativity]
   \label{eq:non_neg_of_prob}
   \begin{equation*}
-    p(X) \geq 0
+    p(x) \geq 0
   \end{equation*}
 \end{definition}
 
@@ -34,19 +34,19 @@ Most manipulations of random variables may be reduced to the following three rul
 \begin{theorem}[Sum Rule]
   \label{eq:sum_rule}
   \begin{equation*}
-    p(X) = \int_{\mathcal{Y}}p(X, Y) \dif Y
+    p(x) = \int_{\mathcal{Y}}p(x, y) \dif y
   \end{equation*}
 \end{theorem}
 \begin{theorem}[Product Rule]
   \label{eq:product_theorem}
   \begin{equation*}
-    p(X, Y) = p(Y | X)p(X)
+    p(x, y) = p(y | x)p(x)
   \end{equation*}
 \end{theorem}
 \begin{theorem}[Bayes Rule]
   \label{eq:Bayes_theorem}
   \begin{equation*}
-    p(Y | X) = \frac{p(X | Y)p(Y)}{p(X)}
+    p(y | x) = \frac{p(x | y)p(y)}{p(x)}
   \end{equation*}
 \end{theorem}
 
@@ -56,49 +56,49 @@ those of \textit{Expectation} and \textit{Covariance}.
   \label{eq:expectation}
   Let $f : \mathcal{X} \to \mathbb{R}$, then
   \begin{equation*}
-    \E_X[f] = \int_{\mathcal{X}} f(X) p(X) \dif X
+    \E_x[f] = \int_{\mathcal{X}} f(x) p(x) \dif x
   \end{equation*}
 \end{definition}
 \begin{definition}[Covariance]
   \label{eq:covariance}
   \begin{equation*}
-    \Cov(X, Y) = \E_{XY}[(X - \E_X[X])(Y - \E_Y[Y])]
+    \Cov(x, y) = \E_{xy}[(x - \E_x[x])(y - \E_y[y])]
   \end{equation*}
 \end{definition}
 The variance operator is straightforwardly defined:
 \begin{definition}[Variance]
   \label{eq:variance}
   \begin{equation*}
-    \Var(X) = \Cov(X, X)
+    \Var(x) = \Cov(x, x)
   \end{equation*}
 \end{definition}
 
-The generalisation from $f: \mathcal{X} \to \mathbb{R}$ to $f: \mathcal{X} \to
-\mathbb{R}^n$ is defined in the straightforward manner. If $\bm{f} =
-f(X)$ then:
+The generalisation of expectation from $f: \mathcal{X} \to \mathbb{R}$ to $f: \mathcal{X} \to
+\mathbb{R}^n$ is defined in a direct manner. If $\bm{f} =
+f(x)$ then:
 \begin{equation*}
-  \E_X
+  \E_x
   \begin{bmatrix}
     \bm{f}_1 \\
     \vdots \\
     \bm{f}_n \\
   \end{bmatrix} =
   \begin{bmatrix}
-    \E_X \bm{f}_1 \\
+    \E_x \bm{f}_1 \\
     \vdots \\
-    \E_X \bm{f}_n \\
+    \E_x \bm{f}_n \\
   \end{bmatrix}
 \end{equation*}
 similarly $\Cov(\bm{f})$ is a $D \times D$-dimensional matrix where
-$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i, \bm{f}_j)$\cite{Bishop:2006, Barber:2012:BRM:2207809}.
+$\Cov(\bm{f})_{i,j} = \Cov(\bm{f}_i,
+\bm{f}_j)$\cite{Bishop:2006, Barber:2012:BRM:2207809}.
 
 \subsection{The Gaussian Distribution}
-
-For a $D$-dimensional random vector $\bm{X}$, the multivariate Gaussian
+For a $D$-dimensional random vector $\bm{x}$, the multivariate Gaussian
 distribution takes the form
 \begin{equation}
   \label{eq:Gaussian_dist}
-  \mathcal{N}(\bm{X} | \bm{\mu}, \bm{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\bm{\Sigma}|^{1/2}}\exp\left( -\frac{1}{2}(\bm{X} - \bm{\mu})^T\bm{\Sigma}^{-1}(\bm{X} - \bm{\mu})\right)
+  \mathcal{N}(\bm{x} | \bm{\mu}, \bm{\Sigma}) = \frac{1}{(2\pi)^{D/2}}\frac{1}{|\bm{\Sigma}|^{1/2}}\exp\left( -\frac{1}{2}(\bm{x} - \bm{\mu})^T\bm{\Sigma}^{-1}(\bm{x} - \bm{\mu})\right),
 \end{equation}
 where $\bm{\mu}$ is a $D$-dimensional mean vector, $\bm{\Sigma}$ is a $D \times
 D$ dimensional positive definite covariance matrix and $|\bm{\Sigma}|$ denotes
@@ -110,30 +110,29 @@ The Gaussian distribution can be seen as a unit $D$-dimensional cube which is
 translated, sheared and rotated, giving rise to the fact that we can write any
 Gaussianly distributed random variable $\bm{x} \sim \mathcal{N}(\bm{x} |
 \bm{\mu}, \bm{\Sigma})$ as a linear combination of a unit Gaussian random
-variable $\bm{z} \sim \mathcal{N}(\bm{x} | \bm{0}_D, \bm{I}_{D \times D})$. If
+variable $\bm{z} \sim \mathcal{N}(\bm{x} | \bm{0}, \bm{I})$. If
 we let $\bm{\Lambda} \bm{\Lambda}^{\top} = \bm{\Sigma}$ be the Cholesky
 decomposition\cite[p.~100-102]{Press:2007:NRE:1403886} of $\bm{\Sigma}$, then we
 also have that
 \begin{equation}
   \label{eq:sample_x}
-  \bm{x} = \bm{\mu} + \bm{\Lambda}\bm{z}
-\end{equation},
+  \bm{x} = \bm{\mu} + \bm{\Lambda}\bm{z},
+\end{equation}
 where the equality is in terms of distribution. If we further assume that
 $\bm{x}$ is parametrised by $\bm{\mu}$ and $\bm{\Sigma}$ such that $\bm{\Sigma}$
-is diagonal positive definite with diagonal $\bm{\sigma}$, then $\bm{\Sigma} =
-\bm{\sigma} \odot \bm{I}_{D \times D}$ where we let $\bm{\sigma} \odot \bm{I}_{D
-\times D}$ represent
-elementwise multiplication of $\bm{\sigma}$ with the diagonal of $\bm{I}_{D
-  \times D}$. Finally this means that if we want to
-sample a random variable $\bm{x}$ with diagonal covariance structure, then we
-can do this by sampling a unit normal $\bm{z}$ which we then transform, which we can express as
+is diagonal positive definite with diagonal $\bm{\sigma}$ then this means that if we want to
+sample a random variable $\bm{x}$ with diagonal covariance structure, we
+can do this by sampling a unit normal $\bm{z}$ which we then transform, which
+may be expressed as
 \begin{equation}
   \label{eq:sample_x_diag_covariance}
-  \bm{x} = \bm{\mu} + \bm{\sigma} \odot \bm{z} \sim \mathcal{N}(\bm{\mu}, \bm{\sigma} \odot \bm{I}_{D \times D})
+  \bm{x} = \bm{\mu} + \bm{\sigma} \odot \bm{z} \sim \mathcal{N}(\bm{\mu}, \bm{\sigma}),
 \end{equation}
+where we define a vector $\bm{\sigma}$ as the covariance matrix $\bm{\Sigma}$ to
+mean that $\bm{\Sigma}$ is diagonal positive definite with diagonal $\bm{\sigma}$.
 
 As the Gaussian distribution is part of the exponential
-family\cite{Barber:2012:BRM:2207809}, the density of the joint distribution of iid
+family \cite{Barber:2012:BRM:2207809}, the density of the joint distribution of iid
 Gaussian variables are themselves Gaussian distributed where the natural
 parameters of this joint distribution is the sum of the natural parameters of
 each random variable in the joint. In particular for the Gaussian distribution,
@@ -151,67 +150,64 @@ where
 
 In the case of two independent random variables distributed according to the form as laid
 out in \eqref{eq:sample_x_diag_covariance}, $\bm{x} \sim
-\mathcal{N}(\bm{\mu}_{\bm{x}}, \bm{\sigma}_{\bm{x}} \odot \bm{I})$
-and $\bm{y} \sim \mathcal{N}(\bm{\mu}_{\bm{y}}, \bm{\sigma}_{\bm{y}}
-\odot \bm{I})$, we have that the resulting distribution $p(\bm{x}, \bm{y}) =
+\mathcal{N}(\bm{\mu}_{\bm{x}}, \bm{\sigma}_{\bm{x}})$
+and $\bm{y} \sim \mathcal{N}(\bm{\mu}_{\bm{y}}, \bm{\sigma}_{\bm{y}})$, we have that the resulting distribution $p(\bm{x}, \bm{y}) =
 p(\bm{x})p(\bm{y})$ is distributed such that
 \begin{equation*}
-  p(\bm{x}, \bm{y}) = \mathcal{N}(\bm{\mu}_{\bm{x}, \bm{y}}, \bm{\sigma}_{\bm{x}, \bm{y}} \odot \bm{I})
+  p(\bm{x}, \bm{y}) = \mathcal{N}(\bm{\mu}_{\bm{x}, \bm{y}}, \bm{\sigma}_{\bm{x}, \bm{y}})
 \end{equation*}
 where
 \begin{align}
   \bm{\sigma}_{\bm{x}, \bm{y}} & = \frac{1}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \label{eq:joint_indep_normal_covariance_diag}\\
   \bm{\mu}_{\bm{x}, \bm{y}} & = \frac{\bm{\sigma}_{\bm{x}}^{-1}\bm{\mu}_{\bm{x}} + \bm{\sigma}_{\bm{y}}^{-1}\bm{\mu}_{\bm{y}}}{\bm{\sigma}_{\bm{x}}^{-1} + \bm{\sigma}_{\bm{y}}^{-1}} \label{eq:joint_indep_normal_mean_diag}
-\end{align},
+\end{align}
 with the inverse and division operators being done elementwise.
 
 \subsection{Maximum Likelihood Estimation}
 
 Assume we have a model $\mathcal{M}$ parametrised by $\bm{\theta}$ constrained
-to live in the parameter space $\bm{\Theta}$. Given data $\mathcal{D}$ we want
+to live in the parameter space $\bm{\Theta}$. Given data $\mathcal{D} = \{\bm{x}_i\}_{i=1}^n$ we want
 to be able to fit the parameters $\bm{\theta}$ such that the model generalise to
 unseen data.
 
-We define the likelihood function Using the common assumption of i.i.d datapoints
+We define the likelihood function using the common assumption of i.i.d datapoints
 \begin{equation}
   \label{eq:likelihood}
-  \mathcal{L}(\bm{\theta} | \mathcal{D}) = p(\bm{x}_1, \dots, \bm{x}_n | \bm{\theta}) = \prod_i^n p(\bm{x}_i | \bm{\theta})
+  \mathcal{L}(\bm{\theta} | \mathcal{D}) = p(\bm{x}_1, \dots, \bm{x}_n | \bm{\theta}) = \prod_i^n p(\bm{x}_i | \bm{\theta}).
 \end{equation}
-
 The MLE of of the parameters of the model is then defined to be
 \begin{equation}
   \label{eq:MLE}
-  \hat{\bm{\theta}}_{ML} = \argmax_{\bm{\theta} \in \bm{\Theta}}\mathcal{L}(\bm{\theta}; \mathcal{D})
+  \hat{\bm{\theta}}_{ML} = \argmax_{\bm{\theta} \in \bm{\Theta}}\mathcal{L}(\bm{\theta} | \mathcal{D}).
 \end{equation}
-.
 
 While the original MLE is defined in terms of the likelihood function
-$\mathcal{L}(\bm{\theta}; \mathcal{D})$, it's often more practical to work with
-the logarithm of this function, the log-likelihood function $\ell(\bm{\theta} ;
+$\mathcal{L}(\bm{\theta}| \mathcal{D})$, it's often more practical to work with
+the logarithm of this function, the log-likelihood function $\ell(\bm{\theta} |
 \mathcal{D})$. Using the log-likelihood we transform this product into a form involving sums
 \begin{equation}
   \label{eq:loglikelihood}
-  \ell(\bm{\theta} | \mathcal{D}) = \log \mathcal{L}(\bm{\theta} | \mathcal{D}) = \sum_i^n \log p(\bm{x}_i)
-\end{equation}\cite{CaseBerg:01}.
+  \ell(\bm{\theta} | \mathcal{D}) = \log \mathcal{L}(\bm{\theta} | \mathcal{D}) = \sum_i^n \log p(\bm{x}_i).
+\end{equation} \cite{CaseBerg:01}
 
 Besides from simplifying notation and calculation, the log-likelihood has the added benefit of
 reducing the risk of arithmetic underflow due to the small magnitude of
 individual probabilities. In models with long dependency such as language
-models, working in the log-space is needed to enable computation efficiently and robustly.
+models, working in the log-space is needed to enable computation efficiently and
+robustly \cite{}.
 
 \subsection{Graphical models}
 Graphical models are powerful tools for specifying the dependency relations
-between random variables in models. Each graph specifies a class of
-distributions possible to for the model. In particular they provide a clear way
+between random variables in models. Each graph specifies the class of possible distributions for the model. In particular they provide a clear way
 of reasoning about model assumptions and provide a framework for doing inference
 and learning \cite{Barber:2012:BRM:2207809}.
 
 Directed graphical models specify how the joint distribution of a set of random
 variables $\mathcal{X}$ factors in a conditional manner. In general, the
-relationship between a given directed graph and the corresponding distribution
+relationship between a given directed graph and the corresponding distributions
 over the variables in $\mathcal{X}$ is such that the join distribution defined
-by the graph is given by the product, over all vertices of the graph, of a
-conditional distribution for each vertex conditioned on the variables
+by the graph is given by the product over all vertices of the graph. The
+conditional distribution for each vertex is conditioned on the variables
 corresponding to the parents of that vertex in the graph. So for a graph with
 $K$ vertices, the joint distribution is give by
 \begin{equation}
@@ -247,8 +243,7 @@ later section when we specify our models.
 \end{figure}
 There are two different vertices in this graphical model, the greyed out vertex
 indicates that the random variable is \textit{observed} such that it's value is
-fixed and known. The white vertices indicates latent random variables which we
-don't observe.
+fixed and known. The white vertices indicates \textit{latent} random variables which are unobserved.
 
 The edge around some of the vertices specifying that $n = 1, \dots, N$ is an
 instance of plate notation. Plate notation signifies that the plate is
@@ -258,14 +253,14 @@ times as is the case with for example iid data.
 For this example we have the following factorisation of the joint distribution,
 following the rules laid out in equation~\eqref{eq:dir_graph_model_dist},
 \begin{equation*}
-  p(a, \{(b_n, c_n, d_n)_{n=1}^N\}) = p(a)\prod_{n=1}^Np(d_n | c_n)p(c_n | b_n, a)p(b_n | a)
-\end{equation*}.
+  p(a, \{(b_n, c_n, d_n)_{n=1}^N\}) = p(a)\prod_{n=1}^Np(d_n | c_n)p(c_n | b_n, a)p(b_n | a).
+\end{equation*}
 
 \section{Deep Learning}
-Until recently the field of NLP were dominated by older machine learning
+The field of NLP were originally dominated by older machine learning
 techniques utilising linear models trained over very high-dimensional and sparse
 feature vectors. Recently the field has switched over to neural networks over
-dense inputs instead using embeddings\cite[p.~1 - 2]{goldberg2015primer}.
+dense inputs using word embeddings \cite[p.~1 - 2]{goldberg2015primer}.
 
 Neural networks may be seen from many angles, but from a mathematical point of
 view a neural network parametrised by parameters (weights) $\bm{\theta}$
@@ -278,7 +273,7 @@ set of nice functions \cite{Hornik:1989:MFN:70405.70408, Cybenko1989univapprox},
 justifying their use theoretically.
 
 \subsection{Multilayer Perceptron}
-MLP's are neural networks represented by functional composition, where each
+Multilayer Perceptrons (MLP's) are neural networks represented by functional composition, where each
 function is interpreted as a layer of the network. The original MLP can be defined in
 terms of a recurrence relation such that if we have input vectors of the form $\bm{x} \in
 \mathbb{R}^{d_{in}}$ and output vectors of the form $\bm{y} \in
@@ -291,10 +286,10 @@ where for any $l \in \{2, \dots, L-1\}$
 \begin{equation}
     \bm{z}_l = \sigma_l(\bm{W}_l \bm{z}_{l-1} + \bm{b}_l)
 \end{equation}
-and with the base case
+with base case
 \begin{equation}
-  \bm{z}_1 = \sigma_1(\bm{W}_1 \bm{x} + \bm{b}_1)
-\end{equation}\cite{BarberAppliedML}.
+  \bm{z}_1 = \sigma_1(\bm{W}_1 \bm{x} + \bm{b}_1).
+\end{equation} \cite{BarberAppliedML}
 
 $\bm{W}_l$ and $\bm{b}_l$ may be of any dimension as long as it is dimensionally consistent
 with the input and output of the previous and next layers and conform to the
@@ -317,7 +312,7 @@ numbers to some interval. Activation functions which will be useful to us are
     \tanh(x) = \frac{2}{1 + \exp(-2x)} - 1 = 2 \sigma(2x) - 1
   \end{equation}
 \item[SELU]
-  Scaled Exponential Linear Units have the form
+  Scaled Exponential Linear Units \cite{DBLP:journals/corr/KlambauerUMH17} have the form
   \begin{equation}
     \label{eq:SELU}
     \text{selu}(x) = \lambda
@@ -325,14 +320,14 @@ numbers to some interval. Activation functions which will be useful to us are
       x \quad\text{if $x > 0$} \\
       \alpha(\exp(x) - 1) \quad \text{if $x \leq 0$}
     \end{cases}
-  \end{equation} \cite{DBLP:journals/corr/KlambauerUMH17}.
+  \end{equation}
 \item[Softmax]
   The Softmax is a mapping from an input space $\mathbb{R}^{d_{in}}$ to an output
   space $\mathbb{R}^{d_{out}}$, the form given by
   \begin{equation}
     \label{eq:softmax}
-    \text{softmax}(\bm{z})_i = \frac{\exp(z_j)}{\sum_{k=1}^{d_{out}}\exp(z_k)}
-  \end{equation}.
+    \text{softmax}(\bm{z})_i = \frac{\exp(z_i)}{\sum_{k=1}^{d_{out}}\exp(z_k)} \quad \text{where} \quad i \in \{1, \dots, d_{out}\}
+  \end{equation}
   Since it is normalized it is a natural candidate for defining categorical
   distributions \cite{Barber:2012:BRM:2207809} and we will use it for this
   purpose in our models.
@@ -341,30 +336,33 @@ numbers to some interval. Activation functions which will be useful to us are
 \subsection{Recurrent Neural Networks}
 
 RNN's have traditionally been the neural network architecture of choice for NLP
-due to it being able to handle long-term dependencies well \cite{KarpathyRNN}. As we only use it
-briefly we will not describe it in depth. For in depth treatment of the
-architecture with respect to nlp see \cite{Hochreiter:1997:LSM:1246443.1246450, sundermeyer2012lstm}.
+due to it being able to handle long-term dependencies well \cite{KarpathyRNN}.
+
+
+
+For in depth treatment of the architecture with respect to nlp see \cite{Hochreiter:1997:LSM:1246443.1246450, sundermeyer2012lstm}.
 
 \subsection{Convolutional Neural Networks}
-
+\label{ch:WaveNet}
 The CNN we will use will be highly specialised for our case. We use the WaveNet
 as laid out in the paper by DeepMind \cite{DBLP:journals/corr/OordDZSVGKSK16}.
 
-WaveNet works on data of the form $\bm{x}$, were we describe the distribution as
+WaveNet works on data of the form of vectors, $\bm{x}$, were we describe the distribution as
 \begin{equation*}
-p(\bm{x}) = \prod_{l=1}^L p(\bm{x}_l| \bm{x}_1, \dots, \bm{x}_{l-1})
+p(\bm{x}) = \prod_{l=1}^L p(\bm{x}_l| \bm{x}_1, \dots, \bm{x}_{l-1}),
 \end{equation*}
-which is the form common in NLP and NMT. The output of the model has the same
+the form common in NLP and NMT. The output of the model has the same
 time dimensionality as the input, meaning that the model has the ability to
 output a categorical distribution over the next value $x_l$ with a softmax
 layer. In our case this is a parametrisation of the output probability at point
 $l$.
 
-As WaveNet uses dilated convolutions, a type of convolution where the filter is applied
-to an area larger than its length by skipping input values with a certain step,
-it is possible to stack the dilation layers. By stacking them in such a way that
-the dilations increase with the depth of the network by a power of two, we get a
-receptive field which grows exponentially \cite{DBLP:journals/corr/OordDZSVGKSK16}.
+WaveNet uses dilated convolutions, a type of convolution where the filter is applied
+to an area larger than its length by only considering input values such that at
+each step you skip $k$ inputs, where $k$ is the dilation. Stacking layers and
+using dilations that increase exponentially with the depth of the layer, it is
+possible to get a receptive field which grows exponentially with the depth of
+the network \cite{DBLP:journals/corr/OordDZSVGKSK16}.
 
 \begin{figure}[H]
   \centering
@@ -391,24 +389,23 @@ We will here lay out the necessities for understanding the neural language model
 will build.
 
 \subsection{Language model}
-We define a sentence to be a vector of words $\bm{w}_{1:L} = (\mathsf{w}_1, \dots,
-\mathsf{w}_L)^{\top}$ such that each word is an atomic element $\mathsf{w}_i \in
+We define a sentence to be a vector of words $\bm{x}_{1:L} = (\mathsf{x}_1, \dots,
+\mathsf{x}_L)^{\top}$ such that each word is an atomic element $\mathsf{x}_i \in
 V$, where $V$ is the dictionary of words in our language. Repeated use of the
 rule laid out in \ref{eq:product_theorem} enables us to rewrite the probability
 of a sentence in terms of how it is composed of words
 \begin{equation}
   \label{eq:conditional_language_probability}
-  P(\bm{w}_{1:L}) = \prod_{l = 1}^LP(\mathsf{w}_l | \mathsf{w}_1, \dots, \mathsf{w}_{l-1})
+  P(\bm{x}_{1:L}) = \prod_{l = 1}^LP(\mathsf{x}_l | \mathsf{x}_1, \dots, \mathsf{x}_{l-1})
 \end{equation}
-where $\mathsf{w}_l$ is the $l$'th word of the sentence
-$\bm{w}_{1:L}$\cite{Bengio:2003:NPL:944919.944966}.
+where $\mathsf{x}_l$ is the $l$'th word of the sentence
+$\bm{x}_{1:L}$ \cite{Bengio:2003:NPL:944919.944966}.
 
 This form of the probability of a sentence lays bare how the words in a sentence
-relate to words that has previously occurred in the sentence. We will assume
-that all sentences in a dataset $\mathcal{D} = \{(\bm{w}^n)_{n=1}^N\}$ are iid
+relate to previously occurred words within the same sentence. We will assume
+that all sentences in the dataset $\mathcal{D} = \{(\bm{x}^n)_{n=1}^N\}$ are iid
 which enables us to express the log-likelihood in the form of equation
-\eqref{eq:loglikelihood}, and also the form that WaveNet uses to model
-probabilities.
+\eqref{eq:loglikelihood}.
 
 \subsection{Word embeddings}
 Breaking down sentences at a word level and processing them into a form that
@@ -416,15 +413,16 @@ encodes information efficiently is a problem which has gained notorious
 recognition \cite{DBLP:journals/corr/abs-1301-3781}, leading to algorithms such
 as word2vec \cite{Mikolov:2013:DRW:2999792.2999959} and
 Glove \cite{Pennington14glove:global}. However, these techniques work less well
-in a neural network setting where instead finding the best embedding jointly with the parameters of the model is preferred \cite[p.~5-7]{goldberg2015primer}.
+in a neural network setting where instead the preferred technique is to find the
+best embeddings jointly with the parameters of the model using backpropagation \cite[p.~5-7]{goldberg2015primer}.
 
 A straightforward way to represent the various words of the dictionary is as
-one-hot-encoded vectors such that a word $\mathsf{w} \in V$, such that size of
+one-hot-encoded vectors such that a word $\mathsf{x} \in V$, where the size of
 $V$ is $|V|$, with an index $i$ given by its place in the dictionary sorted
 alphabetically in descending order will have the vector representation
 \begin{equation}
   \label{eq:one_hot_encoding}
-  \bm{w} =
+  \bm{x}_{one-hot} =
   \begin{bmatrix}
     0 \\
     \vdots \\
@@ -434,17 +432,17 @@ alphabetically in descending order will have the vector representation
     \vdots \\
     0
   \end{bmatrix}
-\end{equation} \cite[p.~6]{goldberg2015primer}
-such that $\bm{w}_{j} = \delta_{ij}$.
+\end{equation}
+such that $\bm{x}_{one-hot, j} = \delta_{ij}$ \cite[p.~6]{goldberg2015primer}.
 
 While this is a form conceptually easy to understand, it fails to account for the
 curse of dimensionality as the size of the vocabulary grows very big in practice
-and the fact that the cosine similarity of two words $\mathsf{v}_1,
-\mathsf{v}_2 \in V$ is zero unless they are the same word
+and the fact that the cosine similarity of two words $\mathsf{x}_1,
+\mathsf{x}_2 \in V$ is zero unless they are the same word,
 \begin{equation}
   \label{eq:cosine_similarity}
-  \cos_{similarity}(\bm{v}_1, \bm{v}_2) = \delta_{\mathsf{v}_1 \mathsf{v}_2}
-\end{equation}. This means that no meaning is embedded in the vector space
+  \cos_{similarity}(\bm{x}_{1, one-hot}, \bm{x}_{2, one-hot}) = \delta_{\mathsf{x}_1 \mathsf{x}_2}.
+\end{equation} This means that no meaning is embedded in the vector space
 except for the location in the sorted dictionary. Instead we would like to
 associate each word in the vocabulary with a distributed \textit{word feature
   vector}, a dense, real-valued vector in $\mathbb{R}^m$ where $m$ is the
@@ -454,11 +452,11 @@ parameters of the network words which share similarities such as \texttt{Dog,
 \texttt{Dog, Bulwark} \cite{Bengio:2003:NPL:944919.944966}.
 
 We may represent this in a mathematical form by trying to find a linear map $C$
-from any element $\mathsf{w} \in V$ such that $C(\mathbf{w}) \in \mathbb{R}^m$.
+from any element $\mathsf{x} \in V$ such that $C(\mathbf{x}) \in \mathbb{R}^m$.
 Using the canonical basis of the Euclidean space, we can express this
 linear map in terms of a matrix $\bm{C} \in \mathbb{R}^{m \times |V|}$, thus the
 word feature vector of the learned embedding can be represented by the matrix
-multiplication $\bm{C}\bm{w}$.
+multiplication $\bm{C}\bm{x}_{one-hot}$.
 
 \subsection{Neural machine translation}
 For a long time the dominant paradigm within machine translation was to use
@@ -480,6 +478,11 @@ Figure ~\ref{fig:encoder_decoder}.
     \caption{Encoder decoder schematic}
   \label{fig:encoder_decoder}
 \end{figure}
+
+Our model builds on this paradigm but instead of considering context vectors
+$\bm{c}$ we instead consider distributions over a latent vector $\bm{z}$ which
+in theory should give the model a greater expressive power since the
+distribution relays more knowledge than a direct point estimate.
 
 \section{Optimization}
 
@@ -505,22 +508,22 @@ log-likelihood function \eqref{eq:loglikelihood} or equally minimizes the
 negative log-likelihood.
 
 Gradient descent takes steps in the direction of the gradient, which also is the
-direction of steepest descent. If we let $\mathcal{D} = \{\bm{w}_i\}_{i = 1}^n$
+direction of steepest descent. If we let $\mathcal{D} = \{\bm{x}_i\}_{i = 1}^n$
 be our set of sentences and $-\ell$ be the negative log-likelihood that we are
 trying to minimize then the updates are of the form
 \begin{equation}
   \label{eq:GD_update}
-  \bm{\theta}_{t + 1} = \bm{\theta}_t - \gamma \frac{1}{n} \sum_{i = 1}^n \nabla_{\bm{\theta}} (-\ell(\bm{\theta}; \bm{x}_i))
-\end{equation},
+  \bm{\theta}_{t + 1} = \bm{\theta}_t - \gamma \frac{1}{n} \sum_{i = 1}^n \nabla_{\bm{\theta}} (-\ell(\bm{\theta}| \bm{x}_i)),
+\end{equation}
 where $\gamma$ is the learning rate of the algorithm.
 
 Stochastic Gradient Descent is a similar algorithm to GD that instead of
 calculating the gradient with respect to the whole dataset calculates an
 approximate gradient, as it only takes a subset of the data into account at each
-update. If we let $I_t$ be a random subset of the indices of $\{(\bm{w}_n)_{n=1}^N\}$ of size $m$ then SGD does the following update
+update. If we let $I_t$ be a random subset of the indices of $\{(\bm{x}_n)_{n=1}^N\}$ of size $m$ then SGD does the following update
 \begin{equation}
   \label{eq:SGD_update}
-  \bm{\theta}_{t + 1} = \bm{\theta}_t - \gamma \frac{1}{m} \sum_{i \in I_t} \nabla_{\bm{\theta}} (-\ell(\bm{\theta}; \bm{x}_i))
+  \bm{\theta}_{t + 1} = \bm{\theta}_t - \gamma \frac{1}{m} \sum_{i \in I_t} \nabla_{\bm{\theta}} (-\ell(\bm{\theta}| \bm{x}_i))
 \end{equation}\cite{series/lncs/Bottou12}\cite[p.~240]{Bishop:2006}.
 
 \subsection{ADAM}
@@ -533,11 +536,9 @@ Adam takes inspiration from RMSProp and AdaGrad. Technically, Adam keeps an
 exponential running average of the first and second order statistics of the
 gradient, using these to calculate an adaptive learning rate.
 
-As laid out in the original paper by Kingma et. al \cite{kingma_adam:_2014}, ADAM operates on a
-stochastic objective function $f(\bm{\theta})$, which in our case would be the
-probability averaged over our input batch. $f_t(\bm{\theta})$ denotes this
-function over different time steps, equally $g_t = \nabla_{\bm{\theta}}
-f_t(\bm{\theta})$. $m_t$ and $v_t$ denotes the first and second order moments of
+As laid out in the original paper by Kingma et al. \cite{kingma_adam:_2014}, ADAM operates on a
+stochastic objective function $f_t(\bm{\theta})$, where $t$ denotes the time
+step, similarly $g_t = \nabla_{\bm{\theta}}f_t(\bm{\theta})$. $m_t$ and $v_t$ denotes the first and second order moments of
 the gradients, however, these are biased and are corrected in the algorithm.
 The whole algorithm is as follows.
 \begin{algorithm}[H]
@@ -562,6 +563,7 @@ The whole algorithm is as follows.
     \EndWhile
     \Return $\bm{\theta}_t$ (Resulting parameters)
   \end{algorithmic}
+  \caption{The ADAM algorithm}
 \end{algorithm}
 
 Experimentally Adam has shown very good results on training various deep
@@ -569,7 +571,7 @@ learning models such as MLP's, CNN's and RNN's so we will use it to train our
 models throughout this dissertation \cite{kingma_adam:_2014}.
 
 \subsection{Automatic Differentiation}
-
+\label{ch:autodiff}
 The AutoDiff framework is a general theory for efficiently
 calculating gradients with respect to a loss function in general computational graphs.
 It includes the famed backpropagation \cite{Bishop:2006,

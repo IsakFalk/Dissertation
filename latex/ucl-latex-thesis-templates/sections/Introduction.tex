@@ -10,15 +10,15 @@
 Natural language processing (NLP) is an old field with roots in many different
 disciplines including but not exclusive to electrical engineering, artificial
 intelligence and linguistics \cite[p.~10-15]{Jurafsky:2000:SLP:555733}. Machine
-learning often view language as a statistical problem. A
+learning often view NLP as a statistical problem. A
 language model is a statistical model that trained on a training corpus assign
-probabilities to new sentences. Using latent variable models enables these
+probabilities to new sentences \cite{Bengio:2003:NPL:944919.944966}. Latent variable models enables these
 language models to generate novel sentences from an underlying stochastic
 variable. While using probabilistic models enables us to do inference in a
-principled manner, it is often non-trivial to find the optimal parameters of
-latent variable models. Variational Inference approximates the log-likelihood
-through the Evidence Lower Bound (ELBO) which bound it from below, by
-introducing an approximate distribution of the conditional probability of the
+principled manner, it is non-trivial to optimise the log-likelihood
+specified by a latent variable model. Variational Inference bounds the log-likelihood
+from below using the Evidence Lower Bound (ELBO) by
+introducing an approximate distribution, $q(\bm{z})$, of the conditional probability of the
 latent variable, $p(\bm{z} | \bm{x})$ \cite{blei_variational_2017}.
 
 %%%
@@ -31,31 +31,46 @@ log-likelihood by a variational distribution $q$ it does not specify the form of
 this $q$. Variational Autoencoder (VAE) \cite{kingma_auto-encoding_2013}, also
 under the name of stochastic backpropagation \cite{2014arXiv1401.4082J}, is a
 framework for training deep generative models with latent variables by
-introducing a recognition model $q_{\bm{\phi}}$. Except for the most basic of
-models the ELBO function is not tractable, however, using
-the reparametrisation trick and the law of large numbers, it is possibly to
+introducing a recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x})$. Except for the most basic of
+models the ELBO function is not tractable. However, it is possibly to
 approximate the ELBO by sampling the latent variable instead of
-integrating it out, giving us the Stochastic Gradient Variational Bayes (SGVB)
-algoritm. The recognition model may then be optimized jointly with the
-generative model $p_{\bm{\theta}}$ with respect to the SGVB objective \cite{kingma_auto-encoding_2013}. As the recognition model maps the
-input sentences to the latent space, it effectively tries to compress
+integrating it out. Using the reparameterization trick to sample this latent
+variable gives us the differentiable unbiased Stochastic Gradient Variational
+Bayes (SGVB) estimator of the ELBO, leading to the Auto-Encoding Variational
+Bayes (AEVB) algorithm. AEVB optimises the introduced recognition model
+$q_{\bm{\varphi}}(\bm{z} | \bm{x})$ jointly with the generative model
+$p_{\bm{\theta}}(\bm{z}, \bm{x})$ with respect to the SGVB objective
+\cite{kingma_auto-encoding_2013}. As the recognition model maps the input sentences to the latent space, it effectively tries to compress
 information about the sentences through $\bm{z}$, resulting in distributed
-latent representations of sentences \cite{bowman_generating_2015}. After
-learning the recognition mapping from $\bm{x}, \bm{y}$ to $\bm{z}$ we may use
-this form to do translation by omitting one of the input languages, effectively
-letting a source language decide the distribution over the latent space, which
-can be mapped back through the generative model to both $\lang{X}$ and
-$\lang{Y}$ performing both reconstruction and translation concurrently.
-
-%%%
-%%% Compare this to other approaches: RNNLM, Context vectors
-%%%
-
+latent representations of sentences \cite{bowman_generating_2015}.
 
 %%%
 %%% What this thesis tries to do
 %%%
 
+In this thesis we introduce a deep generative model which generates sentences in two
+different languages, $\lang{X}$ (EN) and $\lang{Y}$ (FR), from one latent
+variable, $\bm{z}$. The generative model is based on the WaveNet neural network
+\cite{DBLP:journals/corr/OordDZSVGKSK16} and is traicned using the AEVB
+algorithm. We show how different recognition models (MLP, RNN, WaveNet) affect
+the final performance and training time in the mono-language generative model and based on this
+performance we use the MLP recognition model for the twin-language generative model.
+
+Learning the recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$
+effectively lets us do translation. By omitting the dependency of one of the
+languages, here $\lang{Y}$, we force $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})
+\propto q_{\bm{\varphi}}(\bm{z} | \bm{x})$ giving us a way to perform mappings of $\lang{X} \to
+\lang{Y}$. We use a variety of measures to show that our model may perform
+translation and reconstruction, but that it does not perform as well as the
+current best models.
+
 %%%
 %%% Layout of the thesis
 %%%
+
+The thesis follows the following structure. In Chapter 2 we review the necessary
+background knowledge to understand the theory and experiments conducted. Chapter
+3 lays out how variational inference and how the AEVB algorithm works,
+and also specifies the models we will be using. Chapter 4 presents the
+experimental setup and a discussion of results and chapter 5 the conclusion and future work. The
+appendix shows an excerpt of generated sentences for all the different models.
