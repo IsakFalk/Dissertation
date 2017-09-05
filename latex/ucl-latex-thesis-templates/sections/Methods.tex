@@ -4,11 +4,11 @@
 This chapter deals with the theory needed in order to use VAE in our setting. It
 will also deal with extending the theory and necessary calculations.
 
-\subsection{Variational Inference}
+\section{Variational Inference}
 Consider the following general graphical model of a latent variable $\bm{z}$ and
 an observed variable $\bm{x}$ parametrised by $\bm{\theta}$:
 \begin{figure}[H]
-  \label{tikz:latent_variable_model}
+  \label{fig:latent_variable_model}
   \centering
   \begin{tikzpicture}
     % Define nodes
@@ -23,7 +23,7 @@ an observed variable $\bm{x}$ parametrised by $\bm{\theta}$:
     % Plate
     \plate {zx} {(z)(x)} {$N$} ;
   \end{tikzpicture}
-  \caption{Latent variable model}
+  \caption{Graphical model of a latent variable model parametrised by $\bm{\theta}$.}
 \end{figure}
 implying the joint distribution
 \begin{equation}
@@ -31,9 +31,9 @@ implying the joint distribution
   p(\bm{x}, \bm{z}) = p(\bm{x} | \bm{z}) p(\bm{z}).
 \end{equation}
 
-In order to fit the parameters of the model using optimisation of
+In order to train the model using optimisation of
 $\ell(\bm{\theta} | \mathcal{D})$ we need to be able to to find the gradient and
-value of $\ell(\bm{\theta} | \bm{x})$ to use ADAM. We can rewrite
+value of $\ell(\bm{\theta} | \bm{x})$ which are used by ADAM. We can rewrite
 the likelihood for a datapoint $\bm{x}$ as
 \begin{equation}
   \label{eq:likelihood_integrate_out_latent}
@@ -90,39 +90,15 @@ lower bound through the closeness to the true posterior $p_{\bm{\theta}}(\bm{z}
 
 \section{VAE and SGVB}
 
-\begin{figure}[H]
-  \label{tikz:VAE_graphical_model}
-  \centering
-  \begin{tikzpicture}
-    % Define nodes
-    \node[latent] (z) {$\bm{z}$} ;
-    \node[obs, below=of z] (x) {$\bm{x}$} ;
-    \node[const, right=of z, xshift=-0.5] (theta) {$\bm{\theta}$} ;
-    \node[const, left=of z, xshift=-0.5] (phi) {$\bm{\varphi}$} ;
-    
-    % Connect the nodes
-    \edge {z} {x} ;
-    \edge {theta} {x} ;
-    \edge {theta} {z} ;
-    \edge[dashed] {phi} {z} ;
-    \edge[bend left, dashed] {x} {z} ;
-    
-    % \draw[dashed,->] (x) -- (z)
-    
-    % Plate
-    \plate {zx} {(z)(x)} {$N$} ;
-  \end{tikzpicture}
-  \caption{Variational Autoencoder}
-\end{figure}
-
 The Variational Autoencoder by Kingma et al. \cite{kingma_auto-encoding_2013}
-introduces a recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ that serves as
+introduces a recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ to a latent
+variable model of the form \eqref{eq:latent_variable_model}, that serves as
 an approximation to the true posterior $p_{\bm{\theta}}( \bm{z} | \bm{x})$. We let $q_{\bm{\varphi}}(\bm{z} | \bm{x}) \sim
 \mathcal{N}(\bm{z}| \bm{\mu_{\bm{\varphi}}}(\bm{x}),
-\bm{\sigma}_{\bm{\varphi}}(\bm{x}))$ such that the pair of vectors
-$(\bm{\mu}_{\bm{\varphi}}(\bm{x}), \bm{\sigma}_{\bm{\varphi}}(\bm{x}))$ is the
+\bm{\sigma}^2_{\bm{\varphi}}(\bm{x}))$ such that the pair of vectors
+$(\bm{\mu}_{\bm{\varphi}}(\bm{x}), \bm{\sigma}^2_{\bm{\varphi}}(\bm{x}))$ is the
 output of a neural network, and let this Gaussian have a diagonal covariance
-structure with the vector $\bm{\sigma}_{\bm{\varphi}}(\bm{x})$ as the diagonal.
+structure with the vector $\bm{\sigma}^2_{\bm{\varphi}}(\bm{x})$ as the diagonal.
 
 In the following we assume that $\bm{x}$ is an observed datapoint from our
 dataset and $\bm{z}$ is the corresponding latent variable. If we consider the
@@ -155,11 +131,11 @@ Under certain mild regularity conditions, for a chosen approximate posterior
 $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ we can express the distribution of $\bm{z}
 \sim q_{\bm{\varphi}}(\bm{z} | \bm{x})$ in terms of a simpler distribution using
 reparametrisation, called the reparametrisation trick
-\cite{kingma_auto-encoding_2013}. For our case, let transformation $g_{\bm{\varphi}}(\bm{\epsilon},
-\bm{x})$ such that
+\cite{kingma_auto-encoding_2013}. For our case, let transformation
+$g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x})$ be such that
 \begin{equation}
   \label{eq:reparametrisation_trick}
-  \bm{z} = g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x}), \quad \text{such that} \quad \bm{\epsilon} \sim \mathcal{N}(\bm{0}, \bm{I}).
+  \bm{z} = g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x}), \quad \text{where} \quad \bm{\epsilon} \sim \mathcal{N}(\bm{0}, \bm{I}).
 \end{equation}
 In our case we use \eqref{eq:sample_x_diag_covariance} in order to write
 $g_{\bm{\varphi}}(\bm{\epsilon}, \bm{x}) = \bm{\mu}_{\bm{\varphi}}(\bm{x}) +
@@ -170,15 +146,15 @@ $\bm{z}$ through sampling $\bm{\epsilon}$ and using the differentiable
 transformation
 \begin{equation}
   \label{eq:SGVB}
-    \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})} \left[ \log p_{\bm{\theta}}(\bm{x},  \bm{z}) - \log q_{\bm{\varphi}}(\bm{z} | \bm{x}) \right] \simeq \frac{1}{L} \sum_{l=1}^L \log p_{\bm{\theta}}(\bm{x},  \bm{z}^{l}) - \log q_{\bm{\varphi}}(\bm{z}^{l} | \bm{x})
+    \E_{q_{\bm{\varphi}}(\bm{z} | \bm{x})} \left[ \log p_{\bm{\theta}}(\bm{x},  \bm{z}) - \log q_{\bm{\varphi}}(\bm{z} | \bm{x}) \right] \simeq \frac{1}{S} \sum_{s=1}^S \log p_{\bm{\theta}}(\bm{x},  \bm{z}^{s}) - \log q_{\bm{\varphi}}(\bm{z}^{s} | \bm{x})
 \end{equation}
-where $\bm{z}^{l} = g_{\bm{\varphi}}(\bm{\epsilon}^{l}, \bm{x})$ and
-$\bm{\epsilon}^{l} \sim \mathcal{N}(\bm{0}, \bm{I})$.
+where $\bm{z}^{s} = g_{\bm{\varphi}}(\bm{\epsilon}^{s}, \bm{x})$ and
+$\bm{\epsilon}^{s} \sim \mathcal{N}(\bm{0}, \bm{I})$ for all $s \in \{1, \dots, S\}$.
 
-Equation \eqref{eq:SGVB} is the Stochastic Gradient Variational Bayes estimator
-of the ELBO, which we call $\mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}|
-\bm{x})$ and is an unbiased estimator of the ELBO since we sample $\bm{z}$ from
-the recognition model.
+The right hand side of equation \eqref{eq:SGVB} is the Stochastic Gradient
+Variational Bayes estimator of the ELBO, which we call
+$\mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}| \bm{x})$ and is an unbiased
+estimator of the ELBO since we sample $\bm{z}$ from the recognition model.
 
 \subsection{AEVB algorithm}
 The AEVB algorithm optimises the SGVB equation \eqref{eq:SGVB} in order to in
@@ -190,11 +166,11 @@ Gaussianly distributed enables us to write the SGVB in an alternative form which
 typically has less variance than the SGVB form of equation \eqref{eq:SGVB}:
 \begin{equation}
   \label{eq:SGVB_analytical_KL}
-  \mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}) = -\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})} + \frac{1}{L} \sum_{l=1}^L \log p_{\bm{\theta}}(\bm{x} | \bm{z}^{l})
+  \mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}) = -\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x})}{p_{\bm{\theta}}(\bm{z})} + \frac{1}{S} \sum_{s=1}^S \log p_{\bm{\theta}}(\bm{x} | \bm{z}^{s})
 \end{equation}
-where $\bm{z}^{l} = g_{\bm{\varphi}}(\bm{\epsilon}^{l}, \bm{x})$ and
-$\bm{\epsilon}^{l} \sim \mathcal{N}(\bm{0},
-\bm{I})$. We let $L = 1$ following the advice
+where $\bm{z}^{s} = g_{\bm{\varphi}}(\bm{\epsilon}^{s}, \bm{x})$ and
+$\bm{\epsilon}^{s} \sim \mathcal{N}(\bm{0},
+\bm{I})$. We let $S = 1$ following the advice
 of Kingma et al. \cite{kingma_auto-encoding_2013}.
 
 \section{Models}
@@ -203,7 +179,7 @@ Here we lay out the graphical models we will use in order to model language
 generation. All of our models are latent variable models with the prior on
 $\bm{z}$ being unit normal, $p(\bm{z}) = \mathcal{N}(\bm{z}| \bm{0}, \bm{I})$.
 
-\subsection{Reconstruction}
+\subsection{Mono-Language Model}
 
 The generative model is the same as in the figure for latent variable models
 % \ref{tikz:latent_variable_model}
@@ -226,23 +202,23 @@ The generative model is the same as in the figure for latent variable models
     \plate {zx} {(z)(x)} {$N$};
     
   \end{tikzpicture}
-  \caption{Reconstruction language model}
+  \caption{Graphical representation of the Mono-language model. The prior over
+    the latent is independent of $\bm{\theta}$.}
 \end{figure}
 where $\bm{z}$ is the latent variable representing the latent sentence structure
 and the joint factorizes as $p_{\bm{\theta}}(\bm{x}, \bm{z}) =
 p_{\bm{\theta}}(\bm{x} | \bm{z})p(\bm{z})$.
 
-The reconstruction model is the same model specified in
+The Mono-language model is the same model specified in
 \cite{kingma_auto-encoding_2013}. Bowman et al. has successfully showed that it
 can be applied to natural language, learning meaningful representations of
 language in the latent dimension \cite{bowman_generating_2015} while improving
 on previous models such as RNNLM \cite{conf/icassp/MikolovKBCK11}.
 
-\subsection{Translation}
+\subsection{Twin-Language Model}
 
-Translation adds and extra observed variable $\bm{y}$, a sentence belonging to
+Using two languages adds and extra observed variable $\bm{y}$, a sentence belonging to
 $\lang{Y}$. The probabilistic model looks like:
-
 \begin{figure}[H]
   \center
   \begin{tikzpicture}
@@ -264,23 +240,24 @@ $\lang{Y}$. The probabilistic model looks like:
     \plate {zxy} {(z)(x)(y)} {$N$} ;
     
   \end{tikzpicture}
-  \caption{Translation language model}
+  \caption{Twin-language generative latent variable model. The prior over
+    the latent is independent of $\bm{\theta}_{\bm{x}}$ and $\bm{\theta}_{\bm{x}}$.}
 \end{figure}
 
 The graphical model implies that the joint distribution factorises as
 \begin{equation}
   \label{eq:joint_generative}
-  p(\bm{\bm{z}}, \bm{x}, \bm{y}) = p(\bm{z})p(\bm{x} | \bm{z})p(\bm{y} | \bm{z})
+  p_{\bm{\theta}}(\bm{\bm{z}}, \bm{x}, \bm{y}) = p(\bm{z})p_{\bm{\theta}_{\bm{x}}}(\bm{x} | \bm{z})p_{\bm{\theta}_{\bm{y}}}(\bm{y} | \bm{z})
 \end{equation}
 and we make the following distributional assumption
 \begin{align}
-  p(\bm{x} | \bm{z}) & = \mathcal{N}(\mu_{\bm{\theta}_{\bm{x}}}(\bm{z}), \sigma_{\bm{\theta}_{\bm{x}}}(\bm{z})) \\
-  p(\bm{y} | \bm{z}) & = \mathcal{N}(\mu_{\bm{\theta}_{\bm{y}}}(\bm{z}), \sigma_{\bm{\theta}_{\bm{y}}}(\bm{z}))
+  p_{\bm{\theta}_{\bm{x}}}(\bm{x} | \bm{z}) & = \mathcal{N}(\bm{\mu}_{\bm{\theta}_{\bm{x}}}(\bm{z}), \bm{\sigma}^2_{\bm{\theta}_{\bm{x}}}(\bm{z})) \\
+  p_{\bm{\theta}_{\bm{y}}}(\bm{y} | \bm{z}) & = \mathcal{N}(\bm{\mu}_{\bm{\theta}_{\bm{y}}}(\bm{z}), \bm{\sigma}^2_{\bm{\theta}_{\bm{y}}}(\bm{z}))
 \end{align}
 
-The notation $\mathcal{N}(\mu_{\bm{\theta}}(\bm{z}), \sigma_{\bm{\theta}}(\bm{z}))$
+The notation $\mathcal{N}(\bm{\mu}_{\bm{\theta}}(\bm{z}), \bm{\sigma}^2_{\bm{\theta}}(\bm{z}))$
 means that the mean and variance diagonal of the normal are represented by a
-functional relationship $f: \bm{z} \mapsto (\bm{\mu}, \bm{\sigma})$ where $f$ is a function
+functional relationship $f: \bm{z} \mapsto (\bm{\mu}, \bm{\sigma}^2)$ where $f$ is a function
 represented a a learnable neural network with parameters $\bm{\theta}$.
 
 The recognition model parametrises the probability distribution
@@ -292,13 +269,13 @@ inequality in \eqref{eq:ELBO_inequality} will be as shown by equation
 analytical tractability, 
 \begin{align*}
   q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y}) & = q_{\bm{\varphi}_{\bm{x}}}(\bm{z} | \bm{x})q_{\bm{\varphi}_{\bm{y}}}(\bm{z} | \bm{y}) \\
-                                            & = \mathcal{N}(\mu_{\bm{\varphi}_{\bm{x}}}(\bm{x}), \sigma_{\bm{\varphi}_{\bm{x}}}(\bm{x}))\mathcal{N}(\mu_{\bm{\varphi}_{\bm{y}}}(\bm{y}), \sigma_{\bm{\varphi}_{\bm{y}}}(\bm{y})).
+                                            & = \mathcal{N}(\bm{\mu}_{\bm{\varphi}_{\bm{x}}}(\bm{x}), \bm{\sigma}^2_{\bm{\varphi}_{\bm{x}}}(\bm{x}))\mathcal{N}(\bm{\mu}_{\bm{\varphi}_{\bm{y}}}(\bm{y}), \bm{\sigma}^2_{\bm{\varphi}_{\bm{y}}}(\bm{y})).
 \end{align*}
 
 This is again a Gaussian distribution
 \begin{equation}
   \label{eq:joint_variational_gaussian}
-  q(\bm{z} | \bm{x}, \bm{y}) = \mathcal{N}(\bm{z} | \mu(\bm{x}, \bm{y}), \sigma(\bm{x}, \bm{y}))
+  q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y}) = \mathcal{N}(\bm{z} | \mu_{\bm{\varphi}}(\bm{x}, \bm{y}), \sigma^2_{\bm{\varphi}}(\bm{x}, \bm{y}))
 \end{equation} which reduces to the expressions
 \eqref{eq:joint_indep_normal_mean} for the mean and
 \eqref{eq:joint_indep_normal_covariance} for the covariance as shown in the
@@ -308,13 +285,11 @@ translation case reduces to the equation
 \begin{equation}
   \begin{split}
   \label{eq:translation_SGVB}
-  \mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}| \bm{x}, \bm{y}) = (\frac{1}{L} \sum_{l=1}^L \log(\mathcal{N}(\bm{x} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z}))) + \log(\mathcal{N}(\bm{y} | \mu_{\bm{\theta}_y}(\bm{z}), \sigma_{\bm{\theta}_y}(\bm{z})))) + \\ \frac{1}{2} \sum_{j=1}^J(1 + \log((\sigma_j^{(i)})^2) - (\mu_j^{(i)})^2 - (\sigma_j^{(i)})^2))
+  \mathcal{L}^{SGVB}(\bm{\theta}, \bm{\varphi}| \bm{x}, \bm{y}) = (\frac{1}{S} \sum_{s=1}^S \log(\mathcal{N}(\bm{x} | \bm{\mu}_{\bm{\theta}_{\bm{x}}}(\bm{z}), \bm{\sigma}^2_{\bm{\theta}_{\bm{x}}}(\bm{z}))) + \log(\mathcal{N}(\bm{y} | \bm{\mu}_{\bm{\theta}_{\bm{y}}}(\bm{z}), \bm{\sigma}^2_{\bm{\theta}_{\bm{y}}}(\bm{z})))) + \\ \frac{1}{2} \sum_{j=1}^J(1 + \log((\bm{\sigma}_{\bm{\varphi}}(\bm{x}, \bm{y})_j)^2) - (\bm{\mu}_{\bm{\varphi}}(\bm{x}, \bm{y})_j^2 - (\bm{\sigma}_{\bm{\varphi}}(\bm{x}, \bm{y})_j^2))
   \end{split}
 \end{equation}
-
-where the parameters $\mu, \sigma$ are from the normal in equation
-\eqref{eq:joint_variational_gaussian}, with $\mu_j^{(i)}, \sigma_j^{(i)}$ being
-the $i$'th entry in the mean and covariance of the $j$'th latent sampled. The
+where $j$ goes over all of the elements of
+the mean and the diagonal covariance vector. The
 second expression on the right is the analytical form of $-\KL{q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})}{p(\bm{z})}$ \cite{kingma_auto-encoding_2013}.
 \subsection{Training}
 Variational Autoencoders in NLP have a tendency to collapse the KL term in the
@@ -336,4 +311,4 @@ objective, similar to normal simulated annealing \cite{Kirkpatrick1983}.
 The training is then carried out using ADAM on the objective
 $\mathcal{L}^{SGVB}$ where we take into account the KL-annealing. In order to
 calculate the gradients efficiently we use Theano which has automatic support
-for AutoDiff \ref{ch:autodiff}.
+for AutoDiff, laid out in section \ref{ch:autodiff}.

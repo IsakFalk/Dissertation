@@ -6,7 +6,7 @@
 \renewcommand {\@degree@string} {Master of Science}
 \makeatother
 
-\title{Latent Variable Models in Neural Machine Translation}
+\title{Neural Multi-Language Generation using Variational Autoencoders}
 \author{John Isak Texas Falk}
 \department{The Centre for Computational Statistics and Machine Learning}
 
@@ -15,34 +15,21 @@
 
 \leavevmode\thispagestyle{empty}\newpage
 
-% Info in: https://users.ece.cmu.edu/~koopman/essays/abstract.html
-
 \begin{abstract}
-  Neural machine translation is the application of neural networks to perform
-  translation between two languages, natural language generation concerns itself
-  with the generation of sentences using a probabilistic model. Employing latent
-  variable models for language generation enables generation of sentences from
-  an underlying latent cause. Latent variable models using neural
-  networks are very powerful but hard to optimise since the log-likelihood is
-  intractable. Variational Autoencoder is a framework for optimising a stochastic approximation of the
-  ELBO, a lower bound on the log-likelihood, letting us train these models. While variational autoencoders have been applied with some success to natural language
-  processing, it is still unclear if this could be used as a way of translating
-  sentence between two languages. We apply the variational autoencoder framework
-  to a latent variable model mapping the latent variable to a sentence in two
-  distinct languages, showing that after completing training, we can perform
-  translation through the use of the recognition model. We evaluate how the
-  quality of the generated and translated sentences differ with the power of the
-  generative model by qualitative inspection, BLEU, upper bounded perplexity and
-  an estimate of the ELBO on a small and big dataset. The results show that
-  while the model manages to perform well on shorter sentences it has problems
-  generating coherent sentences over longer sequences and that translation is
-  possible but unlikely to be competitive with the currently best models.
+  A language model is a statistical model that parametrise a distribution over
+  sentences. Latent variable models have found widespread use throughout machine learning
+  due to its ability to encode information about data in an underlying smaller space. Applying latent
+  variable models to language models enable us to generate novel sentences
+  from a continuous stochastic latent variable. While powerful, latent variable
+  models are notoriously hard to train due to intractability of the
+  log-likelihood. The VAE framework lets us to choose recognition model and a
+  generative model in order to learn a deep latent variable models for text, avoiding having to optimise the log-likelihood directly. We
+  introduce the VAE framework in an NLP setting and apply it to multi-language text generations using neural networks. We extend the theory to the case of
+  two languages sharing a latent space. Implementing the theory and applying it to parallel language data we
+  show how stronger generative models result in better sentences without
+  collapsing the latent distribution to the prior, enabling us to generate coherent sentences in both languages and also perform language reconstruction using
+  the recognition model. 
 \end{abstract}
-
-\begin{acknowledgements}
-I would like to thank the help from my supervisor Harshil Shah for helping me
-make this thesis possible, and my parents, for always being there for me.
-\end{acknowledgements}
 
 \setcounter{tocdepth}{2} 
 % Setting this higher means you get contents entries for
@@ -50,4 +37,3 @@ make this thesis possible, and my parents, for always being there for me.
 
 \tableofcontents
 \listoffigures
-\listoftables

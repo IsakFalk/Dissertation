@@ -528,22 +528,12 @@
 }
 
 @article{blei_variational_2017,
-	title = {Variational {Inference}: {A} {Review} for {Statisticians}},
-	volume = {112},
-	issn = {0162-1459, 1537-274X},
-	shorttitle = {Variational {Inference}},
-	url = {http://arxiv.org/abs/1601.00670},
-	doi = {10.1080/01621459.2017.1285773},
-	abstract = {One of the core problems of modern statistics is to approximate difficult-to-compute probability densities. This problem is especially important in Bayesian statistics, which frames all inference about unknown quantities as a calculation involving the posterior density. In this paper, we review variational inference (VI), a method from machine learning that approximates probability densities through optimization. VI has been used in many applications and tends to be faster than classical methods, such as Markov chain Monte Carlo sampling. The idea behind VI is to first posit a family of densities and then to find the member of that family which is close to the target. Closeness is measured by Kullback-Leibler divergence. We review the ideas behind mean-field variational inference, discuss the special case of VI applied to exponential family models, present a full example with a Bayesian mixture of Gaussians, and derive a variant that uses stochastic optimization to scale up to massive data. We discuss modern research in VI and highlight important open problems. VI is powerful, but it is not yet well understood. Our hope in writing this paper is to catalyze statistical research on this class of algorithms.},
-	number = {518},
-	urldate = {2017-07-29},
-	journal = {Journal of the American Statistical Association},
-	author = {Blei, David M. and Kucukelbir, Alp and McAuliffe, Jon D.},
-	month = apr,
-	year = {2017},
-	note = {arXiv: 1601.00670},
-	keywords = {Computer Science - Learning, Statistics - Computation, Statistics - Machine Learning},
-	pages = {859--877}
+  title={Variational inference: A review for statisticians},
+  author={Blei, David M and Kucukelbir, Alp and McAuliffe, Jon D},
+  journal={Journal of the American Statistical Association},
+  number={just-accepted},
+  year={2017},
+  publisher={Taylor \& Francis}
 }
 
 @article{roeder_sticking_2017,
@@ -655,19 +645,13 @@ Eprint = {arXiv:1609.04747},
 } 
 
 @article{Bengio:2003:NPL:944919.944966,
- author = {Bengio, Yoshua and Ducharme, R{\'e}jean and Vincent, Pascal and Janvin, Christian},
- title = {A Neural Probabilistic Language Model},
- journal = {J. Mach. Learn. Res.},
- issue_date = {3/1/2003},
- volume = {3},
- month = mar,
- year = {2003},
- issn = {1532-4435},
- pages = {1137--1155},
- numpages = {19},
- url = {http://dl.acm.org/citation.cfm?id=944919.944966},
- acmid = {944966},
- publisher = {JMLR.org},
+  title={A neural probabilistic language model},
+  author={Bengio, Yoshua and Ducharme, R{\'e}jean and Vincent, Pascal and Jauvin, Christian},
+  journal={Journal of machine learning research},
+  volume={3},
+  number={Feb},
+  pages={1137--1155},
+  year={2003}
 }
 
 @article{DBLP:journals/corr/abs-1301-3781,
@@ -955,24 +939,31 @@ archivePrefix = "arXiv",
 }
 
 @article{DBLP:journals/corr/OordDZSVGKSK16,
-  author    = {A{\"{a}}ron van den Oord and
-               Sander Dieleman and
-               Heiga Zen and
-               Karen Simonyan and
-               Oriol Vinyals and
-               Alex Graves and
-               Nal Kalchbrenner and
-               Andrew W. Senior and
-               Koray Kavukcuoglu},
-  title     = {WaveNet: {A} Generative Model for Raw Audio},
-  journal   = {CoRR},
-  volume    = {abs/1609.03499},
-  year      = {2016},
-  url       = {http://arxiv.org/abs/1609.03499},
-  timestamp = {Wed, 07 Jun 2017 14:42:54 +0200},
-  biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/OordDZSVGKSK16},
-  bibsource = {dblp computer science bibliography, http://dblp.org}
+  title={Wavenet: A generative model for raw audio},
+  author={Oord, Aaron van den and Dieleman, Sander and Zen, Heiga and Simonyan, Karen and Vinyals, Oriol and Graves, Alex and Kalchbrenner, Nal and Senior, Andrew and Kavukcuoglu, Koray},
+  journal={arXiv preprint arXiv:1609.03499},
+  year={2016}
 }
+
+@Comment @article{DBLP:journals/corr/OordDZSVGKSK16,
+@Comment   author    = {A{\"{a}}ron van den Oord and
+@Comment                Sander Dieleman and
+@Comment                Heiga Zen and
+@Comment                Karen Simonyan and
+@Comment                Oriol Vinyals and
+@Comment                Alex Graves and
+@Comment                Nal Kalchbrenner and
+@Comment                Andrew W. Senior and
+@Comment                Koray Kavukcuoglu},
+@Comment   title     = {WaveNet: {A} Generative Model for Raw Audio},
+@Comment   journal   = {CoRR},
+@Comment   volume    = {abs/1609.03499},
+@Comment   year      = {2016},
+@Comment   url       = {http://arxiv.org/abs/1609.03499},
+@Comment   timestamp = {Wed, 07 Jun 2017 14:42:54 +0200},
+@Comment   biburl    = {http://dblp.uni-trier.de/rec/bib/journals/corr/OordDZSVGKSK16},
+@Comment   bibsource = {dblp computer science bibliography, http://dblp.org}
+@Comment }
 
 @online{KarpathyRNN,
   author = {Karpathy, Andrej},
@@ -1217,3 +1208,48 @@ archivePrefix = "arXiv",
   isbn = {978-2-9517408-9-1},
   language = {english}
  }
+
+
+@MISC{Chen98evaluationmetrics,
+    author = {Stanley Chen and Douglas Beeferman and Ronald Rosenfeld},
+    title = {Evaluation Metrics For Language Models},
+    year = {1998}
+}
+
+@inproceedings{Papineni:2002:BMA:1073083.1073135,
+ author = {Papineni, Kishore and Roukos, Salim and Ward, Todd and Zhu, Wei-Jing},
+ title = {BLEU: A Method for Automatic Evaluation of Machine Translation},
+ booktitle = {Proceedings of the 40th Annual Meeting on Association for Computational Linguistics},
+ series = {ACL '02},
+ year = {2002},
+ location = {Philadelphia, Pennsylvania},
+ pages = {311--318},
+ numpages = {8},
+ url = {https://doi.org/10.3115/1073083.1073135},
+ doi = {10.3115/1073083.1073135},
+ acmid = {1073135},
+ publisher = {Association for Computational Linguistics},
+ address = {Stroudsburg, PA, USA},
+}
+
+@incollection{NIPS2016_6581,
+title = {Improved Variational Inference with Inverse Autoregressive Flow},
+author = {Kingma, Diederik P and Salimans, Tim and Jozefowicz, Rafal and Chen, Xi and Sutskever, Ilya and Welling, Max},
+booktitle = {Advances in Neural Information Processing Systems 29},
+editor = {D. D. Lee and M. Sugiyama and U. V. Luxburg and I. Guyon and R. Garnett},
+pages = {4743--4751},
+year = {2016},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.nips.cc/paper/6581-improved-variational-inference-with-inverse-autoregressive-flow.pdf}
+}
+
+@incollection{NIPS2014_5352,
+title = {Semi-supervised Learning with Deep Generative Models},
+author = {Kingma, Diederik P and Mohamed, Shakir and Jimenez Rezende, Danilo and Welling, Max},
+booktitle = {Advances in Neural Information Processing Systems 27},
+editor = {Z. Ghahramani and M. Welling and C. Cortes and N. D. Lawrence and K. Q. Weinberger},
+pages = {3581--3589},
+year = {2014},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.nips.cc/paper/5352-semi-supervised-learning-with-deep-generative-models.pdf}
+}

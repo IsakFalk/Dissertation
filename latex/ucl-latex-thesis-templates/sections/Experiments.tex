@@ -1,7 +1,9 @@
 \chapter{Experiments}
 \label{ExperimentsCh}
 
-We compare how the different models fare for reconstruction and translation. 
+Here we specify the setup of the experiments, the data sets and preprocessing
+done and interpret the results. We divide the experiments into Mono-language
+generation and reconstruction and Twin-language generation, reconstruction. Finally we also specify our contribution in terms of software engineering.
 
 \section{Data}
 
@@ -14,24 +16,24 @@ We evaluate the models on two different datasets.
   Parliament,
   comprising in total the 11 official languages of the European Union
   \cite{koehn2005epc}. We use the French-English language pair and preprocess
-  it. The English dataset used for reconstruction has $625213$ train sentences
-  and $69469$ test sentences. For the French-English dataset used for
-  translation has $534635$ train sentences and $59404$ test sentences. The
-  reason why the reconstruction dataset is bigger than the translation dataset
-  is because for translation we take the intersection of the sentences that is
-  between $2$ and $20$ words long for French and English, while in
-  reconstruction we only need to consider the English sentences on their own.
+  it. The English dataset used for the training of the Mono-language models has
+  $625'213$ train sentences and $69'469$ test sentences. The French-English dataset used for
+  the Twin-language models, has $534'635$ train sentences and $59'404$ test sentences. The
+  reason why the Mono-language dataset is bigger than the Twin-language dataset
+  is because for Twin-language models we take the intersection of the sentences that is
+  between $2$ and $20$ words long for French and English, while for
+  Mono-language models we only need to consider the English sentences on their own.
 \item[Custom] Our custom dataset is made from merging three different datasets;
   Europarl \cite{koehn2005epc}, News Commentary and UN corpus
   \cite{ZIEMSKI16.1195} \footnote{Taken from the wmt14 translation challenge: \texttt{http://www.statmt.org/wmt14/translation-task.html}}. This dataset is
   considerably bigger than the Europarl dataset. We only use it on the 
-  twin-language model. After preprocessing the dataset it has $4268791$ train
-  sentences and $474311$ test sentences.
+  twin-language model. After preprocessing the dataset it has $4'268'791$ train
+  sentences and $474'311$ test sentences.
 \end{description}
 
 \subsection{Preprocessing}
 
-The raw data is unfit for use directly with the model. For one thing the raw
+The raw data is unfit for use directly. For one thing the raw
 data is in the form of strings and in order to use neural networks we need to
 transform this into a form using vectors in some space $\mathbb{R}^m$.
 
@@ -39,70 +41,298 @@ We do the following preprocessing steps:
 
 \begin{itemize}
 \item We specify the maximum and minimum length of the words. This enables us to
-  pad sentences to be the same length.
+  pad sentences to be the same length with zeros.
 \item We calculate the word frequencies in order to sort all of the words in the
   dataset in terms of how often it appear in absolute terms. This is then used
-  to only retain the 30000 most common words. Words which are not part of this
+  to only retain the $30'000$ most common words. Words which are not part of this
   list gets replaced by an \texttt{<UNK>} token, specifying that it's an unknown
   word outside of the dictionary.
 \item Newline characters were removed and replaced by \texttt{<EOS>},
   end-of-sentence tokens, signifying the end of a sentence.
-\item When preprocessing, we let the preprocessed data from English and French
-  be the intersection of the sentences in English and French that pass the above
-  criteria.
-\item Unicode is needed for French due to diacretics and accents which are not
+\item When preprocessing the dataset for Twin-language models, we let the
+  preprocessed data be the intersection of the sentences in English and French
+  that pass the above criteria.
+\item Unicode is needed for French due to diacritics and accents which are not
   included in the normal ASCII encoder-decoder scheme for characters. We make
   sure that encoding and decoding is done correctly.
 \end{itemize}
 
-It is important to note that due to how languages differ, even though the
-dataset might consist of sentence pairs this will still not mean that in general
-both of the languages will have the same dictionary of words. Partially this is
-due to the different ways that languages are built up when expressing meaning,
-but on a more basic level, there are no bijection between languages as words
-have slightly different meaning and contexts, with some words only existing in
-one language but not the other. Similarly the sentence length of the same
-sentence in English and French will in general be different.
-
 \section{software}
+
+\subsection{Libraries}
 All of the models were trained using Theano \cite{2016arXiv160502688short} and Lasagne \cite{lasagne} built on
 top of the Python (2.7) programming language. All of the plots were
 generated using Matplotlib \cite{Hunter:2007} and Seaborn \cite{michael_waskom_2014_12710}. Data processing was done with Numpy
 \cite{Walt:2011:NAS:1957373.1957466} and Pandas \cite{mckinney-proc-scipy-2010}. The software repository can be found at \texttt{http://www.github.com/isakfalk/project}.
 
+\subsection{Engineering}
+Due to the nature of the project, a lot of work went into software engineering.
+We were fortunate to inherit a code base that implemented the necessary base for
+Mono-language generation and reconstruction. This code base was refactored and
+reconfigured for our purposes. We ported the code from the Mono-language setting
+to the Twin-language setting and created programs for preprocessing the data.
+
+For decoding the sentences we implemented a beam search algorithm \cite[p.~249]{Jurafsky:2000:SLP:555733}. For a given
+latent $\bm{z}$ there is an optimal sentence $\bm{x}_{opt}$ such that
+$\bm{x}_{opt}$ maximises the probability $p_{\bm{\theta}}(\bm{x} | \bm{z})$.
+Using a brute force search strategy fails since the number of branches in the
+search tree grows exponentially. Beam search prunes the tree at each stage and
+only keeps the $k$ best paths from the root to the leaves at any point. In this
+way it allows us to decode the sentences from $\bm{z}$ efficiently and such that
+the generated sentences are close to the optimal sentence.
+
 \section{Design}
-Each model needs to specify a recognition model $q_{\bm{\varphi}}(\bm{z} |
-\bm{x})$ and a generative model $p_{\bm{\theta}}(\bm{x} | \bm{z})$. Below we
-specify all of the different models we trained and the hyperparameters we chose.
+Working within the VAE framework forces us to choose in addition to the generative
+model also the form of the recognition model. For Mono-language models we will need to specify the generative model
+$p_{\bm{\theta}}(\bm{x} | \bm{z})$ and the recognition model $q_{\bm{\varphi}}(\bm{z} |
+\bm{x})$. For Twin-language models we need
+to specify the generative model $p_{\bm{\theta}}(\bm{x}, \bm{y} | \bm{z}) = p_{\bm{\theta}_{\bm{x}}}(\bm{x}| \bm{z})p_{\bm{\theta}_{\bm{y}}}(\bm{y}| \bm{z})$ and the
+recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$. We assume that the
+recognition model can be factorised into $q_{\bm{\varphi}}(\bm{z} | \bm{x},
+\bm{y}) = q_{\bm{\varphi}_{\bm{x}}}(\bm{z} |
+\bm{x})q_{\bm{\varphi}_{\bm{y}}}(\bm{z} | \bm{y})$. For the Twin-language models
+we assume that the generative and recognition models for $\bm{x}$ and $\bm{y}$
+are the same in terms of architecture, but let them be optimised independently.
 
-\subsection{Reconstruction}
-We let the latent dimension be $50$ and the embedding dimension $300$. For
-Reconstruction we only use the Europarl dataset. These dimensions were tuned by
-evaluating performance over short runs.
+Specifically, for the recognition models, we have a Gaussian distribution of the
+form
+\begin{equation*}
+  q_{\bm{\varphi}}(\bm{z} | \bm{x}) = \mathcal{N}(\bm{\mu}_{\bm{\varphi}}(\bm{x}), \bm{\sigma}^2_{\bm{\varphi}}(\bm{x}))
+\end{equation*}
+where the pair of vectors $(\bm{\mu}_{\bm{\varphi}}(\bm{x}),
+\bm{\sigma}^2_{\bm{\varphi}}(\bm{x}))$ are the output of some specified neural
+network followed by an affine layer. The Twin-language case is similar but
+combines the pairs of vectors $(\bm{\mu}_{\bm{\varphi}_{\bm{x}}}(\bm{x}),
+\bm{\sigma}^2_{\bm{\varphi}_{\bm{x}}}(\bm{x})), (\bm{\mu}_{\bm{\varphi}_{\bm{y}}}(\bm{y}),
+\bm{\sigma}^2_{\bm{\varphi}_{\bm{y}}}(\bm{y}))$ into a third set of pair
+$(\bm{\mu}_{\bm{\varphi}}(\bm{x}, \bm{y}), \bm{\sigma}^2_{\bm{\varphi}}(\bm{y},
+\bm{x}))$ as specified by equations
+\eqref{eq:joint_indep_normal_covariance_diag} and
+\eqref{eq:joint_indep_normal_mean_diag}.
 
-\subsubsection{Generative model}
-As specified before we let the prior be a unit normal:
+We let the prior be a unit normal for all models:
 \begin{equation}
   \label{eq:prior_distribution_generative}
   p(\bm{z}) = \mathcal{N}(\bm{z} | \bm{0}, \bm{I}).
 \end{equation}
+Furthermore we specify the dimensionality of the word embeddings, $E$, and the
+latent dimension, $dim(\bm{z})$. All of the activation functions for the neural networks are ELU
+activation function (SELU with $\alpha = 1, \lambda = 1$), unless specified otherwise.
 
-The generative model of the observed variable $p_{\bm{\theta}}(\bm{x} | \bm{z})$
-is chosen to be the output from the WaveNet, as specified in \ref{ch:WaveNet}.
-The distribution of each word is parametrised as a categorical
-distribution dependent on all previously outputted probability vectors for the
-preceding words and the latent vector $\bm{z}$.
+\subsection{Mono-language models}
+We let $E = 300$ and $dim(\bm{z}) = 50$ for all models. We have three different
+models that we use, we label them $\mathcal{M}_{M1}$, $\mathcal{M}_{M2}$ and
+$\mathcal{M}_{M3}$. All recognition models are connected to a final MLP of depth
+$3$ and with layers of $1000$ units specified otherwise. We train the models for $200'000$ iterations each, taking
+approximately 2 days per model to train with MLP being the fastest by a half.
+The generative model for all of the Mono-language models is the WaveNet with
+dilations $(1, 2, 4, 8)$, $2$ dilation channels and $4$ residual channels. We
+thus only specify the recognition models:
 
-\subsubsection{Recognition model}
-We let the recognition model for all reconstruction models be a normal distribution
-\begin{equation}
-  \label{eq:rec_model_reconstruction}
-  q_{\bm{\varphi}}(\bm{z} | \bm{x}) \sim \mathcal{N}(\bm{z}| \bm{\mu_{\bm{\varphi}}}(\bm{x}),
-\bm{\sigma}_{\bm{\varphi}}(\bm{x})),
-\end{equation}
-with the parameters of the Gaussian being the output from different neural
-networks depending on the model such that $\bm{\varphi}$ are the parameters of
-the neural network. We train three different models.
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Model & Recognition model & Depth & Hidden dim. & Nonlinearity \\ [0.5ex] 
+    \hline\hline
+    $\mathcal{M}_{M1}$ & MLP & $4$ & $1000$ & ELU \\ 
+    \hline\hline
+    Model & Recognition model & Depth & Hidden dim. & Cell \\
+    \hline\hline
+    $\mathcal{M}_{M2}$ & RNN  & $1000$ & $1000$ & LSTM \\
+    \hline\hline
+    Model & Recognition mode & dilations & dilation channels & residual channels \\
+    \hline\hline
+    $\mathcal{M}_{M3}$ & WaveNet & $(1, 2, 4, 8)$ & $200$ & $400$ \\
+    \hline
+  \end{tabular}
+  \caption{Recognition models for all of the Mono-language models.}
+  \label{results:Mono_lang_recog_models}
+\end{table}
 
+\subsection{Twin-language models}
+The quality of the trained models highly depend on the number of iterations
+trained. As MLP was much faster for training the Mono-language models (by a
+factor of 2) compared to the other neural network architectures we tried, while
+being similar in performance to the others, we use it as the recognition model
+for all Twin-language models. We train all models for $500'000$ iterations
+taking approximately 5 days each.
 
+For all Twin-language models we let $E = 300$ and $dim(z) = 100$. We train 4
+models in total, labelling them $\mathcal{M}_{T1}$, $\mathcal{M}_{T2}$,
+$\mathcal{M}_{T3}$ and $\mathcal{M}_{T4}$. All of the models were trained on the
+Europarl dataset (French-English) except for $\mathcal{M}_{T4}$ which was
+trained on the custom bigger dataset. The architecture of the recognition model is
+an MLP of depth $4$, with layers of a $1'000$ hidden units and with ELU as the activation
+function. All the generative models are WaveNet of varying hyperparameters:
 
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{|c|c|c|c|} 
+    \hline
+    Model & dilations & dilation channels & residual channels \\ [0.5ex] 
+    \hline\hline
+    $\mathcal{M}_{T1}$ & $(1, 2, 4, 8, 16) \times 3$ & $4$ & $8$ \\ 
+    \hline
+    $\mathcal{M}_{T2}$ & $(1, 2, 4, 8, 16) \times 5$ & $2$ & $4$ \\ 
+    \hline
+    $\mathcal{M}_{T3}$ & $(1, 2, 4, 8, 16) \times 5$ & $4$ & $8$ \\
+    \hline
+    $\mathcal{M}_{T4}$ & $(1, 2, 4, 8, 16) \times 5$ & $4$ & $8$ \\
+    \hline
+  \end{tabular}
+  \caption{Generative models for all of the Twin-language models.}
+  \label{results:Twin_lang_gen_models}
+\end{table}
+
+\FloatBarrier
+
+\section{Results}
+
+We use several scores to measure how well the models are doing.
+
+\begin{description}
+\item[ELBO (SGVB estimate)]
+  The SGVB estimate of the ELBO from the VAE framework. This is a lower bound on
+  the log-likelihood and our objective function. We want to maximise this.
+\item[KL]
+  KL in the VAE framework measures how much the outputted distribution from the
+  recognition model differ from the prior over the latent variable. In this
+  sense it tells us how much the model is relying on the latent variable
+  $\bm{z}$ when generating sentences compared to the generative model. We want
+  to ensure that this quantity doesn't go to zero.
+% \item[BLEU]
+%   When measuring the translation quality, we use the BLEU score. BLEU is a
+%   metric for measuring the quality of translation from language $\lang{X}$ to
+%   language $\lang{Y}$. It uses a modified n-gram precision metric to do this. It
+%   has been shown to correlate well with human scoring of translated sentences \cite{Papineni:2002:BMA:1073083.1073135}.
+\item[Perplexity (PP)]
+  For corpus data $\mathcal{D} = \{\bm{x}^n\}_{n=1}^N$ and total number of
+  words $W$, assuming independence of sentences, we define the perplexity of a model to be
+  \begin{equation}
+    \label{eq:perplexity}
+    \text{PP}(\mathcal{D}) = \sqrt[W]{\frac{1}{\prod_{n=1}^Np(\bm{x}^n)}}.
+  \end{equation}
+  Taking exponent and logarithm we get the following easier expression
+  \begin{equation}
+    \label{eq:perplexity_exp_log}
+    \exp(-\frac{1}{W}\sum_{n=1}^N \log p(\bm{x}^n))
+  \end{equation}
+  where $\log p(\bm{x}^n) = \sum_{l = 1}^{L_n} \log p(\bm{x}^n_{l} |
+  \bm{x}^n_{l-1}, \dots, \bm{x}^n_{1})$ and $L_n$ is the length of the $n$'th sentence. Since we don't have access to the
+  log-likelihood directly we instead use the SGVB estimate of the ELBO to bound
+  the perplexity by above. This follows from the fact that
+  \begin{equation*}
+    \mathcal{L}^{ELBO}(\bm{x}) \leq \log p(\bm{x}) \implies \exp(-\frac{1}{W}\log \mathcal{L}^{ELBO}(\bm{x})) \geq \exp(-\frac{1}{W} \log p(\bm{x}))
+  \end{equation*}
+  as $\exp(\cdot), \log(\cdot)$ are monotonically increasing functions. We thus
+  use an approximate upper bound on the perplexity.
+\end{description}
+
+\subsection{Metrics}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{|c|c|c|c|} 
+    \hline
+    Model & ELBO  & KL & PP \\ [0.5ex] 
+    \hline\hline
+    $\mathcal{M}_{M1}$ & $-56.1135$ & $9.0132$ & $57.4400$ \\
+    \hline
+    $\mathcal{M}_{M2}$ & $-55.9835$ & $8.5231$ & $56.9031$ \\
+    \hline
+    $\mathcal{M}_{M3}$ & $-56.4169$ & $4.9505$ & $58.7118$ \\
+    \hline
+  \end{tabular}
+  \caption{Results for the different Mono-language models.}
+  \label{results:Mono_lang_results}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|} 
+    \hline
+    Model & ELBO & KL & PP (EN, FR)  \\ [0.5ex] 
+    \hline\hline
+    $\mathcal{M}_{T1}$ & $-145.8284$ & $33.3129$ & $264.7696$\\
+    \hline
+    $\mathcal{M}_{T2}$ & $-148.6798$ & $32.3151$ & $295.6363$\\
+    \hline
+    $\mathcal{M}_{T3}$ & $-143.5361$ & $35.5259$ & $243.8360$\\
+    \hline
+    $\mathcal{M}_{T4}$ & $-122.2952$ & $26.7563$ & $237.2852$\\
+    \hline
+  \end{tabular}
+  \caption{Results for the different Twin-language models.}
+  \label{results:Twin_lang_results}
+\end{table}
+
+\section{Discussion}
+
+We tried three different recognition models for the Mono-language models. These
+all performed relatively equal in performance as can be seen by how close the
+ELBO estimates are to each other, (-56.1135, -55.9835, -56.4169) for model
+($M1, M2$ and $M3$) respectively. Since the recognition model have the same form
+for all of the models in this thesis, $q_{\bm{\varphi}}(\bm{z} | \bm{x}) \sim
+\mathcal{N}(\bm{z} | \bm{\mu}_{\bm{\varphi}}(\bm{x}),
+\bm{\sigma}_{\bm{\varphi}}^2(\bm{x}))$, this essentially puts a bottleneck on the
+information that can be encoded in $\bm{z}$ which would explain why they all
+reach similar level of performance, even though the different architectures (MLP, RNN, WaveNet)
+have different predictive capabilities. Given that the models perform similar
+for different recognition models we deliberately pick MLP as the recognition
+model for all Twin-language models, as this lets us train for longer. From table \ref{results:Mono_lang_results} We
+note that the KL is similar for the MLP and the RNN while very low for the WaveNet, which explains why the sentences for
+reconstructing sentences using the recognition model is worse for
+$\mathcal{M}_{M3}$ as it relies too much on the generative model.
+
+As for the quality, inspecting the sentences in appendix \ref{Appendix:output}, we can see that
+they all perform well for both generating new sentences from the prior
+distribution over $\bm{z}$ but also are able to do reconstruction to some
+extent. Reconstructed sentences are not directly comparable to the input
+sentences, but often pick up on words and form sentences around these.
+
+The Twin-language models are all of a similar form, MLP as the recognition model
+with the generative model being different forms of WaveNet. It is interesting to
+note that WaveNet has the capability to mimic the form of an MLP for shallow
+stacked convolutions, while being closer to an RNN for deeper stacks, justifying
+choosing WaveNet as a generative model. From table
+\ref{results:Mono_lang_results} we see that as we make the models deeper and
+stack more convolutions we get a smaller ELBO estimate ($\mathcal{M}_{M1}$ and
+$\mathcal{M}_{M2}$ does not progress strictly in terms of how powerful they are
+since the channels and dilations differ in a way that can't really be ordered).
+This is in line with results that state that CNN's are able to model more long
+term dependencies in data as the receptive field grows larger.
+
+Referring to the appendix \ref{Appendix:output} we can see that the models does
+not perform as well as the Mono-language model in terms of reconstruction but
+learns to do generation well. This makes sense since the data
+is now split up in two parts which are structurally very different. In a sense
+we are trying to learn two different distributions over languages instead of
+one. It is very good on reconstructing certain sentences, phrases and words that occurs
+frequently in the dataset, such as \texttt{Mr. President, Europe} and
+\texttt{Commission} pointing that it learns some of these through memorisation.
+We see that KL stays away from zero in all cases avoiding collapse. Finally we
+see that all models, Twin and Mono-language perform better at the start of all
+the sentences and also on shorter sentences implying that the generative model forgets.
+
+We tried to do translation by sampling $\bm{z}$ from $q_{\bm{\varphi}}(\bm{z} |
+\bm{x}, \bm{y}) \propto q_{\bm{\varphi}_{\bm{x}}}(\bm{z} |
+\bm{x})$ in the case of translating from language $\lang{X}$ to $\lang{Y}$ but
+noted that it didn't work at all. There are several reasons why this might have
+failed. Since the reconstructed sentences when conditioning on both $\bm{x}$ and
+$\bm{y}$ are not great in themselves, conditioning on only one and then
+transferring to the other language will be even worse. Since the model is
+trained using both $\bm{x}, \bm{y}$ together this also means that it doesn't
+really optimize for this case directly, even though we could imagine that it
+could be the outcome that a trained model would force $q_{\bm{\varphi}_{\bm{x}}}(\bm{z} |
+\bm{x})$ and $q_{\bm{\varphi}_{\bm{y}}}(\bm{z} |
+\bm{y})$ to be similar in distribution since $\bm{x}$ and $\bm{y}$ represents
+the same meaning in different languages.
+
+This could be explained by the fact training we did not experience any kind of
+KL collapse, with the KL actually being bigger with respect to the ELBO than for
+the Mono-language models. When training we want the sentences generated for $\lang{X}$ and
+$\lang{Y}$ to be close to the input sentences $\bm{x}$ and $\bm{y}$ which would
+force the model to rely on the latent space rather than purely outputting
+probable sentences which does not rely on $\bm{z}$ or only do so very weakly by
+the generative model forgetting about it.

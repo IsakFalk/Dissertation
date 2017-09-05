@@ -1,16 +1,14 @@
-\addcontentsline{toc}{chapter}{Appendices}
+%\addcontentsline{toc}{chapter}{Appendices}
 
-% The \appendix command resets the chapter counter, and changes the chapter numbering scheme to capital letters.
-%\chapter{Appendices}
+% The \appendix command resets the chapter counter, and changes the chapter
+% numbering scheme to capital letters.
 \appendix
-\chapter{Plots and generated output}
+\chapter{Plots and generated text}
 \label{Appendix:output}
 
-\section{Mono-Reconstruction}
+\section{Plots}
 
-\subsection{Plots}
-
-\begin{figure}[H]
+\begin{figure}[!htbp]
   \centering
   \begin{subfigure}[b]{0.55\textwidth}
     \centering
@@ -32,35 +30,12 @@
   \end{subfigure}
   \caption{Plots of the SGVB estimate of ELBO (Labelled ELBO in plots)
       together with the KL divergence $\KL{q_{\bm{\varphi}}(\bm{z} |
-        \bm{x})}{p_{\bm{\theta}}(\bm{z})}$ for the different models for mono-reconstruction. The
+        \bm{x})}{p_{\bm{\theta}}(\bm{z})}$ for the different models for
+      Mono-language models. The
       vertical line specifies the end of the KL-annealing.}
 \end{figure}
 
-\subsection{Generated Sentences}
-
-\begin{center}
-  \begin{tabular}{|c|} 
-    \hline
-    Sampled sentences from prior (English)\\ [0.5ex] 
-    \hline\hline
-    Sentences 1\\ 
-    \hline
-    Sentences 2\\
-    \hline
-    Sentences 3\\
-    \hline
-    Sentences 4\\
-    \hline
-    Sentences 5\\
-    \hline
-  \end{tabular}
-\end{center}
-
-\section{Twin-Reconstruction}
-
-\subsection{Plots}
-
-\begin{figure}[H]
+\begin{figure}[!htbp]
   \centering
   \begin{subfigure}[b]{0.5\textwidth}
     \centering
@@ -88,19 +63,127 @@
   \end{subfigure}
   \caption{Plots of the SGVB estimate of ELBO (Labelled ELBO in plots)
       together with the KL divergence $\KL{q_{\bm{\varphi}}(\bm{z} |
-        \bm{x})}{p_{\bm{\theta}}(\bm{z})}$ for the different models for twin-reconstruction. The
+        \bm{x})}{p_{\bm{\theta}}(\bm{z})}$ for the different models for
+      Twin-language models. The
       vertical line specifies the end of the KL-annealing.}
 \end{figure}
 
-\subsection{Generated Sentences}
+\FloatBarrier
+
+\section{Generated Sentences}
 
 We let (T) stand for the true sentence, and (G) for the generated sentence.
 
-\subsubsection{Model $\mathcal{M}_{M1}$}
+\begin{table}
+  \centering
+  \begin{tabular}{|L{14cm}|} 
+    \hline
+    Sampled sentences from prior\\ [0.5ex] 
+    \hline\hline
+    the vote will take place on the debate , the council , and the commission .\\
+    \hline
+    i have already received a number of questions .\\
+    \hline
+    why , we have to be able to get the right to get the right ?\\
+    \hline
+  \end{tabular}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{M1}$.}
+\end{table}
 
-\textbf{English}
+\begin{table}
+  \centering
+  \begin{tabular}{|L{14cm}|} 
+    \hline
+    Sampled sentences from posterior\\ [0.5ex] 
+    \hline\hline
+    (T) faced with this situation , europe has a decision to make .\\
+    (G) in the council , we are faced with a situation .\\
+    \hline
+    (T) now , that process certainly requires a reliable police force .\\
+    (G) this is a new process , the european union is needed .\\
+    \hline
+    (T) as i am pleased to say that the commission is going to be done .\\
+    (G) as i say , i shall be here with the presidency .\\
+    \hline
+  \end{tabular}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ of model $\mathcal{M}_{M1}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
+  \begin{tabular}{|L{14cm}|} 
+    \hline
+    Sampled sentences from prior\\ [0.5ex] 
+    \hline\hline
+    what is the result of the vote , and i am not going to be taken .\\
+    \hline
+    as you believe that the commission is right , we need to be transparent .\\
+    \hline
+    i am not a great deal of a great deal of a great deal .\\
+    \hline
+  \end{tabular}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{M2}$.}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|L{14cm}|} 
+    \hline
+    Sampled sentences from posterior\\ [0.5ex] 
+    \hline\hline
+    (T) i hope that we will continue to support the commission .\\
+    (G) i hope we shall be able to maintain this cooperative approach throughout the subsequent presidencies .\\
+    \hline
+    (T) i agree with the need to support efficiency and effectiveness in the various education systems .\\
+    (G) i believe that we need to improve the need for greater transparency and efficiency .\\
+    \hline
+    (T) this decline is encouraging news .\\
+    (G) the situation is a very important .\\
+    \hline
+  \end{tabular}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ of model $\mathcal{M}_{M2}$.}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|L{14cm}|} 
+    \hline
+    Sampled sentences from prior\\ [0.5ex] 
+    \hline\hline
+    the commission is not the same thing , and the same .\\
+    \hline
+    ( the sitting was closed at UNK p.m . )\\
+    \hline
+    the european union 's aim is to be welcomed .\\
+    \hline
+  \end{tabular}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{M3}$.}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|L{14cm}|} 
+    \hline
+    Sampled sentences from posterior\\ [0.5ex] 
+    \hline\hline
+    (T) the eu should stop these payments immediately .\\
+    (G) we must not be taken into account .\\
+    \hline
+    (T) that is the inescapable conclusion we must draw .\\
+    (G) the commission is very important .\\
+    \hline
+    (T) mr president , thank you very much for this debate .\\
+    (G) i would like to thank you for your attention .\\
+    \hline
+  \end{tabular}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x})$ of model $\mathcal{M}_{M3}$.}
+\end{table}
+
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\ [0.5ex] 
@@ -112,9 +195,11 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     as far ' s and UNK to being UNK to UNK UNK , to the UNK UNK .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T1}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
@@ -125,15 +210,16 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     (T) mr president , commissioner , ladies and gentlemen , what is this debate actually about ?\\
     (G) mr president , commissioner , ladies and gentlemen , what is going to do about ?\\
     \hline
-    (T) mrs <UNK> was the rapporteur at the time .\\
-    (G) mrs <UNK> has to be of no to <UNK> .\\
+    (T) mrs UNK was the rapporteur at the time .\\
+    (G) mrs UNK has to be of no to UNK .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T1}$.}
+\end{table}
 
-\textbf{French}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\ [0.5ex] 
@@ -142,12 +228,14 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     \hline
     pouviez , notre groupe aussi pour un communication pour cette approche .\\
     \hline
-    lançons , <UNK> a la parole de la commission .\\
+    lançons , UNK a la parole de la commission .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T1}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
@@ -158,17 +246,16 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     (T) monsieur le président , madame la commissaire , chers collègues , de quoi traite vraiment ce débat ?\\
     (G) monsieur le président , madame la présidente , monsieur le commissaire , dont nous avons ce débat ?\\
     \hline
-    (T) à l’époque , c’est mme <UNK> qui était rapporteur .\\
-    (G) à occupé de <UNK> , cela était de <UNK> .\\
+    (T) à l’époque , c’est mme UNK qui était rapporteur .\\
+    (G) à occupé de UNK , cela était de UNK .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T1}$.}
+\end{table}
 
-\subsubsection{Model $\mathcal{M}_{M2}$}
-
-\textbf{English}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\
@@ -180,9 +267,11 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     you must be able to make for one of one .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T2}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
@@ -197,11 +286,12 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     (G) mr president , there is no longer in the european parliament .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T2}$.}
+\end{table}
 
-\textbf{French}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|}
     \hline
     Sampled sentences from prior\\
@@ -213,9 +303,11 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     par conséquent ce sont les citoyens .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T2}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
@@ -230,13 +322,12 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     (G) monsieur le président , la situation n'est pas la situation sont la situation .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T2}$.}
+\end{table}
 
-\subsubsection{Model $\mathcal{M}_{M3}$}
-
-\textbf{English}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\
@@ -248,9 +339,11 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     that is something we are now today .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T3}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
@@ -259,17 +352,18 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     (G) this is a compromise .\\
     \hline
     (T) that is why this aid programme needs to be made a top priority .\\
-    (G) that is why the only to do is about to be in <UNK> .\\
+    (G) that is why the only to do is about to be in UNK .\\
     \hline
     (T) yet it is a country that is important to europe .\\
-    (G) yet it is an <UNK> of an <UNK> for europe .\\
+    (G) yet it is an UNK of an UNK for europe .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T3}$.}
+\end{table}
 
-\textbf{French}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\
@@ -281,9 +375,11 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     c'est pourquoi j'ai également que notre travail à faire dans notre dans ce sens .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T3}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
@@ -298,72 +394,78 @@ We let (T) stand for the true sentence, and (G) for the generated sentence.
     (G) mais il s'agit d'un pays pour l'europe .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T3}$.}
+\end{table}
 
-\subsubsection{Model $\mathcal{M}_{M4}$}
-
-\textbf{English}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\
     \hline\hline
-    \\
+    mrs UNK has been UNK UNK UNK to the present in the general assembly .\\
     \hline
-    \\
+    this is also that this on this countries .\\
     \hline
-    \\
+    and that time , with the situation by the international community of the international organizations of international organizations .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T4}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
     \hline\hline
-    (T) \\
-    (G) \\
+    (T) development project for indigenous communities\\
+    (G) international convention for development\\
     \hline
-    (T) \\
-    (G) \\
+    (T) working party of general safety ( grsg )\\
+    (G) working group of united nations took )\\
     \hline
-    (T) \\
-    (G) \\
+    (T) in these new circumstances , UNK solidarity is no longer enough , at least for the socialists .\\
+    (G) in the UNK , UNK , UNK , they on the UNK of UNK of UNK of UNK .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (EN) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T4}$.}
+\end{table}
 
-\textbf{French}
-
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from prior\\
     \hline\hline
-    \\
+    de plus que ont et de la proposition et ne et ont été sont et du rapport .\\
     \hline
-    \\
+    mecque pays en programmes de UNK par a \\
     \hline
-    \\
+    enthousiasme du conseil de sécurité\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the prior $p(\bm{z})$ of model $\mathcal{M}_{T4}$.}
+\end{table}
 
-\begin{center}
+\begin{table}
+  \centering
   \begin{tabular}{|L{14cm}|} 
     \hline
     Sampled sentences from posterior\\ [0.5ex] 
     \hline\hline
-    (T) \\
-    (G) \\
+    (T) projet de développement des communautés autochtones\\
+    (G) projet de rapporte pour le développement\\
     \hline
-    (T) \\
-    (G) \\
+    (T) rapport du comité du programme et de la coordination ( UNK ( chap .\\
+    (G) rapport du comité pour le programme et de la coordination ( UNK ) ( UNK ) .\\
     \hline
-    (T) \\
-    (G) \\
+    (T) en ces nouvelles circonstances , la solidarité UNK n’est plus suffisante , du moins de l’avis des socialistes .\\
+    (G) en ce sont , UNK ont , ont des UNK et ont , sont des UNK de UNK .\\
     \hline
   \end{tabular}
-\end{center}
+  \caption{Sampled sentences (FR) using the recognition model
+    $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$ of model $\mathcal{M}_{T4}$.}
+\end{table}

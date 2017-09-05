@@ -51,18 +51,22 @@ latent representations of sentences \cite{bowman_generating_2015}.
 In this thesis we introduce a deep generative model which generates sentences in two
 different languages, $\lang{X}$ (EN) and $\lang{Y}$ (FR), from one latent
 variable, $\bm{z}$. The generative model is based on the WaveNet neural network
-\cite{DBLP:journals/corr/OordDZSVGKSK16} and is traicned using the AEVB
+\cite{DBLP:journals/corr/OordDZSVGKSK16} and is trained using the AEVB
 algorithm. We show how different recognition models (MLP, RNN, WaveNet) affect
 the final performance and training time in the mono-language generative model and based on this
-performance we use the MLP recognition model for the twin-language generative model.
+performance we use the MLP recognition model for the twin-language generative
+model. Letting the generative WaveNet model in the twin-language model differ in
+depth and power, we evaluate how this affects the latent representation.
 
 Learning the recognition model $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})$
-effectively lets us do translation. By omitting the dependency of one of the
+theoretically lets us do translation. By omitting the dependency of one of the
 languages, here $\lang{Y}$, we force $q_{\bm{\varphi}}(\bm{z} | \bm{x}, \bm{y})
 \propto q_{\bm{\varphi}}(\bm{z} | \bm{x})$ giving us a way to perform mappings of $\lang{X} \to
-\lang{Y}$. We use a variety of measures to show that our model may perform
-translation and reconstruction, but that it does not perform as well as the
-current best models.
+\lang{Y}$. We use metrics including the SGVB estimate of the ELBO
+and an upper bound on the perplexity to evaluate the models on language
+generation, reconstruction and translation. We show that the twin-language model
+avoids KL-collapse for all models and performs well on reconstruction and
+generation, but fails to translate sentences.
 
 %%%
 %%% Layout of the thesis
@@ -71,6 +75,7 @@ current best models.
 The thesis follows the following structure. In Chapter 2 we review the necessary
 background knowledge to understand the theory and experiments conducted. Chapter
 3 lays out how variational inference and how the AEVB algorithm works,
-and also specifies the models we will be using. Chapter 4 presents the
+and also specifies the mono and twin-language latent variable model. Chapter 4 presents the
 experimental setup and a discussion of results and chapter 5 the conclusion and future work. The
-appendix shows an excerpt of generated sentences for all the different models.
+appendix shows an excerpt of generated sentences for all the different models
+together with plots.

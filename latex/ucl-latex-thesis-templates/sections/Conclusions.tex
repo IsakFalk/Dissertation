@@ -1,11 +1,35 @@
 \chapter{Conclusions}
 \label{ConclusionsCh}
 
-Possible extensions:
+\section{Discussion}
 
-The Authors of WaveNet has introduced ByteNet, might be
-worthwhile looking into that as well as it is explicitly created to work well on
-character level generative models (https://arxiv.org/pdf/1610.10099.pdf).
+In this thesis, we have shown how the VAE framework can be used for language
+reconstruction and generation. We extend it from a single language latent
+variable model to a model with two output language, efficiently enabling doing
+multi-language generation by sampling the latent. We apply the model two French
+and English and show using reconstructed sentences that the twin-language model
+learns to encode information in the latent space. Using the recognition model to
+sample the latent we are able to do both language reconstruction and generation
+at the same time. We try to apply the model to machine translation, however
+this fails.
 
-Kingma et. al has come with a new extension to VAE's which uses normalising
-flows https://arxiv.org/pdf/1606.04934.pdf.
+\section{Future work}
+
+Building on the results in this thesis, it would be fruitful to explore more
+combinations of recognition models and generative models. While the normal
+yields analytical forms of the KL, other distributions might be better for
+generating the latent, especially if the conditional distribution over the
+latent is multimodal.
+
+Furthermore it would be interesting to see if applying regularisation such as
+dropout on the generative model would force the model to rely more on the
+encoded information in the latent space compared to the generative neural
+networks.
+
+In particular there has recently been improvements in for performing inference
+using a certain kind of normalising flows using autoregressive neural networks
+\cite{NIPS2016_6581}. Similarly there have been advances in using
+semi-supervised learning \cite{NIPS2014_5352} for deep generative models which
+would allow us to train the models on non-parallel data and make use of
+mono-language data for while training multi-language models.
+

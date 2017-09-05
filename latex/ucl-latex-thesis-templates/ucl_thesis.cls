@@ -429,7 +429,7 @@
     \begin{center}%
         {\huge \bfseries \@title}\\[5em]%
         {\Large Author: \itshape \@author}\\%
-        {\Large Supervisor: \itshape Pr. David Barber}\\%
+        {\Large Supervisor: \itshape Prof. David Barber}\\%
     \end{center}%
     \vfill%
     \begin{center}%

@@ -3,13 +3,12 @@
  (lambda ()
    (LaTeX-add-labels
     "MethodsCh"
-    "tikz:latent_variable_model"
+    "fig:latent_variable_model"
     "eq:latent_variable_model"
     "eq:likelihood_integrate_out_latent"
     "eq:ELBO"
     "eq:ELBO_inequality"
     "eq:ELBO_decomposed"
-    "tikz:VAE_graphical_model"
     "eq:ELBO_VAE"
     "eq:VAE_ELBO"
     "eq:reparametrisation_trick"

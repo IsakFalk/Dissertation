@@ -21,8 +21,6 @@
     "eq:likelihood"
     "eq:MLE"
     "eq:loglikelihood"
-    "eq:dir_graph_model_dist"
-    "tikz:gm"
     "eq:sigmoid"
     "eq:tanh"
     "eq:SELU"
